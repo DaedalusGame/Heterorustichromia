@@ -1,0 +1,16 @@
+[
+{
+  "modid": "rustichromia",
+  "name": "Rustichromia",
+  "description": "This is a mod. It adds stuff.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["BordListian"],
+  "credits": "Mangoose, Liahim85",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

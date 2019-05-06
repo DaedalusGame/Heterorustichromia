@@ -1,0 +1,12 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "textures": { "all": "rustichromia:blocks/block_steel" },
+    "transform": "forge:default-block"
+  },
+  "variants":{
+    "normal":[{}],
+    "inventory":[{}]
+  }
+}

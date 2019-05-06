@@ -1,0 +1,29 @@
+{
+	"elements": [
+		{
+			"from": [5.5, 12, 7.5],
+			"to": [10.5, 28, 8.5],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 5, 16], "texture": "#blade"},
+				"east": {"uv": [1, 0, 0, 16], "texture": "#blade"},
+				"south": {"uv": [5, 0, 0, 16], "texture": "#blade"},
+				"west": {"uv": [5, 0, 4, 16], "texture": "#blade"},
+				"up": {"uv": [0, 0, 5, 1], "rotation": 180, "texture": "#blade"},
+				"down": {"uv": [0, 0, 5, 16], "rotation": 180, "texture": "#blade"}
+			}
+		},
+		{
+			"from": [7.5, 8, 7.5],
+			"to": [8.5, 12, 8.5],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [5, 0, 6, 4], "texture": "#blade"},
+				"east": {"uv": [5, 0, 6, 4], "texture": "#blade"},
+				"south": {"uv": [5, 0, 6, 4], "texture": "#blade"},
+				"west": {"uv": [5, 0, 6, 4], "texture": "#blade"},
+				"down": {"uv": [5, 4, 6, 5], "rotation": 90, "texture": "#blade"}
+			}
+		}
+	]
+}

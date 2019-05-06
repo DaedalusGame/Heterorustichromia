@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "textures": { "all": "rustichromia:blocks/molten_steel" },
+    "transform": "forge:default-block"
+  },
+  "variants":{
+    "inventory":[{}],
+    "trail":{
+      "true":  { },
+      "false":  { }
+    }
+  }
+}
