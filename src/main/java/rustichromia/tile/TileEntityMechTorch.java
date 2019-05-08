@@ -73,7 +73,8 @@ public class TileEntityMechTorch extends TileEntity  implements ITickable {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         capability.readFromNBT(compound);
-        angle = compound.getDouble("rotation");
+        power = compound.getDouble("rotation");
+        angle = power;
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import rustichromia.tile.TileEntityMechTorch;
 import rustichromia.tile.TileEntityWindmill;
@@ -68,6 +69,25 @@ public class BlockMechTorch extends Block {
     @Override
     public int getMetaFromState(IBlockState state) {
         return (state.getValue(facing).getIndex() << 1) | (state.getValue(on) ? 1 : 0);
+    }
+
+    @Override
+    public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+        return true;
+    }
+
+    @Override
+    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        if(blockState.getValue(on))
+            return 15;
+        return 0;
+    }
+
+    @Override
+    public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        if(blockState.getValue(on) && side == blockState.getValue(facing))
+            return 15;
+        return 0;
     }
 
     /*@Override
