@@ -32,7 +32,7 @@ public class TileEntityWindmillRenderer extends TileEntitySpecialRenderer<TileEn
         double lastAngle = tile.lastAngle;
         float rotationAngle = (float) (partialTicks * angle) + (1 - partialTicks) * (float) lastAngle;
 
-        int blades = 4;
+        int blades = tile.getBlades();
         for(int i = 0; i < blades; i++) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.5, 0.5, 0.5);

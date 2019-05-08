@@ -48,11 +48,36 @@ public class Registry {
         BLOCK_STEEL = new Block(Material.IRON,MapColor.WHITE_STAINED_HARDENED_CLAY).setRegistryName(Rustichromia.MODID, "block_steel").setUnlocalizedName("block_steel").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
         RECEPTACLE = new BlockMetalReceptacle(Material.IRON).setRegistryName(Rustichromia.MODID, "receptacle").setUnlocalizedName("receptacle").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
         EXTRUDER = new BlockExtrusionForm(Material.IRON).setRegistryName(Rustichromia.MODID, "extruder").setUnlocalizedName("extruder").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
-        WINDMILL = new BlockWindmill(Material.WOOD).setRegistryName(Rustichromia.MODID, "windmill").setUnlocalizedName("windmill").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
+        WINDMILL = new BlockWindmill(Material.WOOD) {
+            @Override
+            public double getScale(World world, BlockPos pos, IBlockState state) {
+                return 1.0;
+            }
+
+            @Override
+            public int getMaxBlades(World world, BlockPos pos, IBlockState state) {
+                return 12;
+            }
+
+            @Override
+            public double getBladeWeight(World world, BlockPos pos, IBlockState state) {
+                return 1.0;
+            }
+        }.setRegistryName(Rustichromia.MODID, "windmill").setUnlocalizedName("windmill").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
         WINDMILL_BIG = new BlockWindmill(Material.WOOD) {
             @Override
             public double getScale(World world, BlockPos pos, IBlockState state) {
                 return 2.0;
+            }
+
+            @Override
+            public int getMaxBlades(World world, BlockPos pos, IBlockState state) {
+                return 8;
+            }
+
+            @Override
+            public double getBladeWeight(World world, BlockPos pos, IBlockState state) {
+                return 8.0;
             }
         }.setRegistryName(Rustichromia.MODID, "windmill_big").setUnlocalizedName("windmill_big").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
         MECH_TORCH = new BlockMechTorch(Material.WOOD).setRegistryName(Rustichromia.MODID, "mech_torch").setUnlocalizedName("mech_torch").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);

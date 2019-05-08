@@ -18,16 +18,18 @@ import rustichromia.tile.TileEntityWindmill;
 
 import javax.annotation.Nullable;
 
-public class BlockWindmill extends Block {
+public abstract class BlockWindmill extends Block {
     public static final PropertyDirection facing = PropertyDirection.create("facing");
 
     public BlockWindmill(Material blockMaterialIn) {
         super(blockMaterialIn);
     }
 
-    public double getScale(World world, BlockPos pos, IBlockState state) {
-        return 1.0;
-    }
+    public abstract double getScale(World world, BlockPos pos, IBlockState state);
+
+    public abstract int getMaxBlades(World world, BlockPos pos, IBlockState state);
+
+    public abstract double getBladeWeight(World world, BlockPos pos, IBlockState state);
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
@@ -57,6 +59,12 @@ public class BlockWindmill extends Block {
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(facing,EnumFacing.getFront(meta));
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        TileEntityWindmill p = (TileEntityWindmill)world.getTileEntity(pos);
+        return p.activate(world, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
     @Override

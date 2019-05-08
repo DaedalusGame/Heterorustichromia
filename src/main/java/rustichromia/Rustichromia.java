@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import rustichromia.handler.WindHandler;
 import rustichromia.handler.PistonHandler;
 import rustichromia.proxy.IProxy;
 import rustichromia.tile.TileEntityExtrusionForm;
@@ -25,6 +26,7 @@ public class Rustichromia {
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new Registry());
         MinecraftForge.EVENT_BUS.register(PistonHandler.class);
+        MinecraftForge.EVENT_BUS.register(WindHandler.class);
 
         PROXY.preInit();
     }
