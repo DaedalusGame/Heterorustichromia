@@ -1,0 +1,15 @@
+tile.windmill.name=Windmill
+tile.windmill_big.name=Big Windmill
+tile.mech_torch.name=Mechanical Timer
+tile.axle_wood.name=Wooden Axle
+tile.ratiobox.name=Ratiobox
+
+item.windmill_blade.name=Windmill Blade
+item.gear_speckled.name=Speckled Gear
+item.disk_stone.name=Stone Disk
+item.disk_sandstone.name=Sandstone Disk
+item.disk_red_sandstone.name=Red Sandstone Disk
+
+rustichromia.tooltip.item.disk_stone=Limits power to more than %s
+rustichromia.tooltip.item.disk_sandstone=Limits power to less than %s
+rustichromia.tooltip.item.disk_red_sandstone=Limits power to exactly %s

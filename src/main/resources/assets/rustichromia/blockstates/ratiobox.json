@@ -1,0 +1,28 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:ratiobox_base",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "axle_input": [{
+      "model": "rustichromia:ratiobox_input"
+    }],
+    "axle_output_a": [{
+      "model": "rustichromia:ratiobox_output_a"
+    }],
+    "axle_output_b": [{
+      "model": "rustichromia:ratiobox_output_b"
+    }],
+    "input": {
+      "down":  {},
+      "up":    {},
+      "north": {},
+      "south": {},
+      "west":  {},
+      "east":  {}
+    }
+  }
+}

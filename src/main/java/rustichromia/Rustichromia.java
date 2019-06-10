@@ -1,5 +1,6 @@
 package rustichromia;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;;
 import net.minecraftforge.fml.common.Mod;
@@ -10,9 +11,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import rustichromia.handler.WindHandler;
 import rustichromia.handler.PistonHandler;
 import rustichromia.proxy.IProxy;
-import rustichromia.tile.TileEntityExtrusionForm;
-import rustichromia.tile.TileEntityMechTorch;
-import rustichromia.tile.TileEntityWindmill;
+import rustichromia.recipe.RecipeRegistry;
+import rustichromia.tile.*;
 
 @Mod(modid = Rustichromia.MODID, acceptedMinecraftVersions = "[1.12, 1.13)")
 @Mod.EventBusSubscriber
@@ -24,7 +24,9 @@ public class Rustichromia {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+
         MinecraftForge.EVENT_BUS.register(new Registry());
+        MinecraftForge.EVENT_BUS.register(new RecipeRegistry());
         MinecraftForge.EVENT_BUS.register(PistonHandler.class);
         MinecraftForge.EVENT_BUS.register(WindHandler.class);
 
@@ -36,5 +38,9 @@ public class Rustichromia {
         GameRegistry.registerTileEntity(TileEntityExtrusionForm.class, new ResourceLocation(MODID, "extruder"));
         GameRegistry.registerTileEntity(TileEntityWindmill.class, new ResourceLocation(MODID, "windmill"));
         GameRegistry.registerTileEntity(TileEntityMechTorch.class, new ResourceLocation(MODID, "mech_torch"));
+        GameRegistry.registerTileEntity(TileEntityAxleWood.class, new ResourceLocation(MODID, "axle_wood"));
+        GameRegistry.registerTileEntity(TileEntityRatiobox.class, new ResourceLocation(MODID, "ratiobox"));
+
+        Registry.init();
     }
 }
