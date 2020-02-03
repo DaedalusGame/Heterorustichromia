@@ -1,0 +1,32 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "rustichromia:hand": 0,
+        "rustichromia:loaded": 0
+      },
+      "model": "rustichromia:item/blastspear_right"
+    },
+    {
+      "predicate": {
+        "rustichromia:hand": 1,
+        "rustichromia:loaded": 0
+      },
+      "model": "rustichromia:item/blastspear_left"
+    },
+    {
+      "predicate": {
+        "rustichromia:hand": 0,
+        "rustichromia:loaded": 1
+      },
+      "model": "rustichromia:item/blastspear_loaded_right"
+    },
+    {
+      "predicate": {
+        "rustichromia:hand": 1,
+        "rustichromia:loaded": 1
+      },
+      "model": "rustichromia:item/blastspear_loaded_left"
+    }
+  ]
+}

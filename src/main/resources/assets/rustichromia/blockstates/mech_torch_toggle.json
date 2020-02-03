@@ -1,0 +1,27 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:mech_torch",
+    "transform": "forge:default-block",
+    "textures": { "torch": "blocks/lever" }
+  },
+  "variants":{
+    "normal":[{}],
+    "dial":[{
+      "model": "rustichromia:mech_torch_dial"
+    }],
+    "inventory":[{}],
+    "on": {
+      "true": { "textures": { "torch": "rustichromia:blocks/lever_on" }},
+      "false": { "textures": { "torch": "rustichromia:blocks/lever_off" }}
+    },
+    "facing": {
+      "down":  { "x": 180 },
+      "up":    { },
+      "north": { "x": 90 },
+      "south": { "x": 90, "y": 180 },
+      "west":  { "x": 90, "y": 270 },
+      "east":  { "x": 90, "y": 90 }
+    }
+  }
+}

@@ -12,7 +12,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -26,8 +25,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import rustichromia.block.*;
+import rustichromia.item.ItemBlastSpear;
 import rustichromia.item.ItemDisk;
-import rustichromia.recipe.RecipeCombine;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,10 +48,14 @@ public class Registry {
     public static Block WINDMILL_BIG;
     @ObjectHolder("rustichromia:mech_torch")
     public static Block MECH_TORCH;
+    @ObjectHolder("rustichromia:mech_torch_toggle")
+    public static Block MECH_TORCH_TOGGLE;
     @ObjectHolder("rustichromia:axle_wood")
     public static Block AXLE_WOOD;
     @ObjectHolder("rustichromia:ratiobox")
     public static Block RATIOBOX;
+    @ObjectHolder("rustichromia:press")
+    public static Block PRESS;
 
     @ObjectHolder("rustichromia:windmill_blade")
     public static Item WINDMILL_BLADE;
@@ -64,6 +67,12 @@ public class Registry {
     public static Item DISK_SANDSTONE;
     @ObjectHolder("rustichromia:disk_red_sandstone")
     public static Item DISK_RED_SANDSTONE;
+    @ObjectHolder("rustichromia:spear")
+    public static Item SPEAR;
+    @ObjectHolder("rustichromia:blastspear")
+    public static Item BLASTSPEAR;
+    @ObjectHolder("rustichromia:shamshir")
+    public static Item SHAMSHIR;
 
     public static void init() {
         MysticalMechanicsAPI.IMPL.registerGear(new ResourceLocation(Rustichromia.MODID, "gear_speckled"), Ingredient.fromItem(GEAR_SPECKLED), new IGearBehavior() {
@@ -182,8 +191,11 @@ public class Registry {
             }
         }.setRegistryName(Rustichromia.MODID, "windmill_big").setUnlocalizedName("windmill_big").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         MECH_TORCH = new BlockMechTorch(Material.WOOD).setRegistryName(Rustichromia.MODID, "mech_torch").setUnlocalizedName("mech_torch").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+        MECH_TORCH_TOGGLE = new BlockMechTorchToggle(Material.WOOD).setRegistryName(Rustichromia.MODID, "mech_torch_toggle").setUnlocalizedName("mech_torch_toggle").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         AXLE_WOOD = new BlockAxleWood(Material.WOOD).setRegistryName(Rustichromia.MODID, "axle_wood").setUnlocalizedName("axle_wood").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         RATIOBOX = new BlockRatiobox(Material.WOOD).setRegistryName(Rustichromia.MODID, "ratiobox").setUnlocalizedName("ratiobox").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+        PRESS = new BlockPress(Material.WOOD).setRegistryName(Rustichromia.MODID, "press").setUnlocalizedName("press").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+
 
         event.getRegistry().register(MOLTEN_STEEL);
         event.getRegistry().register(BLOCK_STEEL);
@@ -192,8 +204,10 @@ public class Registry {
         event.getRegistry().register(WINDMILL);
         event.getRegistry().register(WINDMILL_BIG);
         event.getRegistry().register(MECH_TORCH);
+        event.getRegistry().register(MECH_TORCH_TOGGLE);
         event.getRegistry().register(AXLE_WOOD);
         event.getRegistry().register(RATIOBOX);
+        event.getRegistry().register(PRESS);
     }
 
     @SubscribeEvent
@@ -207,9 +221,14 @@ public class Registry {
         event.getRegistry().register(new ItemBlock(WINDMILL).setRegistryName(WINDMILL.getRegistryName()));
         event.getRegistry().register(new ItemBlock(WINDMILL_BIG).setRegistryName(WINDMILL_BIG.getRegistryName()));
         event.getRegistry().register(new ItemBlock(MECH_TORCH).setRegistryName(MECH_TORCH.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(MECH_TORCH_TOGGLE).setRegistryName(MECH_TORCH_TOGGLE.getRegistryName()));
         event.getRegistry().register(new ItemBlock(AXLE_WOOD).setRegistryName(AXLE_WOOD.getRegistryName()));
         event.getRegistry().register(new ItemBlock(RATIOBOX).setRegistryName(RATIOBOX.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(PRESS).setRegistryName(PRESS.getRegistryName()));
 
+        event.getRegistry().register(SHAMSHIR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"shamshir")).setUnlocalizedName("shamshir").setCreativeTab(CreativeTabs.COMBAT));
+        event.getRegistry().register(SPEAR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"spear")).setUnlocalizedName("spear").setCreativeTab(CreativeTabs.COMBAT));
+        event.getRegistry().register(BLASTSPEAR = new ItemBlastSpear().setRegistryName(new ResourceLocation(Rustichromia.MODID,"blastspear")).setUnlocalizedName("blastspear").setCreativeTab(CreativeTabs.COMBAT));
         event.getRegistry().register(WINDMILL_BLADE = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"windmill_blade")).setUnlocalizedName("windmill_blade").setCreativeTab(mystmechTab));
         event.getRegistry().register(GEAR_SPECKLED = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"gear_speckled")).setUnlocalizedName("gear_speckled").setCreativeTab(mystmechTab));
         event.getRegistry().register(DISK_STONE = new ItemDisk(1).setRegistryName(new ResourceLocation(Rustichromia.MODID,"disk_stone")).setUnlocalizedName("disk_stone").setCreativeTab(mystmechTab));
@@ -230,18 +249,27 @@ public class Registry {
         registerItemModel(Item.getItemFromBlock(WINDMILL_BIG), 1, "blade");
         registerItemModel(Item.getItemFromBlock(MECH_TORCH), 0, "inventory");
         registerItemModel(Item.getItemFromBlock(MECH_TORCH), 1, "dial");
+        registerItemModel(Item.getItemFromBlock(MECH_TORCH_TOGGLE), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(MECH_TORCH_TOGGLE), 1, "dial");
         registerItemModel(Item.getItemFromBlock(AXLE_WOOD), 0, "inventory");
         registerItemModel(Item.getItemFromBlock(AXLE_WOOD), 1, "normal");
         registerItemModel(Item.getItemFromBlock(RATIOBOX), 0, "inventory");
         registerItemModel(Item.getItemFromBlock(RATIOBOX), 1, "axle_input");
         registerItemModel(Item.getItemFromBlock(RATIOBOX), 2, "axle_output_a");
         registerItemModel(Item.getItemFromBlock(RATIOBOX), 3, "axle_output_b");
+        registerItemModel(Item.getItemFromBlock(PRESS), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(PRESS), 1, "extension");
+        registerItemModel(Item.getItemFromBlock(PRESS), 2, "head");
 
         registerItemModel(WINDMILL_BLADE, 0, "inventory");
         registerItemModel(GEAR_SPECKLED, 0, "inventory");
         registerItemModel(DISK_STONE, 0, "inventory");
         registerItemModel(DISK_SANDSTONE, 0, "inventory");
         registerItemModel(DISK_RED_SANDSTONE, 0, "inventory");
+        registerItemModel(SHAMSHIR, 0, "inventory");
+        registerItemModel(SPEAR, 0, "inventory");
+        registerItemModel(SPEAR, 1, "normal");
+        registerItemModel(BLASTSPEAR, 0, "inventory");
     }
 
     @SideOnly(Side.CLIENT)

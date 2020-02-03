@@ -1,0 +1,28 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:press_body",
+    "textures": {
+      "particle": "rustichromia:blocks/press_center"
+    }
+  },
+  "variants":{
+    "normal": [{}],
+    "inventory": [{
+      "model": "rustichromia:press_item",
+      "transform": "forge:default-block"
+    }],
+    "extension":[{
+      "model": "rustichromia:press_extension"
+    }],
+    "head":[{
+      "model": "rustichromia:press_head"
+    }],
+    "facing": {
+      "north": { "y": 90 },
+      "south": { "y": 270 },
+      "west":  { },
+      "east":  { "y": 180 }
+    }
+  }
+}

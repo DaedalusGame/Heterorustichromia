@@ -1,8 +1,15 @@
 tile.windmill.name=Windmill
 tile.windmill_big.name=Big Windmill
 tile.mech_torch.name=Mechanical Timer
+tile.mech_torch_toggle.name=Mechanical Toggler
 tile.axle_wood.name=Wooden Axle
 tile.ratiobox.name=Ratiobox
+tile.press.name=Mechanical Press
+
+tile.molten_steel.name=Molten Steel [WIP]
+tile.block_steel.name=Solid Steel [WIP]
+tile.extruder.name=Extrusion Form [WIP]
+tile.receptacle.name=Extrusion Receptacle [WIP]
 
 item.windmill_blade.name=Windmill Blade
 item.gear_speckled.name=Speckled Gear
@@ -13,3 +20,4 @@ item.disk_red_sandstone.name=Red Sandstone Disk
 rustichromia.tooltip.item.disk_stone=Limits power to more than %s
 rustichromia.tooltip.item.disk_sandstone=Limits power to less than %s
 rustichromia.tooltip.item.disk_red_sandstone=Limits power to exactly %s
+rustichromia.tooltip.item.combine=Can be combined in a crafting grid

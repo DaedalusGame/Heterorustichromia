@@ -66,7 +66,7 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
         for (EnumFacing f : EnumFacing.values()) {
             BlockPos p = getPos().offset(f);
             TileEntity t = world.getTileEntity(p);
-            if(t != null && t.hasCapability(MysticalMechanicsAPI.MECH_CAPABILITY, f.getOpposite()) && capability.isOutput(f)) {
+            if(!capability.isInput(f) && t != null && t.hasCapability(MysticalMechanicsAPI.MECH_CAPABILITY, f.getOpposite())) {
                 t.getCapability(MysticalMechanicsAPI.MECH_CAPABILITY, f.getOpposite()).setPower(capability.getPower(f), f.getOpposite());
             }
         }
@@ -115,7 +115,7 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
 
     public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         isBroken = true;
-        capability.setPower(0, getInput());
+        capability.setPower(0, null);
         updateNeighbors();
     }
 
@@ -304,12 +304,16 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
 
         @Override
         public double getPower(EnumFacing from) {
-            return getInternalPower(from);
+            if(isInput(from) || isOutput(from))
+                return getInternalPower(from);
+            return 0;
         }
 
         @Override
         public double getVisualPower(EnumFacing from) {
-            return getInternalPower(from);
+            if(isInput(from) || isOutput(from))
+                return getInternalPower(from);
+            return 0;
         }
 
         protected double getInternalPower(EnumFacing from) {
@@ -330,7 +334,7 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
                 this.power = 0;
                 onPowerChange();
             }
-            if (isInput(from)) {
+            if (isInput(from) && !isBroken) {
                 double oldPower = capability.power;
                 if (oldPower != value) {
                     capability.power = value;

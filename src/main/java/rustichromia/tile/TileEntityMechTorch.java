@@ -118,18 +118,22 @@ public class TileEntityMechTorch extends TileEntity  implements ITickable {
                 this.power %= MAX_POWER;
             }
 
-            IBlockState state = world.getBlockState(pos);
-            if(on) {
-                world.setBlockState(pos,state.withProperty(BlockMechTorch.on,false));
-                on = false;
-                pulses--;
-            } else if(pulses > 0) {
-                world.setBlockState(pos,state.withProperty(BlockMechTorch.on,true));
-                on = true;
-            }
+            handleRedstone();
         } else {
             lastAngle = angle;
             angle += speed;
+        }
+    }
+
+    protected void handleRedstone() {
+        IBlockState state = world.getBlockState(pos);
+        if(on) {
+            world.setBlockState(pos,state.withProperty(BlockMechTorch.on,false));
+            on = false;
+        } else if(pulses > 0) {
+            world.setBlockState(pos,state.withProperty(BlockMechTorch.on,true));
+            on = true;
+            pulses--;
         }
     }
 }
