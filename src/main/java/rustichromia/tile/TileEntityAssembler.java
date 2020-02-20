@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -34,6 +35,8 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
     ItemStackHandlerUnique inventory;
 
     ItemBuffer outputs = new ItemBuffer(this);
+    ResourceLocation filter = null;
+    float angle, lastAngle;
 
     public TileEntityAssembler() {
         this(0);
@@ -52,6 +55,15 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
                 markDirty();
             }
         });
+    }
+
+    public void setFilter(ResourceLocation id) {
+        filter = id;
+        markDirty();
+    }
+
+    public ResourceLocation getFilter() {
+        return filter;
     }
 
     public EnumFacing getFacing() {
@@ -113,16 +125,21 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
         super.update();
         if (!world.isRemote) {
             ejectItems();
+        } else {
+            lastAngle = angle;
+            angle += 1.5f;
         }
     }
 
     @Override
     public AssemblerRecipe findRecipe(double speed) {
-        return RecipeRegistry.getAssemblerRecipe(this, getTier(), speed, getCraftingItems());
+        return RecipeRegistry.getAssemblerRecipe(this, getTier(), speed, getCraftingItems(), filter);
     }
 
     @Override
     public boolean matchesRecipe(AssemblerRecipe recipe, double speed) {
+        if(filter != null && !recipe.id.equals(filter))
+            return false;
         return recipe.matches(this, speed, getCraftingItems());
     }
 
@@ -167,6 +184,10 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
         inventory.deserializeNBT(compound.getCompoundTag("inventory"));
         mechPower.readFromNBT(compound);
         outputs.deserializeNBT(compound.getTagList("outputs", 10));
+        if(compound.hasKey("filter"))
+            filter = new ResourceLocation(compound.getString("filter"));
+        else
+            filter = null;
     }
 
     @Override
@@ -175,6 +196,8 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
         compound.setTag("inventory", inventory.serializeNBT());
         mechPower.writeToNBT(compound);
         compound.setTag("outputs", outputs.serializeNBT());
+        if(filter != null)
+            compound.setString("filter", filter.toString());
         return compound;
     }
 

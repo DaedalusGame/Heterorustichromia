@@ -12,7 +12,11 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 import rustichromia.block.BlockQuern;
+import rustichromia.recipe.AssemblerRecipe;
+import rustichromia.recipe.RecipeRegistry;
 
 public class TileEntityAssemblerRenderer extends TileEntitySpecialRenderer<TileEntityAssembler> {
     @Override
@@ -60,6 +64,25 @@ public class TileEntityAssemblerRenderer extends TileEntitySpecialRenderer<TileE
                     ItemCameraTransforms.TransformType.FIXED);
 
             GlStateManager.popMatrix();
+        }
+
+        ItemStack displayItem = ItemStack.EMPTY;
+        for (AssemblerRecipe recipe : RecipeRegistry.assemblerRecipes) {
+            if(recipe.id.equals(tile.filter)) {
+                displayItem = recipe.getIcon();
+                break;
+            }
+        }
+        if(!displayItem.isEmpty()) {
+            GlStateManager.pushAttrib();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate( 0.5, 0.75+0.2, 0.5);
+            GlStateManager.scale(0.75, 0.75, 0.75);
+            GlStateManager.rotate((float) MathHelper.clampedLerp(tile.lastAngle, tile.angle, partialTicks), 0, 1, 0);
+            Minecraft.getMinecraft().getRenderItem().renderItem(displayItem, ItemCameraTransforms.TransformType.GROUND);
+            GlStateManager.popMatrix();
+            GlStateManager.popAttrib();
         }
 
         GlStateManager.popMatrix();

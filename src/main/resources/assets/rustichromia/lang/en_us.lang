@@ -11,6 +11,7 @@ tile.assembler1.name=Single Assembler
 tile.assembler2.name=Double Assembler
 tile.assembler3.name=Advanced Assembler
 tile.cotton_seed.name=Cotton Seeds
+tile.crank.name=Hand Crank
 
 tile.molten_steel.name=Molten Steel [WIP]
 tile.block_steel.name=Solid Steel [WIP]
@@ -29,6 +30,7 @@ item.cotton_candy.name=Cotton Candy
 item.cotton_candy_stick.name=Cotton Candy on a Stick
 item.dust_wood.name=Sawdust
 item.plate_wood.name=Plywood
+item.dust_flour.name=Flour
 
 rustichromia.jei.recipe.quern=Quern
 rustichromia.jei.recipe.gin=Gin

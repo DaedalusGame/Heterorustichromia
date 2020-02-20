@@ -57,10 +57,10 @@ public class JEI implements IModPlugin {
         reg.addRecipeCatalyst(new ItemStack(Registry.QUERN),QuernCategory.UID);
         reg.addRecipeCatalyst(new ItemStack(Registry.GIN),GinCategory.UID);
         reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_1),ASSEMBLER_1.getUid());
-        reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_1),ASSEMBLER_2.getUid());
+        reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_2),ASSEMBLER_1.getUid());
+        reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_3),ASSEMBLER_1.getUid());
         reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_2),ASSEMBLER_2.getUid());
-        reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_1),ASSEMBLER_3.getUid());
-        reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_2),ASSEMBLER_3.getUid());
+        reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_3),ASSEMBLER_2.getUid());
         reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_3),ASSEMBLER_3.getUid());
     }
 

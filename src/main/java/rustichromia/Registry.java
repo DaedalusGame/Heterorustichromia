@@ -9,10 +9,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -23,6 +25,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -103,6 +106,8 @@ public class Registry {
     public static Item DUST_WOOD;
     @ObjectHolder("rustichromia:plate_wood")
     public static Item PLATE_WOOD;
+    @ObjectHolder("rustichromia:dust_flour")
+    public static Item DUST_FLOUR;
 
     public static void init() {
         //This doesn't work right.
@@ -228,7 +233,7 @@ public class Registry {
         QUERN = new BlockQuern(Material.ROCK).setRegistryName(Rustichromia.MODID, "quern").setUnlocalizedName("quern").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         GIN = new BlockGin(Material.WOOD).setRegistryName(Rustichromia.MODID, "gin").setUnlocalizedName("gin").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         CRANK = new BlockCrank(Material.WOOD).setRegistryName(Rustichromia.MODID, "crank").setUnlocalizedName("crank").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
-        ASSEMBLER_1 = new BlockAssembler(Material.WOOD, 1) {
+        ASSEMBLER_1 = new BlockAssembler(Material.WOOD, 2) {
             @Override
             public ItemStack getDisplayGear() {
                 return new ItemStack(GEAR_WOOD);
@@ -239,7 +244,7 @@ public class Registry {
                 return 1;
             }
         }.setRegistryName(Rustichromia.MODID, "assembler1").setUnlocalizedName("assembler1").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
-        ASSEMBLER_2 = new BlockAssembler(Material.IRON, 2){
+        ASSEMBLER_2 = new BlockAssembler(Material.IRON, 4){
             @Override
             public ItemStack getDisplayGear() {
                 return new ItemStack(RegistryHandler.IRON_GEAR);
@@ -250,7 +255,7 @@ public class Registry {
                 return 2;
             }
         }.setRegistryName(Rustichromia.MODID, "assembler2").setUnlocalizedName("assembler2").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
-        ASSEMBLER_3 = new BlockAssembler(Material.IRON, 4){
+        ASSEMBLER_3 = new BlockAssembler(Material.IRON, 6){
             @Override
             public ItemStack getDisplayGear() {
                 return new ItemStack(RegistryHandler.GOLD_GEAR);
@@ -319,6 +324,19 @@ public class Registry {
         event.getRegistry().register(COTTON_WOOL = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"cotton_wool")).setUnlocalizedName("cotton_wool").setCreativeTab(CreativeTabs.MATERIALS));
         event.getRegistry().register(DUST_WOOD = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"dust_wood")).setUnlocalizedName("dust_wood").setCreativeTab(CreativeTabs.MATERIALS));
         event.getRegistry().register(PLATE_WOOD = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"plate_wood")).setUnlocalizedName("plate_wood").setCreativeTab(CreativeTabs.MATERIALS));
+        event.getRegistry().register(DUST_FLOUR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"dust_flour")).setUnlocalizedName("dust_flour").setCreativeTab(CreativeTabs.MATERIALS));
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void registerOreDict(RegistryEvent.Register<IRecipe> event) {
+        OreDictionary.registerOre("dustWood", DUST_WOOD);
+        OreDictionary.registerOre("plateWood", PLATE_WOOD);
+        OreDictionary.registerOre("gearWood", GEAR_WOOD);
+        OreDictionary.registerOre("gearDiorite", GEAR_SPECKLED);
+        OreDictionary.registerOre("gemCoal", new ItemStack(Items.COAL,1,0));
+        OreDictionary.registerOre("gemCoal", new ItemStack(Items.COAL,1,1));
+        OreDictionary.registerOre("dustFlour", DUST_FLOUR);
+        OreDictionary.registerOre("foodFlour", DUST_FLOUR);
     }
 
     @SideOnly(Side.CLIENT)
@@ -370,11 +388,7 @@ public class Registry {
         registerItemModel(COTTON_WOOL, 0, "inventory");
         registerItemModel(DUST_WOOD, 0, "inventory");
         registerItemModel(PLATE_WOOD, 0, "inventory");
-
-        OreDictionary.registerOre("dustWood", DUST_WOOD);
-        OreDictionary.registerOre("plateWood", PLATE_WOOD);
-        OreDictionary.registerOre("gearWood", GEAR_WOOD);
-        OreDictionary.registerOre("gearDiorite", GEAR_SPECKLED);
+        registerItemModel(DUST_FLOUR, 0, "inventory");
     }
 
     @SideOnly(Side.CLIENT)

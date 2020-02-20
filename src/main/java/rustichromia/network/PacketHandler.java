@@ -13,5 +13,6 @@ public class PacketHandler {
     public static void registerMessages(){
         INSTANCE.registerMessage(MessageBlastDash.MessageHolder.class,MessageBlastDash.class,id ++,Side.SERVER);
         INSTANCE.registerMessage(MessageEntitySwing.MessageHolder.class,MessageEntitySwing.class,id ++,Side.CLIENT);
+        INSTANCE.registerMessage(MessageSelectAssemblerRecipe.MessageHolder.class,MessageSelectAssemblerRecipe.class,id ++,Side.SERVER);
     }
 }

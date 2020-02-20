@@ -11,11 +11,13 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import rustichromia.entity.EntitySpear;
+import rustichromia.gui.GuiHandler;
 import rustichromia.handler.WindHandler;
 import rustichromia.handler.PistonHandler;
 import rustichromia.network.PacketHandler;
@@ -48,6 +50,8 @@ public class Rustichromia {
             MistyWorld.preInit();
 
         PacketHandler.registerMessages();
+
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
         PROXY.preInit();
     }

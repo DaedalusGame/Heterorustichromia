@@ -1,25 +1,40 @@
 package rustichromia.recipe;
 
 import com.google.common.collect.Lists;
+import mysticalmechanics.handler.RegistryHandler;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockQuartz;
+import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockTallGrass;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.registries.IForgeRegistry;
 import rustichromia.Registry;
 import rustichromia.Rustichromia;
+import rustichromia.util.IngredientSet;
 import rustichromia.util.IngredientSized;
+import rustichromia.util.Misc;
+import rustichromia.util.ResultSet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
@@ -50,12 +65,13 @@ public class RecipeRegistry {
         return null;
     }
 
-    public static AssemblerRecipe getAssemblerRecipe(TileEntity tile, int tier, double power, List<ItemStack> inputs){
+    public static AssemblerRecipe getAssemblerRecipe(TileEntity tile, int tier, double power, List<ItemStack> inputs, ResourceLocation filter){
         for (int i = 0; i < assemblerRecipes.size(); i ++){
             AssemblerRecipe recipe = assemblerRecipes.get(i);
-            if (recipe.tier <= tier && recipe.matches(tile,power,inputs)){
+            if(filter != null && !recipe.id.equals(filter))
+                continue;
+            if (recipe.tier <= tier && recipe.matches(tile,power,inputs))
                 return recipe;
-            }
         }
         return null;
     }
@@ -127,23 +143,126 @@ public class RecipeRegistry {
         event.getRegistry().register(new ShapedOreRecipe(getRL("plate_wood"),new ItemStack(Registry.PLATE_WOOD,1),true,new Object[]{
                 "WW", "WW",
                 'W', "dustWood"}).setRegistryName(getRL("plate_wood")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("quern"),new ItemStack(Registry.QUERN,1),true,new Object[]{
+                " I ", "SGS", "SSS",
+                'I', new ItemStack(Registry.AXLE_WOOD),
+                'G', "stone",
+                'S', "cobblestone"}).setRegistryName(getRL("quern")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("gin"),new ItemStack(Registry.GIN,1),true,new Object[]{
+                "WGW", "IHI", "WWW",
+                'H', new ItemStack(Items.IRON_HOE,1, WILDCARD_VALUE),
+                'I', new ItemStack(Registry.AXLE_WOOD),
+                'W', "plankWood",
+                'G', "paneGlassColorless"}).setRegistryName(getRL("gin")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("assembler1"),new ItemStack(Registry.ASSEMBLER_1,1),true,new Object[]{
+                "WGW", "GGG", "WGW",
+                'G', "gearWood",
+                'W', "plankWood"}).setRegistryName(getRL("assembler1")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("assembler2"),new ItemStack(Registry.ASSEMBLER_2,1),true,new Object[]{
+                "WGW", "GGG", "WGW",
+                'G', "gearIron",
+                'W', "ingotIron"}).setRegistryName(getRL("assembler2")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("assembler3"),new ItemStack(Registry.ASSEMBLER_3,1),true,new Object[]{
+                "WGW", "GGG", "WGW",
+                'G', "gearGold",
+                'W', "ingotIron"}).setRegistryName(getRL("assembler3")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("crank"),new ItemStack(Registry.CRANK,1),true,new Object[]{
+                " I", "II", "I ",
+                'I', new ItemStack(Registry.AXLE_WOOD)}).setRegistryName(getRL("crank")));
+        event.getRegistry().register(new ShapelessOreRecipe(getRL("cotton_candy_stick"),new ItemStack(Registry.COTTON_CANDY_STICK,1),new Object[]{
+                "stickWood",new ItemStack(Registry.COTTON_CANDY),new ItemStack(Registry.COTTON_CANDY)}).setRegistryName(getRL("cotton_candy_stick")));
 
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.REEDS)),Lists.newArrayList(new ItemStack(Items.SUGAR,2)),0, Double.POSITIVE_INFINITY,300));
+        quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.WHEAT)),Lists.newArrayList(new ItemStack(Items.WHEAT_SEEDS),new ItemStack(Blocks.TALLGRASS,1, BlockTallGrass.EnumType.GRASS.getMeta())),0, Double.POSITIVE_INFINITY,300)); //TODO: make this produce chaff; possible candidate for Gin (threshing)
+        quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.WHEAT_SEEDS)),Lists.newArrayList(new ItemStack(Registry.DUST_FLOUR)),0, Double.POSITIVE_INFINITY,300));
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.BONE)),Lists.newArrayList(new ItemStack(Items.DYE,6, 15)),3, Double.POSITIVE_INFINITY,900));
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("plankWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,2)),3, Double.POSITIVE_INFINITY,900));
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("logWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,10)),5, Double.POSITIVE_INFINITY,1800));
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("cobblestone")),Lists.newArrayList(new ItemStack(Blocks.GRAVEL,1)),5, Double.POSITIVE_INFINITY,3000));
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("gravel")),Lists.newArrayList(new ItemStack(Blocks.SAND,1), new ItemStack(Items.FLINT, 1)),10, Double.POSITIVE_INFINITY,3000));
+        quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.BLAZE_ROD)),Lists.newArrayList(new ItemStack(Items.BLAZE_POWDER,5)),10, Double.POSITIVE_INFINITY,1500));
+        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreCoal")),Lists.newArrayList(new ItemStack(Items.COAL,4)),20, Double.POSITIVE_INFINITY,3000));
+        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreRedstone")),Lists.newArrayList(new ItemStack(Items.REDSTONE,10)),20, Double.POSITIVE_INFINITY,3000));
+        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreLapis")),Lists.newArrayList(new ItemStack(Items.DYE,16, 4)),20, Double.POSITIVE_INFINITY,3000));
+        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreQuartz")),Lists.newArrayList(new ItemStack(Items.QUARTZ,4)),20, Double.POSITIVE_INFINITY,3000));
 
-        ginRecipes.add(new GinRecipe(Lists.newArrayList(new IngredientSized(Ingredient.fromItem(Items.SUGAR),3)),Lists.newArrayList(new ItemStack(Registry.COTTON_CANDY,1)),Lists.newArrayList(),7, Double.POSITIVE_INFINITY,3000));
+        addOreQuernRecipes();
+        addFlowerQuernRecipes(event.getRegistry());
+
         ginRecipes.add(new GinRecipe(Lists.newArrayList(Ingredient.fromItem(Registry.COTTON)),Lists.newArrayList(new ItemStack(Registry.COTTON_WOOL,1)),Lists.newArrayList(new ItemStack(Registry.COTTON_SEED)),3, Double.POSITIVE_INFINITY,300));
+        ginRecipes.add(new GinRecipe(Lists.newArrayList(new IngredientSized(Ingredient.fromItem(Items.SUGAR),3)),Lists.newArrayList(new ItemStack(Registry.COTTON_CANDY,1)),Lists.newArrayList(),7, Double.POSITIVE_INFINITY,3000));
 
         ginFills.put(Registry.COTTON_CANDY, new ResourceLocation(Rustichromia.MODID,"blocks/cotton_candy"));
         ginFills.put(Registry.COTTON_WOOL, new ResourceLocation(Rustichromia.MODID,"blocks/cotton"));
 
-        assemblerRecipes.add(new AssemblerRecipe(1,Lists.newArrayList(new OreIngredient("dustWood")),Lists.newArrayList(new ItemStack(Registry.PLATE_WOOD,1)),1, Double.POSITIVE_INFINITY,500));
-        assemblerRecipes.add(new AssemblerRecipe(1,Lists.newArrayList(new IngredientSized(new OreIngredient("plateWood"),4)),Lists.newArrayList(new ItemStack(Registry.GEAR_WOOD,1)),1, Double.POSITIVE_INFINITY,500));
-        assemblerRecipes.add(new AssemblerRecipe(1,Lists.newArrayList(new IngredientSized(new OreIngredient("plankWood"),2)),Lists.newArrayList(new ItemStack(Registry.AXLE_WOOD,8)),3, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"stick_wood"),1,Lists.newArrayList(new IngredientSized(new OreIngredient("plankWood"),1)),Lists.newArrayList(new ItemStack(Items.STICK,2)),3, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"torch"),1,Lists.newArrayList(new OreIngredient("stickWood"),new OreIngredient("gemCoal")),Lists.newArrayList(new ItemStack(Blocks.TORCH,5)),5, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"plate_wood"),1,Lists.newArrayList(new OreIngredient("dustWood")),Lists.newArrayList(new ItemStack(Registry.PLATE_WOOD,1)),1, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"gear_wood"),1,Lists.newArrayList(new IngredientSized(new OreIngredient("plateWood"),4)),Lists.newArrayList(new ItemStack(Registry.GEAR_WOOD,1)),1, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"axle_wood"),1,Lists.newArrayList(new IngredientSized(new OreIngredient("plankWood"),2)),Lists.newArrayList(new ItemStack(Registry.AXLE_WOOD,8)),3, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"stonebrick_chiseled"),1,new IngredientSet().stack(new ItemStack(Blocks.STONEBRICK)), new ResultSet().stack(new ItemStack(Blocks.STONEBRICK,1, BlockStoneBrick.EnumType.CHISELED.getMetadata())),5, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"quartz_chiseled"),1,new IngredientSet().stack(new ItemStack(Blocks.QUARTZ_BLOCK)), new ResultSet().stack(new ItemStack(Blocks.QUARTZ_BLOCK,1, BlockQuartz.EnumType.CHISELED.getMetadata())),5, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"name_tag"),1,new IngredientSet().ore("paper",2).ore("string",1), new ResultSet().stack(new ItemStack(Items.NAME_TAG,1)),5, Double.POSITIVE_INFINITY,500));
+
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"gear_iron"),2,Lists.newArrayList(new IngredientSized(new OreIngredient("ingotIron"),2)),Lists.newArrayList(new ItemStack(RegistryHandler.IRON_GEAR,1)),10, Double.POSITIVE_INFINITY,1500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"axle_iron"),2,Lists.newArrayList(new IngredientSized(new OreIngredient("ingotIron"),2)),Lists.newArrayList(new ItemStack(RegistryHandler.IRON_AXLE,8)),15, Double.POSITIVE_INFINITY,1500));
+
+        FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(Registry.DUST_FLOUR),new ItemStack(Items.BREAD),0.1f);
+    }
+
+    private void addOreQuernRecipes() {
+        for (String name : OreDictionary.getOreNames()) {
+            if (!Misc.oreExists(name)) continue;
+
+            if (name.startsWith("ore")) {
+                String ore = name.substring("ore".length());
+                if (Misc.isOreBlacklisted(ore)) continue;
+
+                ItemStack output = ItemStack.EMPTY;
+
+                if (Misc.oreExists("dust" + ore)) {
+                    output = Misc.getOreStack("dust" + ore);
+                    output.setCount(2);
+                } else if (Misc.oreExists("gem" + ore)) {
+                    output = Misc.getOreStack("gem" + ore);
+                    output.setCount(2);
+                }
+
+                if(!output.isEmpty())
+                    quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient(name)),Lists.newArrayList(output),20, Double.POSITIVE_INFINITY,3000));
+            }
+        }
+    }
+
+    private void addFlowerQuernRecipes(IForgeRegistry<IRecipe> recipes) {
+        for (Map.Entry<ResourceLocation, IRecipe> entry : recipes.getEntries()) {
+            IRecipe recipe = entry.getValue();
+            ItemStack output = recipe.getRecipeOutput();
+            if(Misc.oreStartsWith(output,"dye")){
+                //We got a dye, now for the less fun bit: find a flower ingredient
+                for (Ingredient ingredient : recipe.getIngredients()) {
+                    for (ItemStack flowerCandidate : ingredient.getMatchingStacks()) {
+                        if(IsFlower(flowerCandidate)) {
+                            output = output.copy();
+                            output.setCount(output.getCount() * 4);
+                            quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromStacks(flowerCandidate)),Lists.newArrayList(output),0, Double.POSITIVE_INFINITY,300));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean IsFlower(ItemStack flowerCandidate) {
+        Item flowerItem = flowerCandidate.getItem();
+        if(flowerItem instanceof ItemBlock) {
+            Block flowerBlock = ((ItemBlock) flowerItem).getBlock();
+            Material material = flowerBlock.getDefaultState().getMaterial();
+            if(material == Material.PLANTS || material == Material.CACTUS || material == Material.CORAL || material == Material.GOURD || material == Material.VINE){
+                return true;
+            }
+        }
+        return false;
     }
 
     private ResourceLocation getRL(String name) {
