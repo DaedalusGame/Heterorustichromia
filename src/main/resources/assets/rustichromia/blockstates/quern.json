@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:quern",
+    "transform": "forge:default-block"
+  },
+  "variants":{
+    "normal":[{}],
+    "inventory":[{
+      "model": "rustichromia:quern_item"
+    }],
+    "grindstone":[{
+      "model": "rustichromia:quern_grindstone"
+    }],
+    "facing": {
+      "north": {},
+      "south": { "y": 180 },
+      "west":  { "y": 270 },
+      "east":  { "y": 90 }
+    }
+  }
+}

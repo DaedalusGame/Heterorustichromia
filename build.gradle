@@ -7,13 +7,15 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven { url = "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'com.wynprice.cursemaven:CurseMaven:1.2.3'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-
+apply plugin: 'com.wynprice.cursemaven'
 
 version = "0.1"
 group= "rustichromia" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -23,7 +25,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 minecraft {
-    version = "1.12.2-14.23.4.2705"
+    version = "1.12.2-14.23.4.2745"
     runDir = "run"
     mappings = "snapshot_20171125"
     replace "%VERSION%": "${project.version}"
@@ -40,9 +42,17 @@ artifacts {
 }
 
 repositories {
+    maven { url 'http://dvs1.progwml6.com/files/maven' }
+    maven { url 'https://minecraft.curseforge.com/api/maven/' }
+    maven { url 'https://maven.mcmoddev.com/' }
 }
 
 dependencies {
+    deobfCompile "mezz.jei:jei_1.12.2:4.8.3.128"
+    deobfCompile "slimeknights.mantle:Mantle:1.12-1.3.3.49"
+    deobfCompile "slimeknights:TConstruct:1.12.2-2.13.0.171"
+    deobfCompile "constructs-armory:conarm:1.12.2:1.2.5.3"
+    deobfCompile curse.resolveUrl("https://www.curseforge.com/minecraft/mc-mods/mysticalmechanics/files/2869691")
     compile files('libs/')
 }
 

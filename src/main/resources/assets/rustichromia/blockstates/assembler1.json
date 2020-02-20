@@ -1,0 +1,27 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:assembler",
+    "textures": {
+      "side": "rustichromia:blocks/assembler_side_wood",
+      "top": "rustichromia:blocks/assembler_top_wood",
+      "front": "rustichromia:blocks/assembler_front_wood",
+      "particle": "rustichromia:blocks/assembler_side_wood",
+      "gear": "rustichromia:items/gear_wood",
+      "core": "rustichromia:blocks/core_wood"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants":{
+    "normal":[{}],
+    "inventory":[{
+      "model": "rustichromia:assembler_item"
+    }],
+    "facing": {
+      "north": {},
+      "south": { "y": 180 },
+      "west":  { "y": 270 },
+      "east":  { "y": 90 }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:assembler",
+    "textures": {
+      "gear": "mysticalmechanics:items/gear_gold"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants":{
+    "normal":[{}],
+    "inventory":[{
+      "model": "rustichromia:assembler_item"
+    }],
+    "facing": {
+      "north": {},
+      "south": { "y": 180 },
+      "west":  { "y": 270 },
+      "east":  { "y": 90 }
+    }
+  }
+}

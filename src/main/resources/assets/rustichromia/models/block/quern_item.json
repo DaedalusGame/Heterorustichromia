@@ -1,0 +1,91 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "rustichromia:blocks/grindstone_side",
+		"1": "rustichromia:blocks/grindstone_top",
+		"3": "rustichromia:blocks/quern_basin",
+		"4": "rustichromia:blocks/quern_basin_front",
+		"5": "rustichromia:blocks/quern_basin_top",
+		"particle": "rustichromia:blocks/grindstone_side"
+	},
+	"elements": [
+		{
+			"from": [3, 6, 3],
+			"to": [13, 16, 13],
+			"faces": {
+				"north": {"uv": [3, 3, 13, 13], "texture": "#0"},
+				"east": {"uv": [3, 3, 13, 13], "texture": "#0"},
+				"south": {"uv": [3, 3, 13, 13], "texture": "#0"},
+				"west": {"uv": [3, 3, 13, 13], "texture": "#0"},
+				"up": {"uv": [3, 3, 13, 13], "texture": "#1"},
+				"down": {"uv": [3, 3, 13, 13], "texture": "#0"}
+			}
+		},
+		{
+			"from": [2, 0, 2],
+			"to": [14, 6, 14],
+			"faces": {
+				"north": {"uv": [0, 0, 10, 8], "texture": "#missing"},
+				"east": {"uv": [0, 0, 10, 8], "texture": "#missing"},
+				"south": {"uv": [0, 0, 10, 8], "texture": "#missing"},
+				"west": {"uv": [0, 0, 10, 8], "texture": "#missing"},
+				"up": {"uv": [2, 2, 14, 14], "texture": "#5"},
+				"down": {"uv": [2, 2, 14, 14], "texture": "#3"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [16, 9, 2],
+			"faces": {
+				"north": {"uv": [0, 7, 16, 16], "texture": "#4"},
+				"east": {"uv": [14, 7, 16, 16], "texture": "#3"},
+				"south": {"uv": [0, 7, 16, 16], "texture": "#3"},
+				"west": {"uv": [0, 7, 2, 16], "texture": "#3"},
+				"up": {"uv": [0, 0, 16, 2], "texture": "#5"},
+				"down": {"uv": [0, 14, 16, 16], "texture": "#3"}
+			}
+		},
+		{
+			"from": [0, 0, 14],
+			"to": [16, 9, 16],
+			"faces": {
+				"north": {"uv": [0, 7, 16, 16], "texture": "#3"},
+				"east": {"uv": [0, 7, 2, 16], "texture": "#3"},
+				"south": {"uv": [0, 7, 16, 16], "texture": "#3"},
+				"west": {"uv": [14, 7, 16, 16], "texture": "#3"},
+				"up": {"uv": [0, 14, 16, 16], "texture": "#5"},
+				"down": {"uv": [0, 0, 16, 2], "texture": "#3"}
+			}
+		},
+		{
+			"from": [0, 0, 2],
+			"to": [2, 9, 14],
+			"faces": {
+				"north": {"uv": [0, 0, 2, 9], "texture": "#missing"},
+				"east": {"uv": [2, 7, 14, 16], "texture": "#3"},
+				"south": {"uv": [0, 0, 2, 9], "texture": "#missing"},
+				"west": {"uv": [2, 7, 14, 16], "texture": "#3"},
+				"up": {"uv": [0, 2, 2, 14], "texture": "#5"},
+				"down": {"uv": [0, 2, 2, 14], "texture": "#3"}
+			}
+		},
+		{
+			"from": [14, 0, 2],
+			"to": [16, 9, 14],
+			"faces": {
+				"north": {"uv": [0, 0, 2, 9], "texture": "#missing"},
+				"east": {"uv": [2, 7, 14, 16], "texture": "#3"},
+				"south": {"uv": [0, 0, 2, 9], "texture": "#missing"},
+				"west": {"uv": [2, 7, 14, 16], "texture": "#3"},
+				"up": {"uv": [14, 2, 16, 14], "texture": "#5"},
+				"down": {"uv": [14, 2, 16, 14], "texture": "#3"}
+			}
+		}
+	],
+	"groups": [0,
+		{
+			"name": "quern",
+			"children": [1, 2, 3, 4, 5]
+		}
+	]
+}

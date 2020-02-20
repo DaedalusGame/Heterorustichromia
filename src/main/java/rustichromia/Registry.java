@@ -1,8 +1,8 @@
 package rustichromia;
 
 import mysticalmechanics.api.IGearBehavior;
-import mysticalmechanics.api.IMechCapability;
 import mysticalmechanics.api.MysticalMechanicsAPI;
+import mysticalmechanics.handler.RegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
@@ -19,13 +20,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import rustichromia.block.*;
 import rustichromia.item.ItemBlastSpear;
+import rustichromia.item.ItemCottonCandy;
 import rustichromia.item.ItemDisk;
 
 import javax.annotation.Nonnull;
@@ -54,13 +58,27 @@ public class Registry {
     public static Block AXLE_WOOD;
     @ObjectHolder("rustichromia:ratiobox")
     public static Block RATIOBOX;
-    @ObjectHolder("rustichromia:press")
-    public static Block PRESS;
+    @ObjectHolder("rustichromia:quern")
+    public static Block QUERN;
+    @ObjectHolder("rustichromia:gin")
+    public static Block GIN;
+    @ObjectHolder("rustichromia:crank")
+    public static Block CRANK;
+    @ObjectHolder("rustichromia:assembler1")
+    public static Block ASSEMBLER_1;
+    @ObjectHolder("rustichromia:assembler2")
+    public static Block ASSEMBLER_2;
+    @ObjectHolder("rustichromia:assembler3")
+    public static Block ASSEMBLER_3;
+    @ObjectHolder("rustichromia:cotton_seed")
+    public static Block COTTON_SEED;
 
     @ObjectHolder("rustichromia:windmill_blade")
     public static Item WINDMILL_BLADE;
     @ObjectHolder("rustichromia:gear_speckled")
     public static Item GEAR_SPECKLED;
+    @ObjectHolder("rustichromia:gear_wood")
+    public static Item GEAR_WOOD;
     @ObjectHolder("rustichromia:disk_stone")
     public static Item DISK_STONE;
     @ObjectHolder("rustichromia:disk_sandstone")
@@ -73,16 +91,29 @@ public class Registry {
     public static Item BLASTSPEAR;
     @ObjectHolder("rustichromia:shamshir")
     public static Item SHAMSHIR;
+    @ObjectHolder("rustichromia:cotton_candy")
+    public static Item COTTON_CANDY;
+    @ObjectHolder("rustichromia:cotton_candy_stick")
+    public static Item COTTON_CANDY_STICK;
+    @ObjectHolder("rustichromia:cotton")
+    public static Item COTTON;
+    @ObjectHolder("rustichromia:cotton_wool")
+    public static Item COTTON_WOOL;
+    @ObjectHolder("rustichromia:dust_wood")
+    public static Item DUST_WOOD;
+    @ObjectHolder("rustichromia:plate_wood")
+    public static Item PLATE_WOOD;
 
     public static void init() {
-        MysticalMechanicsAPI.IMPL.registerGear(new ResourceLocation(Rustichromia.MODID, "gear_speckled"), Ingredient.fromItem(GEAR_SPECKLED), new IGearBehavior() {
+        //This doesn't work right.
+        /*MysticalMechanicsAPI.IMPL.registerGear(new ResourceLocation(Rustichromia.MODID, "gear_speckled"), Ingredient.fromItem(GEAR_SPECKLED), new IGearBehavior() {
             @Override
             public double transformPower(TileEntity tile, @Nullable EnumFacing side, ItemStack gear, double power) {
                 if(tile != null && tile.hasCapability(MysticalMechanicsAPI.MECH_CAPABILITY,side)) {
                     IMechCapability capability = tile.getCapability(MysticalMechanicsAPI.MECH_CAPABILITY,side);
                     double actualPower = 0;
                     for (EnumFacing facing : EnumFacing.VALUES) {
-                        if(capability.isInput(facing)) {
+                        if(side != facing && capability.isInput(facing)) {
                             double testPower = capability.getPower(facing);
                             if(testPower > 0 && actualPower < testPower)
                                 actualPower = testPower;
@@ -97,7 +128,7 @@ public class Registry {
             public void visualUpdate(TileEntity tile, @Nullable EnumFacing side, ItemStack gear) {
                 //NOOP
             }
-        });
+        });*/
         MysticalMechanicsAPI.IMPL.registerGear(new ResourceLocation(Rustichromia.MODID, "disk_stone"), Ingredient.fromItem(DISK_STONE), new IGearBehavior() {
             @Override
             public double transformPower(TileEntity tile, @Nullable EnumFacing side, ItemStack gear, double power) {
@@ -194,8 +225,43 @@ public class Registry {
         MECH_TORCH_TOGGLE = new BlockMechTorchToggle(Material.WOOD).setRegistryName(Rustichromia.MODID, "mech_torch_toggle").setUnlocalizedName("mech_torch_toggle").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         AXLE_WOOD = new BlockAxleWood(Material.WOOD).setRegistryName(Rustichromia.MODID, "axle_wood").setUnlocalizedName("axle_wood").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         RATIOBOX = new BlockRatiobox(Material.WOOD).setRegistryName(Rustichromia.MODID, "ratiobox").setUnlocalizedName("ratiobox").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
-        PRESS = new BlockPress(Material.WOOD).setRegistryName(Rustichromia.MODID, "press").setUnlocalizedName("press").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+        QUERN = new BlockQuern(Material.ROCK).setRegistryName(Rustichromia.MODID, "quern").setUnlocalizedName("quern").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+        GIN = new BlockGin(Material.WOOD).setRegistryName(Rustichromia.MODID, "gin").setUnlocalizedName("gin").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+        CRANK = new BlockCrank(Material.WOOD).setRegistryName(Rustichromia.MODID, "crank").setUnlocalizedName("crank").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+        ASSEMBLER_1 = new BlockAssembler(Material.WOOD, 1) {
+            @Override
+            public ItemStack getDisplayGear() {
+                return new ItemStack(GEAR_WOOD);
+            }
 
+            @Override
+            public int getTier() {
+                return 1;
+            }
+        }.setRegistryName(Rustichromia.MODID, "assembler1").setUnlocalizedName("assembler1").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+        ASSEMBLER_2 = new BlockAssembler(Material.IRON, 2){
+            @Override
+            public ItemStack getDisplayGear() {
+                return new ItemStack(RegistryHandler.IRON_GEAR);
+            }
+
+            @Override
+            public int getTier() {
+                return 2;
+            }
+        }.setRegistryName(Rustichromia.MODID, "assembler2").setUnlocalizedName("assembler2").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+        ASSEMBLER_3 = new BlockAssembler(Material.IRON, 4){
+            @Override
+            public ItemStack getDisplayGear() {
+                return new ItemStack(RegistryHandler.GOLD_GEAR);
+            }
+
+            @Override
+            public int getTier() {
+                return 3;
+            }
+        }.setRegistryName(Rustichromia.MODID, "assembler3").setUnlocalizedName("assembler3").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
+        COTTON_SEED = new Block(Material.PLANTS).setRegistryName(Rustichromia.MODID, "cotton_seed").setUnlocalizedName("cotton_seed").setCreativeTab(CreativeTabs.MATERIALS).setHardness(5.0F).setResistance(10.0F);
 
         event.getRegistry().register(MOLTEN_STEEL);
         event.getRegistry().register(BLOCK_STEEL);
@@ -207,7 +273,13 @@ public class Registry {
         event.getRegistry().register(MECH_TORCH_TOGGLE);
         event.getRegistry().register(AXLE_WOOD);
         event.getRegistry().register(RATIOBOX);
-        event.getRegistry().register(PRESS);
+        event.getRegistry().register(QUERN);
+        event.getRegistry().register(GIN);
+        event.getRegistry().register(CRANK);
+        event.getRegistry().register(ASSEMBLER_1);
+        event.getRegistry().register(ASSEMBLER_2);
+        event.getRegistry().register(ASSEMBLER_3);
+        event.getRegistry().register(COTTON_SEED);
     }
 
     @SubscribeEvent
@@ -224,16 +296,29 @@ public class Registry {
         event.getRegistry().register(new ItemBlock(MECH_TORCH_TOGGLE).setRegistryName(MECH_TORCH_TOGGLE.getRegistryName()));
         event.getRegistry().register(new ItemBlock(AXLE_WOOD).setRegistryName(AXLE_WOOD.getRegistryName()));
         event.getRegistry().register(new ItemBlock(RATIOBOX).setRegistryName(RATIOBOX.getRegistryName()));
-        event.getRegistry().register(new ItemBlock(PRESS).setRegistryName(PRESS.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(QUERN).setRegistryName(QUERN.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(GIN).setRegistryName(GIN.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(CRANK).setRegistryName(CRANK.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(ASSEMBLER_1).setRegistryName(ASSEMBLER_1.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(ASSEMBLER_2).setRegistryName(ASSEMBLER_2.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(ASSEMBLER_3).setRegistryName(ASSEMBLER_3.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(COTTON_SEED).setRegistryName(COTTON_SEED.getRegistryName()));
 
         event.getRegistry().register(SHAMSHIR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"shamshir")).setUnlocalizedName("shamshir").setCreativeTab(CreativeTabs.COMBAT));
         event.getRegistry().register(SPEAR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"spear")).setUnlocalizedName("spear").setCreativeTab(CreativeTabs.COMBAT));
         event.getRegistry().register(BLASTSPEAR = new ItemBlastSpear().setRegistryName(new ResourceLocation(Rustichromia.MODID,"blastspear")).setUnlocalizedName("blastspear").setCreativeTab(CreativeTabs.COMBAT));
         event.getRegistry().register(WINDMILL_BLADE = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"windmill_blade")).setUnlocalizedName("windmill_blade").setCreativeTab(mystmechTab));
         event.getRegistry().register(GEAR_SPECKLED = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"gear_speckled")).setUnlocalizedName("gear_speckled").setCreativeTab(mystmechTab));
+        event.getRegistry().register(GEAR_WOOD = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"gear_wood")).setUnlocalizedName("gear_wood").setCreativeTab(mystmechTab));
         event.getRegistry().register(DISK_STONE = new ItemDisk(1).setRegistryName(new ResourceLocation(Rustichromia.MODID,"disk_stone")).setUnlocalizedName("disk_stone").setCreativeTab(mystmechTab));
         event.getRegistry().register(DISK_SANDSTONE = new ItemDisk(1).setRegistryName(new ResourceLocation(Rustichromia.MODID,"disk_sandstone")).setUnlocalizedName("disk_sandstone").setCreativeTab(mystmechTab));
         event.getRegistry().register(DISK_RED_SANDSTONE = new ItemDisk(1).setRegistryName(new ResourceLocation(Rustichromia.MODID,"disk_red_sandstone")).setUnlocalizedName("disk_red_sandstone").setCreativeTab(mystmechTab));
+        event.getRegistry().register(COTTON_CANDY = new ItemFood(4,2f, false).setRegistryName(new ResourceLocation(Rustichromia.MODID,"cotton_candy")).setUnlocalizedName("cotton_candy").setCreativeTab(CreativeTabs.FOOD));
+        event.getRegistry().register(COTTON_CANDY_STICK = new ItemCottonCandy(6, 1.6f, false).setRegistryName(new ResourceLocation(Rustichromia.MODID,"cotton_candy_stick")).setUnlocalizedName("cotton_candy_stick").setCreativeTab(CreativeTabs.FOOD));
+        event.getRegistry().register(COTTON = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"cotton")).setUnlocalizedName("cotton").setCreativeTab(CreativeTabs.MATERIALS));
+        event.getRegistry().register(COTTON_WOOL = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"cotton_wool")).setUnlocalizedName("cotton_wool").setCreativeTab(CreativeTabs.MATERIALS));
+        event.getRegistry().register(DUST_WOOD = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"dust_wood")).setUnlocalizedName("dust_wood").setCreativeTab(CreativeTabs.MATERIALS));
+        event.getRegistry().register(PLATE_WOOD = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"plate_wood")).setUnlocalizedName("plate_wood").setCreativeTab(CreativeTabs.MATERIALS));
     }
 
     @SideOnly(Side.CLIENT)
@@ -257,12 +342,21 @@ public class Registry {
         registerItemModel(Item.getItemFromBlock(RATIOBOX), 1, "axle_input");
         registerItemModel(Item.getItemFromBlock(RATIOBOX), 2, "axle_output_a");
         registerItemModel(Item.getItemFromBlock(RATIOBOX), 3, "axle_output_b");
-        registerItemModel(Item.getItemFromBlock(PRESS), 0, "inventory");
-        registerItemModel(Item.getItemFromBlock(PRESS), 1, "extension");
-        registerItemModel(Item.getItemFromBlock(PRESS), 2, "head");
+        registerItemModel(Item.getItemFromBlock(QUERN), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(QUERN), 1, "grindstone");
+        registerItemModel(Item.getItemFromBlock(GIN), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(GIN), 1, "blade");
+        registerItemModel(Item.getItemFromBlock(ASSEMBLER_1), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(ASSEMBLER_2), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(ASSEMBLER_3), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(COTTON_SEED), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(CRANK), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(CRANK), 1, "normal");
+
 
         registerItemModel(WINDMILL_BLADE, 0, "inventory");
         registerItemModel(GEAR_SPECKLED, 0, "inventory");
+        registerItemModel(GEAR_WOOD, 0, "inventory");
         registerItemModel(DISK_STONE, 0, "inventory");
         registerItemModel(DISK_SANDSTONE, 0, "inventory");
         registerItemModel(DISK_RED_SANDSTONE, 0, "inventory");
@@ -270,10 +364,28 @@ public class Registry {
         registerItemModel(SPEAR, 0, "inventory");
         registerItemModel(SPEAR, 1, "normal");
         registerItemModel(BLASTSPEAR, 0, "inventory");
+        registerItemModel(COTTON_CANDY, 0, "inventory");
+        registerItemModel(COTTON_CANDY_STICK, 0, "inventory");
+        registerItemModel(COTTON, 0, "inventory");
+        registerItemModel(COTTON_WOOL, 0, "inventory");
+        registerItemModel(DUST_WOOD, 0, "inventory");
+        registerItemModel(PLATE_WOOD, 0, "inventory");
+
+        OreDictionary.registerOre("dustWood", DUST_WOOD);
+        OreDictionary.registerOre("plateWood", PLATE_WOOD);
+        OreDictionary.registerOre("gearWood", GEAR_WOOD);
+        OreDictionary.registerOre("gearDiorite", GEAR_SPECKLED);
     }
 
     @SideOnly(Side.CLIENT)
-    public void registerItemModel(@Nonnull Item item, int meta, String variant) {
+    public static void registerItemModel(@Nonnull Item item, int meta, String variant) {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), variant));
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onTextureStitch(TextureStitchEvent event) {
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cotton"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cotton_candy"));
     }
 }

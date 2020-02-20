@@ -1,0 +1,24 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:crank",
+    "textures": {
+      "particle": "rustichromia:blocks/axle_wood"
+    }
+  },
+  "variants":{
+    "normal": [{}],
+    "inventory": [{
+      "model": "rustichromia:crank_item",
+      "transform": "forge:default-item"
+    }],
+    "facing": {
+      "down":  { "x": 180 },
+      "up":    { },
+      "north": { "x": 90 },
+      "south": { "x": 90, "y": 180 },
+      "west":  { "x": 90, "y": 270 },
+      "east":  { "x": 90, "y": 90 }
+    }
+  }
+}
