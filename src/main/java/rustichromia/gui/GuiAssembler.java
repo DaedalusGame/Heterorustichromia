@@ -75,9 +75,8 @@ public class GuiAssembler extends GuiContainer {
             this.currentScroll = MathHelper.clamp(this.currentScroll, 0.0F, 1.0F);
             ((ContainerAssembler)this.inventorySlots).scrollTo(this.currentScroll);
         }
-
+        this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
-
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 

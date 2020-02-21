@@ -16,10 +16,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import rustichromia.Registry;
+import rustichromia.Rustichromia;
 import rustichromia.block.BlockRatiobox;
+import rustichromia.gui.GuiHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -209,8 +212,8 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
         Misc.syncTE(this, isBroken);
     }
 
-    public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack heldStack = playerIn.getHeldItem(hand);
+    public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack heldStack = player.getHeldItem(hand);
 
         if(hand != EnumHand.MAIN_HAND)
             return false;
@@ -226,19 +229,21 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
             }
         } else if(heldStack.isEmpty()) {
             if(facing == sideA) {
-                if(playerIn.isSneaking())
+                if(player.isSneaking())
                     sideA = null;
                 else {
                     swapSides();
                 }
+                capability.onPowerChange();
             } else if(facing == sideB) {
-                if(playerIn.isSneaking())
+                if(player.isSneaking())
                     sideB = null;
                 else {
                     swapSides();
                 }
-            } else if(facing != getInput()) {
-                if(playerIn.isSneaking())
+                capability.onPowerChange();
+            } /*else if(facing != getInput()) {
+                if(player.isSneaking())
                     if(active)
                         ratioOn = Math.max(0,ratioOn-0.1);
                     else
@@ -249,8 +254,9 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
                     else
                         ratioOff = Math.min(1,ratioOff+0.1);
                 }
+            }*/ else {
+                player.openGui(Rustichromia.MODID, GuiHandler.RATIOBOX, world, pos.getX(), pos.getY(), pos.getZ());
             }
-            capability.onPowerChange();
             return true;
         }
 
@@ -292,6 +298,24 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
             return inputLastAngle;
         else
             return 0;
+    }
+
+    public double getRatioOff() {
+        return ratioOff;
+    }
+
+    public double getRatioOn() {
+        return ratioOn;
+    }
+
+    public void setRatio(double ratioOn, double ratioOff) {
+        this.ratioOn = MathHelper.clamp(roundTo(ratioOn,100),0,1);
+        this.ratioOff = MathHelper.clamp(roundTo(ratioOff, 100), 0,1);
+        capability.onPowerChange();
+    }
+
+    private static double roundTo(double num, double n) {
+        return Math.round(num * n) / n;
     }
 
     private class RatioboxMechCapability extends DefaultMechCapability {
