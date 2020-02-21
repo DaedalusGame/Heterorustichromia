@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import rustichromia.Rustichromia;
 import rustichromia.gui.GuiHandler;
 import rustichromia.tile.TileEntityAssembler;
+import rustichromia.tile.TileEntityBasicMachine;
 
 import javax.annotation.Nullable;
 
@@ -52,7 +53,7 @@ public abstract class BlockAssembler extends Block {
         EnumFacing facing = placer != null ? placer.getHorizontalFacing() : side;
         if(facing.getAxis().isVertical())
             facing = EnumFacing.NORTH;
-        return getDefaultState().withProperty(BlockAssembler.facing, facing);
+        return getDefaultState().withProperty(BlockAssembler.facing, facing.getOpposite());
     }
 
     @Override
@@ -66,10 +67,18 @@ public abstract class BlockAssembler extends Block {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        playerIn.openGui(Rustichromia.MODID, GuiHandler.ASSEMBLER_RECIPE, worldIn, pos.getX(), pos.getY(), pos.getZ());
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TileEntityBasicMachine)
+            return ((TileEntityBasicMachine) tile).activate(world,pos,state,player,hand,facing,hitX,hitY,hitZ);
+        return false;
+    }
 
-        return true;
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TileEntityBasicMachine)
+            ((TileEntityBasicMachine) tile).breakBlock(world,pos,state,null);
     }
 
     @Override

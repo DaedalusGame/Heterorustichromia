@@ -11,6 +11,11 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import rustichromia.Rustichromia;
+import rustichromia.gui.GuiHandler;
 import rustichromia.recipe.BasicMachineRecipe;
 
 public abstract class TileEntityBasicMachine<TRecipe extends BasicMachineRecipe> extends TileEntity implements ITickable {
@@ -25,13 +30,11 @@ public abstract class TileEntityBasicMachine<TRecipe extends BasicMachineRecipe>
 
     public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
                             EnumFacing side, float hitX, float hitY, float hitZ) {
-        ItemStack heldItem = player.getHeldItem(hand);
-        if (!heldItem.isEmpty()){
-            boolean didFill = FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);
-            this.markDirty();
-            return didFill;
-        }
         return false;
+    }
+
+    public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+        clearInventory();
     }
 
     public abstract TRecipe findRecipe(double speed);
@@ -41,6 +44,28 @@ public abstract class TileEntityBasicMachine<TRecipe extends BasicMachineRecipe>
     public abstract void consumeInputs(TRecipe recipe);
 
     public abstract void produceOutputs(TRecipe recipe, double speed);
+
+    public abstract void clearInventory();
+
+    public boolean hasInventory(EnumFacing facing) {
+        TileEntity tile = getWorld().getTileEntity(getPos().offset(facing));
+        return tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,facing.getOpposite()); //Don't care what kind of inventory
+    }
+
+    public ItemStack pushToInventory(ItemStack stack, EnumFacing facing, boolean simulate) {
+        TileEntity tile = getWorld().getTileEntity(getPos().offset(facing));
+        if(tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,facing.getOpposite())) {
+            IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
+            ItemStack currentPush = stack;
+            for(int i = 0; i < handler.getSlots(); i++){
+                if(currentPush.isEmpty())
+                    break;
+                currentPush = handler.insertItem(i,currentPush,simulate);
+            }
+            return currentPush;
+        }
+        return stack;
+    }
 
     public void resetRecipe() {
         recipe = null;

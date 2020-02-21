@@ -6,12 +6,14 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import rustichromia.tile.TileEntityBasicMachine;
 import rustichromia.tile.TileEntityGin;
 import rustichromia.tile.TileEntityQuern;
 
@@ -49,7 +51,7 @@ public class BlockGin extends Block {
         EnumFacing facing = placer != null ? placer.getHorizontalFacing() : side;
         if(facing.getAxis().isVertical())
             facing = EnumFacing.NORTH;
-        return getDefaultState().withProperty(BlockGin.facing, facing);
+        return getDefaultState().withProperty(BlockGin.facing, facing.getOpposite());
     }
 
     @Override
@@ -60,6 +62,21 @@ public class BlockGin extends Block {
     @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(facing).getHorizontalIndex();
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TileEntityBasicMachine)
+            return ((TileEntityBasicMachine) tile).activate(world,pos,state,player,hand,facing,hitX,hitY,hitZ);
+        return false;
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        TileEntity tile = world.getTileEntity(pos);
+        if(tile instanceof TileEntityBasicMachine)
+            ((TileEntityBasicMachine) tile).breakBlock(world,pos,state,null);
     }
 
     @Override

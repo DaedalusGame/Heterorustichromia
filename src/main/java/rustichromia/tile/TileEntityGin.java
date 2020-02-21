@@ -27,7 +27,6 @@ import rustichromia.util.ItemStackHandlerUnique;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
@@ -79,7 +78,11 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
             return;
         ItemStack stack = outputsInterior.removeFirst();
         if(!stack.isEmpty()) {
-            ejectItem(stack);
+            EnumFacing facing = getFacing();
+            if(hasInventory(facing))
+                outputsInterior.addFirst(pushToInventory(stack, facing, false));
+            else
+                dropItem(stack, facing);
         }
     }
 
@@ -88,12 +91,15 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
             return;
         ItemStack stack = outputsExterior.removeFirst();
         if(!stack.isEmpty()) {
-            ejectItem(stack);
+            EnumFacing facing = getFacing();
+            if(hasInventory(facing))
+                outputsExterior.addFirst(pushToInventory(stack, facing, false));
+            else
+                dropItem(stack, facing);
         }
     }
 
-    private void ejectItem(ItemStack stack) {
-        EnumFacing facing = getFacing();
+    private void dropItem(ItemStack stack, EnumFacing facing) {
         EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5f + facing.getFrontOffsetX() * 0.7f, getPos().getY() + 0.1f, getPos().getZ() + 0.5f + facing.getFrontOffsetZ() * 0.7f, stack);
         item.motionX = facing.getFrontOffsetX() * 0.4f;
         item.motionY = 0;
@@ -146,6 +152,15 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
         List<ItemStack> resultsExterior = recipe.getResultsExterior(this, speed, getCraftingItems());
         outputsInterior.addAll(resultsInterior);
         outputsExterior.addAll(resultsExterior);
+    }
+
+    @Override
+    public void clearInventory() {
+        World world = getWorld();
+        BlockPos pos = getPos();
+        rustichromia.util.Misc.dropInventory(world,pos,inventory);
+        rustichromia.util.Misc.dropInventory(world,pos,outputsInterior);
+        rustichromia.util.Misc.dropInventory(world,pos,outputsExterior);
     }
 
     private List<ItemStack> getCraftingItems() {

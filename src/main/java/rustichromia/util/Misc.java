@@ -1,11 +1,17 @@
 package rustichromia.util;
 
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import rustichromia.tile.TileEntityAssembler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -83,5 +89,18 @@ public class Misc {
             return stack.copy();
         }
         return ItemStack.EMPTY;
+    }
+
+    public static void dropInventory(World world, BlockPos pos, IItemHandler itemHandler) {
+        for (int i = 0; i < itemHandler.getSlots(); i++)
+            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
+    }
+
+    public static void dropInventory(World world, BlockPos pos, ItemBuffer itemBuffer) {
+        itemBuffer.dropAll(world,pos);
+    }
+
+    public static void syncTE(TileEntity tile, boolean broken) {
+        mysticalmechanics.util.Misc.syncTE(tile,broken);
     }
 }

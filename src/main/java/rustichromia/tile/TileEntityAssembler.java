@@ -1,30 +1,31 @@
 package rustichromia.tile;
 
 import mysticalmechanics.api.MysticalMechanicsAPI;
-import mysticalmechanics.util.Misc;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import rustichromia.Rustichromia;
 import rustichromia.block.BlockAssembler;
 import rustichromia.block.BlockQuern;
+import rustichromia.gui.GuiHandler;
 import rustichromia.recipe.AssemblerRecipe;
 import rustichromia.recipe.RecipeRegistry;
-import rustichromia.util.ConsumerMechCapability;
-import rustichromia.util.IHasSize;
-import rustichromia.util.ItemBuffer;
-import rustichromia.util.ItemStackHandlerUnique;
+import rustichromia.util.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -112,12 +113,25 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
         ItemStack stack = outputs.removeFirst();
         if (!stack.isEmpty()) {
             EnumFacing facing = getFacing();
-            EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5f + facing.getFrontOffsetX() * 0.7f, getPos().getY() + 0.1f, getPos().getZ() + 0.5f + facing.getFrontOffsetZ() * 0.7f, stack);
-            item.motionX = facing.getFrontOffsetX() * 0.4f;
-            item.motionY = 0;
-            item.motionZ = facing.getFrontOffsetZ() * 0.4f;
-            getWorld().spawnEntity(item);
+            if(hasInventory(facing))
+                outputs.addFirst(pushToInventory(stack, facing, false));
+            else
+                dropItem(stack, facing);
         }
+    }
+
+    private void dropItem(ItemStack stack, EnumFacing facing) {
+        EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5f + facing.getFrontOffsetX() * 0.7f, getPos().getY() + 0.1f, getPos().getZ() + 0.5f + facing.getFrontOffsetZ() * 0.7f, stack);
+        item.motionX = facing.getFrontOffsetX() * 0.4f;
+        item.motionY = 0;
+        item.motionZ = facing.getFrontOffsetZ() * 0.4f;
+        getWorld().spawnEntity(item);
+    }
+
+    @Override
+    public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        player.openGui(Rustichromia.MODID, GuiHandler.ASSEMBLER_RECIPE, world, pos.getX(), pos.getY(), pos.getZ());
+        return true;
     }
 
     @Override
@@ -164,6 +178,14 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
     public void produceOutputs(AssemblerRecipe recipe, double speed) {
         List<ItemStack> results = recipe.getResults(this, speed, getCraftingItems());
         outputs.addAll(results);
+    }
+
+    @Override
+    public void clearInventory() {
+        World world = getWorld();
+        BlockPos pos = getPos();
+        Misc.dropInventory(world,pos,inventory);
+        Misc.dropInventory(world,pos,outputs);
     }
 
     private List<ItemStack> getCraftingItems() {

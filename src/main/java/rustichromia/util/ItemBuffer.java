@@ -1,10 +1,13 @@
 package rustichromia.util;
 
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.Collection;
@@ -21,6 +24,8 @@ public class ItemBuffer implements INBTSerializable<NBTTagList> {
     }
 
     public void add(ItemStack stack) {
+        if(stack.isEmpty())
+            return;
         stacks.add(stack);
         tile.markDirty();
         checkOverflow();
@@ -30,6 +35,12 @@ public class ItemBuffer implements INBTSerializable<NBTTagList> {
         stacks.addAll(stack);
         tile.markDirty();
         checkOverflow();
+    }
+
+    public void addFirst(ItemStack stack) {
+        if(stack.isEmpty())
+            return;
+        stacks.addFirst(stack);
     }
 
     public ItemStack removeFirst() {
@@ -55,6 +66,12 @@ public class ItemBuffer implements INBTSerializable<NBTTagList> {
 
     public int size() {
         return stacks.size();
+    }
+
+    public void dropAll(World world, BlockPos pos) {
+        for (ItemStack stack : stacks) {
+            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+        }
     }
 
     private void checkOverflow() {

@@ -77,12 +77,20 @@ public class TileEntityQuern extends TileEntityBasicMachine<QuernRecipe> {
         ItemStack stack = outputs.removeFirst();
         if(!stack.isEmpty()) {
             EnumFacing facing = getFacing();
-            EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5f + facing.getFrontOffsetX() * 0.7f, getPos().getY() + 0.1f, getPos().getZ() + 0.5f + facing.getFrontOffsetZ() * 0.7f, stack);
-            item.motionX = facing.getFrontOffsetX() * 0.4f;
-            item.motionY = 0;
-            item.motionZ = facing.getFrontOffsetZ() * 0.4f;
-            getWorld().spawnEntity(item);
+
+            if(hasInventory(facing))
+                outputs.addFirst(pushToInventory(stack, facing, false));
+            else
+                dropItem(stack, facing);
         }
+    }
+
+    private void dropItem(ItemStack stack, EnumFacing facing) {
+        EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5f + facing.getFrontOffsetX() * 0.7f, getPos().getY() + 0.1f, getPos().getZ() + 0.5f + facing.getFrontOffsetZ() * 0.7f, stack);
+        item.motionX = facing.getFrontOffsetX() * 0.4f;
+        item.motionY = 0;
+        item.motionZ = facing.getFrontOffsetZ() * 0.4f;
+        getWorld().spawnEntity(item);
     }
 
     @Override
@@ -124,6 +132,14 @@ public class TileEntityQuern extends TileEntityBasicMachine<QuernRecipe> {
     public void produceOutputs(QuernRecipe recipe, double speed) {
         List<ItemStack> results = recipe.getResults(this, speed, getCraftingItems());
         outputs.addAll(results);
+    }
+
+    @Override
+    public void clearInventory() {
+        World world = getWorld();
+        BlockPos pos = getPos();
+        rustichromia.util.Misc.dropInventory(world,pos,inventory);
+        rustichromia.util.Misc.dropInventory(world,pos,outputs);
     }
 
     private List<ItemStack> getCraftingItems() {
