@@ -37,7 +37,7 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
 
     ItemBuffer outputs = new ItemBuffer(this);
     ResourceLocation filter = null;
-    float angle, lastAngle;
+    float itemAngle, lastItemAngle;
 
     public TileEntityAssembler() {
         this(0);
@@ -140,8 +140,8 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
         if (!world.isRemote) {
             ejectItems();
         } else {
-            lastAngle = angle;
-            angle += 1.5f;
+            lastItemAngle = itemAngle;
+            itemAngle += 1.5f;
         }
     }
 

@@ -11,9 +11,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 
-public class ItemBuffer implements INBTSerializable<NBTTagList> {
+public class ItemBuffer implements INBTSerializable<NBTTagList>, Iterable<ItemStack> {
     private static final int OVERFLOW_THRESHOLD = 100;
 
     TileEntity tile;
@@ -96,5 +97,10 @@ public class ItemBuffer implements INBTSerializable<NBTTagList> {
         for (NBTBase stack : tag) {
             stacks.add(new ItemStack((NBTTagCompound) stack));
         }
+    }
+
+    @Override
+    public Iterator<ItemStack> iterator() {
+        return stacks.iterator();
     }
 }

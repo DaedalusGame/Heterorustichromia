@@ -1,15 +1,17 @@
 package rustichromia.tile;
 
 import mysticalmechanics.api.MysticalMechanicsAPI;
-import mysticalmechanics.util.Misc;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -17,16 +19,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import rustichromia.Registry;
 import rustichromia.block.BlockQuern;
 import rustichromia.recipe.GinRecipe;
 import rustichromia.recipe.RecipeRegistry;
-import rustichromia.util.ConsumerMechCapability;
-import rustichromia.util.IHasSize;
-import rustichromia.util.ItemBuffer;
-import rustichromia.util.ItemStackHandlerUnique;
+import rustichromia.util.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
@@ -37,6 +38,7 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
         }
     });
 
+    //TODO: instead of having an interior item buffer, could just have a superstack. if a recipe would output a different item it just won't work.
     ItemBuffer outputsInterior = new ItemBuffer(this);
     ItemBuffer outputsExterior = new ItemBuffer(this);
 
@@ -71,6 +73,48 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
         if(capability == MysticalMechanicsAPI.MECH_CAPABILITY && facing != null && facing.getAxis() != getFacing().getAxis() && facing.getAxis() != EnumFacing.Axis.Y)
             return (T) mechPower;
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = player.getHeldItem(hand);
+        if(Misc.isOre(heldItem,"stickWood") && hasCottonCandy(1)) {
+            removeCottonCandy(1);
+            heldItem.shrink(1);
+            if (heldItem.isEmpty()) {
+                heldItem = new ItemStack(Registry.COTTON_CANDY_STICK);
+            } else {
+                player.inventory.addItemStackToInventory(new ItemStack(Registry.COTTON_CANDY_STICK));
+            }
+            player.setHeldItem(hand, heldItem);
+        }
+
+        return false;
+    }
+
+    //TODO: generify
+    private boolean hasCottonCandy(int amount) {
+        int count = 0;
+        for (ItemStack stack : outputsInterior) {
+            if(stack.getItem() == Registry.COTTON_CANDY)
+                count += stack.getCount();
+        }
+        return count >= amount;
+    }
+
+    //TODO: generify
+    private void removeCottonCandy(int amount) {
+        Iterator<ItemStack> iterator = outputsInterior.iterator();
+        while(iterator.hasNext() && amount > 0){
+            ItemStack stack = iterator.next();
+            if(stack.getItem() == Registry.COTTON_CANDY) {
+                int take = Math.min(stack.getCount(),amount);
+                stack.shrink(take);
+                if(stack.isEmpty())
+                    iterator.remove();
+                amount -= take;
+            }
+        }
     }
 
     private void ejectItemsInterior() {

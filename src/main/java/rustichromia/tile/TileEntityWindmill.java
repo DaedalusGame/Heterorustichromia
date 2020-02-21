@@ -26,6 +26,7 @@ import rustichromia.handler.WindHandler;
 
 import javax.annotation.Nullable;
 
+//TODO: Possibly make stackable vertically
 public class TileEntityWindmill extends TileEntity implements ITickable {
     double lastAngle;
     double angle;

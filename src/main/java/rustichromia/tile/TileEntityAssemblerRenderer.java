@@ -79,7 +79,7 @@ public class TileEntityAssemblerRenderer extends TileEntitySpecialRenderer<TileE
             GlStateManager.pushMatrix();
             GlStateManager.translate( 0.5, 0.75+0.2, 0.5);
             GlStateManager.scale(0.75, 0.75, 0.75);
-            GlStateManager.rotate((float) MathHelper.clampedLerp(tile.lastAngle, tile.angle, partialTicks), 0, 1, 0);
+            GlStateManager.rotate((float) MathHelper.clampedLerp(tile.lastItemAngle, tile.itemAngle, partialTicks), 0, 1, 0);
             Minecraft.getMinecraft().getRenderItem().renderItem(displayItem, ItemCameraTransforms.TransformType.GROUND);
             GlStateManager.popMatrix();
             GlStateManager.popAttrib();
