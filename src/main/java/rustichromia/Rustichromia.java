@@ -27,7 +27,7 @@ import rustichromia.tile.*;
 import rustichromia.util.Attributes;
 import rustichromia.compat.*;
 
-@Mod(modid = Rustichromia.MODID, acceptedMinecraftVersions = "[1.12, 1.13)")
+@Mod(modid = Rustichromia.MODID, acceptedMinecraftVersions = "[1.12, 1.13)", dependencies = "required-after:mysticalmechanics", guiFactory = "rustichromia.gui.GuiFactory")
 @Mod.EventBusSubscriber
 public class Rustichromia {
     public static final String MODID = "rustichromia";
@@ -37,6 +37,7 @@ public class Rustichromia {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        ConfigManager.init(event.getSuggestedConfigurationFile());
 
         MinecraftForge.EVENT_BUS.register(new Registry());
         MinecraftForge.EVENT_BUS.register(new RecipeRegistry());

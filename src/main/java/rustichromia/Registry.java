@@ -202,7 +202,7 @@ public class Registry {
 
             @Override
             public int getMaxBlades(World world, BlockPos pos, IBlockState state) {
-                return 12;
+                return ConfigManager.windmillBlades;
             }
 
             @Override
@@ -218,7 +218,7 @@ public class Registry {
 
             @Override
             public int getMaxBlades(World world, BlockPos pos, IBlockState state) {
-                return 8;
+                return ConfigManager.windmillBigBlades;
             }
 
             @Override

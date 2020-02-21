@@ -24,6 +24,7 @@ import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
+import rustichromia.ConfigManager;
 import rustichromia.Registry;
 import rustichromia.Rustichromia;
 import rustichromia.util.IngredientSet;
@@ -181,11 +182,12 @@ public class RecipeRegistry {
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("cobblestone")),Lists.newArrayList(new ItemStack(Blocks.GRAVEL,1)),5, Double.POSITIVE_INFINITY,3000));
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("gravel")),Lists.newArrayList(new ItemStack(Blocks.SAND,1), new ItemStack(Items.FLINT, 1)),10, Double.POSITIVE_INFINITY,3000));
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.BLAZE_ROD)),Lists.newArrayList(new ItemStack(Items.BLAZE_POWDER,5)),10, Double.POSITIVE_INFINITY,1500));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreCoal")),Lists.newArrayList(new ItemStack(Items.COAL,4)),20, Double.POSITIVE_INFINITY,3000));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreRedstone")),Lists.newArrayList(new ItemStack(Items.REDSTONE,10)),20, Double.POSITIVE_INFINITY,3000));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreLapis")),Lists.newArrayList(new ItemStack(Items.DYE,16, 4)),20, Double.POSITIVE_INFINITY,3000));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreQuartz")),Lists.newArrayList(new ItemStack(Items.QUARTZ,4)),20, Double.POSITIVE_INFINITY,3000));
-
+        if(ConfigManager.quernOreAmount <= 0) {
+            quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreCoal")), Lists.newArrayList(new ItemStack(Items.COAL, 2 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
+            quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreRedstone")), Lists.newArrayList(new ItemStack(Items.REDSTONE, 5 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
+            quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreLapis")), Lists.newArrayList(new ItemStack(Items.DYE, 8 * ConfigManager.quernOreAmount, 4)), 20, Double.POSITIVE_INFINITY, 3000));
+            quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreQuartz")), Lists.newArrayList(new ItemStack(Items.QUARTZ, 2 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
+        }
         addOreQuernRecipes();
         addFlowerQuernRecipes(event.getRegistry());
 
@@ -211,6 +213,8 @@ public class RecipeRegistry {
     }
 
     private void addOreQuernRecipes() {
+        if(ConfigManager.quernOreAmount <= 0)
+            return;
         for (String name : OreDictionary.getOreNames()) {
             if (!Misc.oreExists(name)) continue;
 
@@ -222,10 +226,10 @@ public class RecipeRegistry {
 
                 if (Misc.oreExists("dust" + ore)) {
                     output = Misc.getOreStack("dust" + ore);
-                    output.setCount(2);
+                    output.setCount(ConfigManager.quernOreAmount);
                 } else if (Misc.oreExists("gem" + ore)) {
                     output = Misc.getOreStack("gem" + ore);
-                    output.setCount(2);
+                    output.setCount(ConfigManager.quernOreAmount);
                 }
 
                 if(!output.isEmpty())
@@ -235,6 +239,8 @@ public class RecipeRegistry {
     }
 
     private void addFlowerQuernRecipes(IForgeRegistry<IRecipe> recipes) {
+        if (ConfigManager.quernFlowerAmount <= 0)
+            return;
         for (Map.Entry<ResourceLocation, IRecipe> entry : recipes.getEntries()) {
             IRecipe recipe = entry.getValue();
             ItemStack output = recipe.getRecipeOutput();
@@ -244,7 +250,7 @@ public class RecipeRegistry {
                     for (ItemStack flowerCandidate : ingredient.getMatchingStacks()) {
                         if(IsFlower(flowerCandidate)) {
                             output = output.copy();
-                            output.setCount(output.getCount() * 4);
+                            output.setCount(output.getCount() * ConfigManager.quernFlowerAmount);
                             quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromStacks(flowerCandidate)),Lists.newArrayList(output),0, Double.POSITIVE_INFINITY,300));
                         }
                     }
