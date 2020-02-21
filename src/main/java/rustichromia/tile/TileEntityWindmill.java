@@ -5,6 +5,7 @@ import mysticalmechanics.api.MysticalMechanicsAPI;
 import mysticalmechanics.util.Misc;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -178,6 +179,8 @@ public class TileEntityWindmill extends TileEntity implements ITickable {
 
     public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         capability.setPower(0f, null);
+        for (int i = 4; i < blades; i++)
+            InventoryHelper.spawnItemStack(world,pos.getX(),pos.getY(),pos.getZ(),new ItemStack(Registry.WINDMILL_BLADE));
         updateNeighbors();
     }
 
