@@ -69,6 +69,7 @@ public class Rustichromia {
         GameRegistry.registerTileEntity(TileEntityAssembler.class, new ResourceLocation(MODID, "assembler"));
         GameRegistry.registerTileEntity(TileEntityGin.class, new ResourceLocation(MODID, "gin"));
         GameRegistry.registerTileEntity(TileEntityCrank.class, new ResourceLocation(MODID, "crank"));
+        GameRegistry.registerTileEntity(TileEntityWindVane.class, new ResourceLocation(MODID, "windvane"));
 
         int id = 0;
 

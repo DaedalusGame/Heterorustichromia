@@ -2,6 +2,8 @@ package rustichromia.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -35,6 +37,11 @@ public class ContainerRatioBox extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
         return true;
+    }
+
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
+    {
+        return ItemStack.EMPTY;
     }
 
     public void setRatio(double ratioOn, double ratioOff) {

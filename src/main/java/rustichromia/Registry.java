@@ -75,6 +75,8 @@ public class Registry {
     public static Block ASSEMBLER_3;
     @ObjectHolder("rustichromia:cotton_seed")
     public static Block COTTON_SEED;
+    @ObjectHolder("rustichromia:windvane")
+    public static Block WINDVANE;
 
     @ObjectHolder("rustichromia:windmill_blade")
     public static Item WINDMILL_BLADE;
@@ -207,7 +209,7 @@ public class Registry {
 
             @Override
             public double getBladeWeight(World world, BlockPos pos, IBlockState state) {
-                return 1.0;
+                return ConfigManager.windmillWeight;
             }
         }.setRegistryName(Rustichromia.MODID, "windmill").setUnlocalizedName("windmill").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         WINDMILL_BIG = new BlockWindmill(Material.WOOD) {
@@ -223,7 +225,7 @@ public class Registry {
 
             @Override
             public double getBladeWeight(World world, BlockPos pos, IBlockState state) {
-                return 8.0;
+                return ConfigManager.windmillBigWeight;
             }
         }.setRegistryName(Rustichromia.MODID, "windmill_big").setUnlocalizedName("windmill_big").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         MECH_TORCH = new BlockMechTorch(Material.WOOD).setRegistryName(Rustichromia.MODID, "mech_torch").setUnlocalizedName("mech_torch").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
@@ -267,6 +269,7 @@ public class Registry {
             }
         }.setRegistryName(Rustichromia.MODID, "assembler3").setUnlocalizedName("assembler3").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         COTTON_SEED = new Block(Material.PLANTS).setRegistryName(Rustichromia.MODID, "cotton_seed").setUnlocalizedName("cotton_seed").setCreativeTab(CreativeTabs.MATERIALS).setHardness(5.0F).setResistance(10.0F);
+        WINDVANE = new BlockWindVane(Material.IRON).setRegistryName(Rustichromia.MODID, "windvane").setUnlocalizedName("windvane").setCreativeTab(CreativeTabs.DECORATIONS).setHardness(5.0F).setResistance(10.0F);
 
         event.getRegistry().register(MOLTEN_STEEL);
         event.getRegistry().register(BLOCK_STEEL);
@@ -285,6 +288,7 @@ public class Registry {
         event.getRegistry().register(ASSEMBLER_2);
         event.getRegistry().register(ASSEMBLER_3);
         event.getRegistry().register(COTTON_SEED);
+        event.getRegistry().register(WINDVANE);
     }
 
     @SubscribeEvent
@@ -308,6 +312,7 @@ public class Registry {
         event.getRegistry().register(new ItemBlock(ASSEMBLER_2).setRegistryName(ASSEMBLER_2.getRegistryName()));
         event.getRegistry().register(new ItemBlock(ASSEMBLER_3).setRegistryName(ASSEMBLER_3.getRegistryName()));
         event.getRegistry().register(new ItemBlock(COTTON_SEED).setRegistryName(COTTON_SEED.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(WINDVANE).setRegistryName(WINDVANE.getRegistryName()));
 
         event.getRegistry().register(SHAMSHIR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"shamshir")).setUnlocalizedName("shamshir").setCreativeTab(CreativeTabs.COMBAT));
         event.getRegistry().register(SPEAR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"spear")).setUnlocalizedName("spear").setCreativeTab(CreativeTabs.COMBAT));
@@ -370,7 +375,8 @@ public class Registry {
         registerItemModel(Item.getItemFromBlock(COTTON_SEED), 0, "inventory");
         registerItemModel(Item.getItemFromBlock(CRANK), 0, "inventory");
         registerItemModel(Item.getItemFromBlock(CRANK), 1, "normal");
-
+        registerItemModel(Item.getItemFromBlock(WINDVANE), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(WINDVANE), 1, "normal");
 
         registerItemModel(WINDMILL_BLADE, 0, "inventory");
         registerItemModel(GEAR_SPECKLED, 0, "inventory");

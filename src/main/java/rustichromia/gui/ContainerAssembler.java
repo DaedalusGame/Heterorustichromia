@@ -242,6 +242,49 @@ public class ContainerAssembler extends Container {
         return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
+    {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(index);
+
+        if (slot != null && slot.getHasStack())
+        {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+
+            if (index < 1)
+            {
+                if (!this.mergeItemStack(itemstack1, 1+ROWS*COLUMNS, 1+ROWS*COLUMNS + 27 + 9, true))
+                {
+                    return ItemStack.EMPTY;
+                }
+            }
+            else if (!this.mergeItemStack(itemstack1, 0, 1, false))
+            {
+                return ItemStack.EMPTY;
+            }
+
+            if (itemstack1.isEmpty())
+            {
+                slot.putStack(ItemStack.EMPTY);
+            }
+            else
+            {
+                slot.onSlotChanged();
+            }
+
+            if (itemstack1.getCount() == itemstack.getCount())
+            {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTake(playerIn, itemstack1);
+        }
+
+        return itemstack;
+    }
+
     public void setRecipe(ResourceLocation id, boolean shouldClose) {
         assembler.setFilter(id);
         if(shouldClose)

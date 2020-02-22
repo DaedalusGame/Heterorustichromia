@@ -182,7 +182,7 @@ public class RecipeRegistry {
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("cobblestone")),Lists.newArrayList(new ItemStack(Blocks.GRAVEL,1)),5, Double.POSITIVE_INFINITY,3000));
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("gravel")),Lists.newArrayList(new ItemStack(Blocks.SAND,1), new ItemStack(Items.FLINT, 1)),10, Double.POSITIVE_INFINITY,3000));
         quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.BLAZE_ROD)),Lists.newArrayList(new ItemStack(Items.BLAZE_POWDER,5)),10, Double.POSITIVE_INFINITY,1500));
-        if(ConfigManager.quernOreAmount <= 0) {
+        if(ConfigManager.quernOreAmount > 0) {
             quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreCoal")), Lists.newArrayList(new ItemStack(Items.COAL, 2 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
             quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreRedstone")), Lists.newArrayList(new ItemStack(Items.REDSTONE, 5 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
             quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreLapis")), Lists.newArrayList(new ItemStack(Items.DYE, 8 * ConfigManager.quernOreAmount, 4)), 20, Double.POSITIVE_INFINITY, 3000));
