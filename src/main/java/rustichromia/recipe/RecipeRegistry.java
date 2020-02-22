@@ -170,6 +170,11 @@ public class RecipeRegistry {
         event.getRegistry().register(new ShapedOreRecipe(getRL("crank"),new ItemStack(Registry.CRANK,1),true,new Object[]{
                 " I", "II", "I ",
                 'I', new ItemStack(Registry.AXLE_WOOD)}).setRegistryName(getRL("crank")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("windvane"),new ItemStack(Registry.WINDVANE,1),true,new Object[]{
+                "NI ", " II", " G ",
+                'N', "nuggetIron",
+                'I', "ingotIron",
+                'G', new ItemStack(RegistryHandler.IRON_AXLE)}).setRegistryName(getRL("windvane")));
         event.getRegistry().register(new ShapelessOreRecipe(getRL("cotton_candy_stick"),new ItemStack(Registry.COTTON_CANDY_STICK,1),new Object[]{
                 "stickWood",new ItemStack(Registry.COTTON_CANDY),new ItemStack(Registry.COTTON_CANDY)}).setRegistryName(getRL("cotton_candy_stick")));
 
