@@ -4,8 +4,10 @@ import mysticalmechanics.api.DefaultMechCapability;
 import mysticalmechanics.api.IMechCapability;
 import mysticalmechanics.api.MysticalMechanicsAPI;
 import mysticalmechanics.util.Misc;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -13,19 +15,23 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.FakePlayer;
 import rustichromia.block.BlockCrank;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class TileEntityCrank extends TileEntity implements ITickable {
     double lastAngle;
     double angle;
     int windup;
     double windupPower;
+    Random random = new Random();
 
     public IMechCapability mechPower;
 
@@ -107,9 +113,25 @@ public class TileEntityCrank extends TileEntity implements ITickable {
     }
 
     public boolean activate(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (playerIn instanceof FakePlayer && random.nextDouble() < 0.1) {
+            breakCrank(false);
+        }
         windup = 100;
         windupPower = 5;
         return true;
+    }
+
+    private void breakCrank(boolean dropItem) {
+        World world = getWorld();
+        BlockPos pos = getPos();
+        IBlockState state = world.getBlockState(pos);
+        breakBlock(world, pos, state,null);
+        if(dropItem)
+            state.getBlock().dropBlockAsItem(world, pos,state,0);
+        else
+            world.playEvent(2001, pos, Block.getStateId(state));
+        world.setBlockToAir(pos);
+        world.playSound(null,pos, SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.BLOCKS, 1, 1);
     }
 
     @Override

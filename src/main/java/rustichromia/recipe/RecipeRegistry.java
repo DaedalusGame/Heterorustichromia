@@ -258,11 +258,12 @@ public class RecipeRegistry {
                             output = output.copy();
                             output.setCount(output.getCount() * ConfigManager.quernFlowerAmount);
                             quernRecipes.add(new QuernRecipe(getRL("auto_dye"+id),Lists.newArrayList(Ingredient.fromStacks(flowerCandidate)),Lists.newArrayList(output),0, Double.POSITIVE_INFINITY,300));
+                            id++;
                         }
                     }
+                    break;
                 }
             }
-            id++;
         }
     }
 

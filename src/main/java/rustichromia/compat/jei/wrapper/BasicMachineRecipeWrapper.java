@@ -5,7 +5,9 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import mysticalmechanics.api.IMechUnit;
 import mysticalmechanics.api.MysticalMechanicsAPI;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.text.TextFormatting;
 import rustichromia.recipe.BasicMachineRecipe;
 
 import java.util.ArrayList;
@@ -21,15 +23,16 @@ public abstract class BasicMachineRecipeWrapper<TRecipe extends BasicMachineReci
     }
 
     protected List<String> getPowerTooltip() {
-        IMechUnit unit = MysticalMechanicsAPI.IMPL.getDefaultUnit();
         List<String> tooltip = new ArrayList<>();
-        if (recipe.minPower > 0)
-            tooltip.add(String.format("Lower: %s", unit.format(recipe.minPower)));
-        if (!Double.isInfinite(recipe.maxPower))
-            tooltip.add(String.format("Upper: %s", unit.format(recipe.maxPower)));
+        List<String> basePowerData = recipe.getBasePowerData();
         List<String> powerData = recipe.getPowerData();
+        if(basePowerData != null)
+            tooltip.addAll(basePowerData);
         if(powerData != null)
             tooltip.addAll(powerData);
+        boolean showAdvanced = Minecraft.getMinecraft().gameSettings.advancedItemTooltips || GuiScreen.isShiftKeyDown();
+        if(showAdvanced)
+            tooltip.add(TextFormatting.GRAY + recipe.id.toString());
         return tooltip.isEmpty() ? null : tooltip;
     }
 

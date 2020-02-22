@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -24,6 +25,7 @@ import rustichromia.tile.TileEntityAssembler;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ContainerAssembler extends Container {
     final RecipeBlob NO_RECIPE = new RecipeBlob(null) {
@@ -69,7 +71,21 @@ public class ContainerAssembler extends Container {
         }
 
         public List<String> getTooltip() {
-            return Lists.newArrayList(getName());
+            List<String> tooltip = Lists.newArrayList(getName());
+            List<String> basePowerData = recipe.getBasePowerData();
+            List<String> powerData = recipe.getPowerData();
+            List<String> extraData = recipe.getExtraData();
+            if(basePowerData != null)
+                tooltip.addAll(formatTooltip(basePowerData,TextFormatting.GRAY));
+            if(powerData != null)
+                tooltip.addAll(formatTooltip(powerData,TextFormatting.GRAY));
+            if(extraData != null)
+                tooltip.addAll(formatTooltip(extraData,TextFormatting.GRAY));
+            return tooltip;
+        }
+
+        private List<String> formatTooltip(List<String> tooltip, TextFormatting formatting) {
+            return tooltip.stream().map(line -> formatting + line).collect(Collectors.toList());
         }
 
         public boolean isSelected() {

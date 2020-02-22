@@ -1,9 +1,12 @@
 package rustichromia.recipe;
 
 import com.google.common.collect.Lists;
+import mysticalmechanics.api.IMechUnit;
+import mysticalmechanics.api.MysticalMechanicsAPI;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BasicMachineRecipe {
@@ -32,6 +35,16 @@ public class BasicMachineRecipe {
 
     public double getSpeed(double power) {
         return power;
+    }
+
+    public List<String> getBasePowerData() {
+        List<String> tooltip = new ArrayList<>();
+        IMechUnit unit = MysticalMechanicsAPI.IMPL.getDefaultUnit();
+        if (minPower > 0)
+            tooltip.add(String.format("Lower: %s", unit.format(minPower)));
+        if (!Double.isInfinite(maxPower))
+            tooltip.add(String.format("Upper: %s", unit.format(maxPower)));
+        return tooltip.isEmpty() ? null : tooltip;
     }
 
     public List<String> getPowerData() {
