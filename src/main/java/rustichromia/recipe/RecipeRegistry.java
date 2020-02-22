@@ -178,26 +178,26 @@ public class RecipeRegistry {
         event.getRegistry().register(new ShapelessOreRecipe(getRL("cotton_candy_stick"),new ItemStack(Registry.COTTON_CANDY_STICK,1),new Object[]{
                 "stickWood",new ItemStack(Registry.COTTON_CANDY),new ItemStack(Registry.COTTON_CANDY)}).setRegistryName(getRL("cotton_candy_stick")));
 
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.REEDS)),Lists.newArrayList(new ItemStack(Items.SUGAR,2)),0, Double.POSITIVE_INFINITY,300));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.WHEAT)),Lists.newArrayList(new ItemStack(Items.WHEAT_SEEDS),new ItemStack(Blocks.TALLGRASS,1, BlockTallGrass.EnumType.GRASS.getMeta())),0, Double.POSITIVE_INFINITY,300)); //TODO: make this produce chaff; possible candidate for Gin (threshing)
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.WHEAT_SEEDS)),Lists.newArrayList(new ItemStack(Registry.DUST_FLOUR)),0, Double.POSITIVE_INFINITY,300));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.BONE)),Lists.newArrayList(new ItemStack(Items.DYE,6, 15)),3, Double.POSITIVE_INFINITY,900));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("plankWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,2)),3, Double.POSITIVE_INFINITY,900));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("logWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,10)),5, Double.POSITIVE_INFINITY,1800));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("cobblestone")),Lists.newArrayList(new ItemStack(Blocks.GRAVEL,1)),5, Double.POSITIVE_INFINITY,3000));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("gravel")),Lists.newArrayList(new ItemStack(Blocks.SAND,1), new ItemStack(Items.FLINT, 1)),10, Double.POSITIVE_INFINITY,3000));
-        quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromItem(Items.BLAZE_ROD)),Lists.newArrayList(new ItemStack(Items.BLAZE_POWDER,5)),10, Double.POSITIVE_INFINITY,1500));
+        quernRecipes.add(new QuernRecipe(getRL("reeds_to_sugar"),Lists.newArrayList(Ingredient.fromItem(Items.REEDS)),Lists.newArrayList(new ItemStack(Items.SUGAR,2)),0, Double.POSITIVE_INFINITY,300));
+        quernRecipes.add(new QuernRecipe(getRL("wheat_to_chaff"),Lists.newArrayList(Ingredient.fromItem(Items.WHEAT)),Lists.newArrayList(new ItemStack(Items.WHEAT_SEEDS),new ItemStack(Blocks.TALLGRASS,1, BlockTallGrass.EnumType.GRASS.getMeta())),0, Double.POSITIVE_INFINITY,300)); //TODO: make this produce chaff; possible candidate for Gin (threshing)
+        quernRecipes.add(new QuernRecipe(getRL("wheat_to_flour"),Lists.newArrayList(Ingredient.fromItem(Items.WHEAT_SEEDS)),Lists.newArrayList(new ItemStack(Registry.DUST_FLOUR)),0, Double.POSITIVE_INFINITY,300));
+        quernRecipes.add(new QuernRecipe(getRL("bonemeal"),Lists.newArrayList(Ingredient.fromItem(Items.BONE)),Lists.newArrayList(new ItemStack(Items.DYE,6, 15)),3, Double.POSITIVE_INFINITY,900));
+        quernRecipes.add(new QuernRecipe(getRL("plank_to_dust"),Lists.newArrayList(new OreIngredient("plankWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,2)),3, Double.POSITIVE_INFINITY,900));
+        quernRecipes.add(new QuernRecipe(getRL("log_to_dust"),Lists.newArrayList(new OreIngredient("logWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,10)),5, Double.POSITIVE_INFINITY,1800));
+        quernRecipes.add(new QuernRecipe(getRL("cobblestone_to_gravel"),Lists.newArrayList(new OreIngredient("cobblestone")),Lists.newArrayList(new ItemStack(Blocks.GRAVEL,1)),5, Double.POSITIVE_INFINITY,3000));
+        quernRecipes.add(new QuernRecipe(getRL("gravel_to_sand"),Lists.newArrayList(new OreIngredient("gravel")),Lists.newArrayList(new ItemStack(Blocks.SAND,1), new ItemStack(Items.FLINT, 1)),10, Double.POSITIVE_INFINITY,3000));
+        quernRecipes.add(new QuernRecipe(getRL("blaze_powder"),Lists.newArrayList(Ingredient.fromItem(Items.BLAZE_ROD)),Lists.newArrayList(new ItemStack(Items.BLAZE_POWDER,5)),10, Double.POSITIVE_INFINITY,1500));
         if(ConfigManager.quernOreAmount > 0) {
-            quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreCoal")), Lists.newArrayList(new ItemStack(Items.COAL, 2 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
-            quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreRedstone")), Lists.newArrayList(new ItemStack(Items.REDSTONE, 5 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
-            quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreLapis")), Lists.newArrayList(new ItemStack(Items.DYE, 8 * ConfigManager.quernOreAmount, 4)), 20, Double.POSITIVE_INFINITY, 3000));
-            quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient("oreQuartz")), Lists.newArrayList(new ItemStack(Items.QUARTZ, 2 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
+            quernRecipes.add(new QuernRecipe(getRL("coal"),Lists.newArrayList(new OreIngredient("oreCoal")), Lists.newArrayList(new ItemStack(Items.COAL, 2 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
+            quernRecipes.add(new QuernRecipe(getRL("redstone"),Lists.newArrayList(new OreIngredient("oreRedstone")), Lists.newArrayList(new ItemStack(Items.REDSTONE, 5 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
+            quernRecipes.add(new QuernRecipe(getRL("lapis"),Lists.newArrayList(new OreIngredient("oreLapis")), Lists.newArrayList(new ItemStack(Items.DYE, 8 * ConfigManager.quernOreAmount, 4)), 20, Double.POSITIVE_INFINITY, 3000));
+            quernRecipes.add(new QuernRecipe(getRL("quartz"),Lists.newArrayList(new OreIngredient("oreQuartz")), Lists.newArrayList(new ItemStack(Items.QUARTZ, 2 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
         }
         addOreQuernRecipes();
         addFlowerQuernRecipes(event.getRegistry());
 
-        ginRecipes.add(new GinRecipe(Lists.newArrayList(Ingredient.fromItem(Registry.COTTON)),Lists.newArrayList(new ItemStack(Registry.COTTON_WOOL,1)),Lists.newArrayList(new ItemStack(Registry.COTTON_SEED)),3, Double.POSITIVE_INFINITY,300));
-        ginRecipes.add(new GinRecipe(Lists.newArrayList(new IngredientSized(Ingredient.fromItem(Items.SUGAR),3)),Lists.newArrayList(new ItemStack(Registry.COTTON_CANDY,1)),Lists.newArrayList(),7, Double.POSITIVE_INFINITY,3000));
+        ginRecipes.add(new GinRecipe(getRL("cotton"),Lists.newArrayList(Ingredient.fromItem(Registry.COTTON)),Lists.newArrayList(new ItemStack(Registry.COTTON_WOOL,1)),Lists.newArrayList(new ItemStack(Registry.COTTON_SEED)),3, Double.POSITIVE_INFINITY,300));
+        ginRecipes.add(new GinRecipe(getRL("cotton_candy"),Lists.newArrayList(new IngredientSized(Ingredient.fromItem(Items.SUGAR),3)),Lists.newArrayList(new ItemStack(Registry.COTTON_CANDY,1)),Lists.newArrayList(),7, Double.POSITIVE_INFINITY,3000));
 
         ginFills.put(Registry.COTTON_CANDY, new ResourceLocation(Rustichromia.MODID,"blocks/cotton_candy"));
         ginFills.put(Registry.COTTON_WOOL, new ResourceLocation(Rustichromia.MODID,"blocks/cotton"));
@@ -238,7 +238,7 @@ public class RecipeRegistry {
                 }
 
                 if(!output.isEmpty())
-                    quernRecipes.add(new QuernRecipe(Lists.newArrayList(new OreIngredient(name)),Lists.newArrayList(output),20, Double.POSITIVE_INFINITY,3000));
+                    quernRecipes.add(new QuernRecipe(getRL("auto_"+ore.toLowerCase()),Lists.newArrayList(new OreIngredient(name)),Lists.newArrayList(output),20, Double.POSITIVE_INFINITY,3000));
             }
         }
     }
@@ -246,6 +246,7 @@ public class RecipeRegistry {
     private void addFlowerQuernRecipes(IForgeRegistry<IRecipe> recipes) {
         if (ConfigManager.quernFlowerAmount <= 0)
             return;
+        int id = 0;
         for (Map.Entry<ResourceLocation, IRecipe> entry : recipes.getEntries()) {
             IRecipe recipe = entry.getValue();
             ItemStack output = recipe.getRecipeOutput();
@@ -256,11 +257,12 @@ public class RecipeRegistry {
                         if(IsFlower(flowerCandidate)) {
                             output = output.copy();
                             output.setCount(output.getCount() * ConfigManager.quernFlowerAmount);
-                            quernRecipes.add(new QuernRecipe(Lists.newArrayList(Ingredient.fromStacks(flowerCandidate)),Lists.newArrayList(output),0, Double.POSITIVE_INFINITY,300));
+                            quernRecipes.add(new QuernRecipe(getRL("auto_dye"+id),Lists.newArrayList(Ingredient.fromStacks(flowerCandidate)),Lists.newArrayList(output),0, Double.POSITIVE_INFINITY,300));
                         }
                     }
                 }
             }
+            id++;
         }
     }
 

@@ -15,19 +15,16 @@ import java.util.stream.Collectors;
 
 public class AssemblerRecipe extends BasicMachineRecipe {
     public int tier;
-    public ResourceLocation id;
     public List<Ingredient> inputs = new ArrayList<>();
     public List<ItemStack> outputs = new ArrayList<>();
 
     public AssemblerRecipe(@Nonnull ResourceLocation id, int tier, double minPower, double maxPower, double time) {
-        super(minPower, maxPower, time);
-        this.id = id;
+        super(id, minPower, maxPower, time);
         this.tier = tier;
     }
 
     public AssemblerRecipe(@Nonnull ResourceLocation id, int tier, @Nonnull Collection<Ingredient> inputs, @Nonnull Collection<ItemStack> outputs, double minPower, double maxPower, double time) {
-        super(minPower, maxPower, time);
-        this.id = id;
+        super(id, minPower, maxPower, time);
         this.tier = tier;
         this.inputs.addAll(inputs);
         this.outputs.addAll(outputs);

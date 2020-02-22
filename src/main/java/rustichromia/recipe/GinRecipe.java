@@ -3,6 +3,7 @@ package rustichromia.recipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,12 +16,12 @@ public class GinRecipe extends BasicMachineRecipe {
     public List<ItemStack> outputsInterior = new ArrayList<>();
     public List<ItemStack> outputsExterior = new ArrayList<>();
 
-    public GinRecipe(double minPower, double maxPower, double time) {
-        super(minPower,maxPower,time);
+    public GinRecipe(ResourceLocation id, double minPower, double maxPower, double time) {
+        super(id,minPower,maxPower,time);
     }
 
-    public GinRecipe(Collection<Ingredient> inputs, Collection<ItemStack> outputsInterior, Collection<ItemStack> outputsExterior, double minPower, double maxPower, double time) {
-        super(minPower,maxPower,time);
+    public GinRecipe(ResourceLocation id, Collection<Ingredient> inputs, Collection<ItemStack> outputsInterior, Collection<ItemStack> outputsExterior, double minPower, double maxPower, double time) {
+        super(id,minPower,maxPower,time);
         this.inputs.addAll(inputs);
         this.outputsInterior.addAll(outputsInterior);
         this.outputsExterior.addAll(outputsExterior);
