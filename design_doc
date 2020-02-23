@@ -1,0 +1,80 @@
+Mystical Mechanics
+
++ Wooden Axle
++ Wooden Gear
++ Windmill
+- Waterwheel
+- Lavawheel
+- Lightning Rod
++ Ratiobox - Splits 1 input into 2 outputs by ratio x:y
++ Grindstone
++ Press - Automates Rustic Basin
++ Spring Dial - Winds up and emits a redstone signal
+- Parasieve - Customizable Filter System
+- Choker - Limit exposed inventory
+- Ticker - Redstone pulse for each item that passes through
+- Gate - Limit transferred items
+- Mixer
+- Cotton
++ Cotton Gin
++ Fan(!) - Remember to add api method default getVisualSpeed(power)
+
+- Occult Engine - 
+- Explosive Engine -
+- Elemental Cancellation Engine -
+
+- Wonkpot
+-- Put food in and heat + spin up
+-- Spin down slowly to finish
+-- Food -> Fatty Food
+-- Poisonous Food -> Slime
+-- Sugar -> Caramel
+-- Cocoa Beans -> Cocoa Butter
+
+- Fat + Netherrack Dust => Nitro
+- Corn Oil + Acid => Nitro
+- Nitro + Sawdust => Congealed Nitro
+- Congealed Nitro + Fuses => Raw TNT
+- Raw TNT + Paper => TNT
+- Saw: TNT => 16x Dynamite
+
+- Turbine (Metal Windmill)
+
+Rustic
+
+- Bush - Green berries, yellow leaves, alternate for green dye
+- Pink Banana - Jungle crop thingy
+- Channel - Wooden fluid pipe
+- Tap - Auto-bottling
+- Olive Oil is lubricant
+- Siege Pot - Dumps hot olive oil on invaders
+- Auto-Ballista - Shoots armor-piercing arrows
+- Alarm Bird
+- Auto Barrel
+- Gargoyle Seat - Gargoyle + Aqueduct = Sprinkler
+
+Misty World
+
+- Aerator - Bigger area in which the fog doesn't do damage (doesn't prevent rain damage)
+- Hydration/Dehydration
+- 
+
+Tinkers Construct
+
+- Filtered Smeltery Drain
+- Smeltery Level Emitter
+- Automatic Tool Forge
+- Automatic Armor Forge
+
+Hightier
+
+- Steel (oredict with SFS?)
+- Chemical Kiln - Like rustic alchemy machines but gray, output fluids, made of lead(?)
+- Pipes
+- Boiler(?)
+- Cooler
+- Bunsen Burner
+- Welder
+- Lathe
+- Melting Steel with Acid
+- Extruder - Molten Steel can be pushed through Extrusion Molds

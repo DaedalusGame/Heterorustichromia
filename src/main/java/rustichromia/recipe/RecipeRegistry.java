@@ -18,6 +18,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
@@ -193,9 +194,6 @@ public class RecipeRegistry {
             quernRecipes.add(new QuernRecipe(getRL("lapis"),Lists.newArrayList(new OreIngredient("oreLapis")), Lists.newArrayList(new ItemStack(Items.DYE, 8 * ConfigManager.quernOreAmount, 4)), 20, Double.POSITIVE_INFINITY, 3000));
             quernRecipes.add(new QuernRecipe(getRL("quartz"),Lists.newArrayList(new OreIngredient("oreQuartz")), Lists.newArrayList(new ItemStack(Items.QUARTZ, 2 * ConfigManager.quernOreAmount)), 20, Double.POSITIVE_INFINITY, 3000));
         }
-        addOreQuernRecipes();
-        addFlowerQuernRecipes(event.getRegistry());
-
         ginRecipes.add(new GinRecipe(getRL("cotton"),Lists.newArrayList(Ingredient.fromItem(Registry.COTTON)),Lists.newArrayList(new ItemStack(Registry.COTTON_WOOL,1)),Lists.newArrayList(new ItemStack(Registry.COTTON_SEED)),3, Double.POSITIVE_INFINITY,300));
         ginRecipes.add(new GinRecipe(getRL("cotton_candy"),Lists.newArrayList(new IngredientSized(Ingredient.fromItem(Items.SUGAR),3)),Lists.newArrayList(new ItemStack(Registry.COTTON_CANDY,1)),Lists.newArrayList(),7, Double.POSITIVE_INFINITY,3000));
 
@@ -215,6 +213,12 @@ public class RecipeRegistry {
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"axle_iron"),2,Lists.newArrayList(new IngredientSized(new OreIngredient("ingotIron"),2)),Lists.newArrayList(new ItemStack(RegistryHandler.IRON_AXLE,8)),15, Double.POSITIVE_INFINITY,1500));
 
         FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(Registry.DUST_FLOUR),new ItemStack(Items.BREAD),0.1f);
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void registerRecipesLate(RegistryEvent.Register<IRecipe> event) {
+        addOreQuernRecipes();
+        addFlowerQuernRecipes(event.getRegistry());
     }
 
     private void addOreQuernRecipes() {
