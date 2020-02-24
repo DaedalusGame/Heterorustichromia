@@ -7,10 +7,12 @@ import mysticalmechanics.util.Misc;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -116,8 +118,15 @@ public class TileEntityCrank extends TileEntity implements ITickable {
         if (playerIn instanceof FakePlayer && random.nextDouble() < 0.1) {
             breakCrank(false);
         }
+        PotionEffect strength = playerIn.getActivePotionEffect(MobEffects.STRENGTH);
+        PotionEffect weakness = playerIn.getActivePotionEffect(MobEffects.WEAKNESS);
+        double bonus = 0;
+        if(strength != null)
+            bonus += (strength.getAmplifier()+1) * 1.2;
+        if(weakness != null)
+            bonus /= (weakness.getAmplifier()+1) * 0.8;
         windup = 100;
-        windupPower = 5;
+        windupPower = 5 * (1 + bonus);
         return true;
     }
 

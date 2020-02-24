@@ -4,8 +4,10 @@ import mysticalmechanics.api.DefaultMechCapability;
 import mysticalmechanics.api.IHasRotation;
 import mysticalmechanics.api.MysticalMechanicsAPI;
 import mysticalmechanics.util.Misc;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -106,15 +109,32 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
     @Override
     public void update() {
         if(!world.isRemote) {
+            double inSpeed = capability.getPower(getInput());
             boolean isRedstoneActive = world.isBlockIndirectlyGettingPowered(pos) > 0;
             if (isRedstoneActive != active) {
                 active = isRedstoneActive;
                 capability.onPowerChange();
             }
+            if(inSpeed > 20 && world.rand.nextDouble() < 0.01 * (inSpeed - 20))
+                breakRatiobox(false);
         } else {
             updateAngle();
         }
     }
+
+    private void breakRatiobox(boolean dropItem) {
+        World world = getWorld();
+        BlockPos pos = getPos();
+        IBlockState state = world.getBlockState(pos);
+        breakBlock(world, pos, state,null);
+        if(dropItem)
+            state.getBlock().dropBlockAsItem(world, pos,state,0);
+        else
+            world.playEvent(2001, pos, Block.getStateId(state));
+        world.setBlockToAir(pos);
+        world.playSound(null,pos, SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.BLOCKS, 1, 1);
+    }
+
 
     public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         isBroken = true;
