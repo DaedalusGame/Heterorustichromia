@@ -77,6 +77,8 @@ public class Registry {
     public static Block COTTON_SEED;
     @ObjectHolder("rustichromia:windvane")
     public static Block WINDVANE;
+    @ObjectHolder("rustichromia:hopper_wood")
+    public static Block HOPPER_WOOD;
 
     @ObjectHolder("rustichromia:windmill_blade")
     public static Item WINDMILL_BLADE;
@@ -270,6 +272,7 @@ public class Registry {
         }.setRegistryName(Rustichromia.MODID, "assembler3").setUnlocalizedName("assembler3").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         COTTON_SEED = new Block(Material.PLANTS).setRegistryName(Rustichromia.MODID, "cotton_seed").setUnlocalizedName("cotton_seed").setCreativeTab(CreativeTabs.MATERIALS).setHardness(5.0F).setResistance(10.0F);
         WINDVANE = new BlockWindVane(Material.IRON).setRegistryName(Rustichromia.MODID, "windvane").setUnlocalizedName("windvane").setCreativeTab(CreativeTabs.DECORATIONS).setHardness(5.0F).setResistance(10.0F);
+        HOPPER_WOOD = new BlockHopperWood(Material.WOOD).setRegistryName(Rustichromia.MODID, "hopper_wood").setUnlocalizedName("hopper_wood").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
 
         event.getRegistry().register(MOLTEN_STEEL);
         event.getRegistry().register(BLOCK_STEEL);
@@ -289,6 +292,7 @@ public class Registry {
         event.getRegistry().register(ASSEMBLER_3);
         event.getRegistry().register(COTTON_SEED);
         event.getRegistry().register(WINDVANE);
+        event.getRegistry().register(HOPPER_WOOD);
     }
 
     @SubscribeEvent
@@ -313,6 +317,7 @@ public class Registry {
         event.getRegistry().register(new ItemBlock(ASSEMBLER_3).setRegistryName(ASSEMBLER_3.getRegistryName()));
         event.getRegistry().register(new ItemBlock(COTTON_SEED).setRegistryName(COTTON_SEED.getRegistryName()));
         event.getRegistry().register(new ItemBlock(WINDVANE).setRegistryName(WINDVANE.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(HOPPER_WOOD).setRegistryName(HOPPER_WOOD.getRegistryName()));
 
         event.getRegistry().register(SHAMSHIR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"shamshir")).setUnlocalizedName("shamshir").setCreativeTab(CreativeTabs.COMBAT));
         event.getRegistry().register(SPEAR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"spear")).setUnlocalizedName("spear").setCreativeTab(CreativeTabs.COMBAT));
@@ -377,6 +382,8 @@ public class Registry {
         registerItemModel(Item.getItemFromBlock(CRANK), 1, "normal");
         registerItemModel(Item.getItemFromBlock(WINDVANE), 0, "inventory");
         registerItemModel(Item.getItemFromBlock(WINDVANE), 1, "normal");
+        registerItemModel(Item.getItemFromBlock(HOPPER_WOOD), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(HOPPER_WOOD), 1, "cog");
 
         registerItemModel(WINDMILL_BLADE, 0, "inventory");
         registerItemModel(GEAR_SPECKLED, 0, "inventory");

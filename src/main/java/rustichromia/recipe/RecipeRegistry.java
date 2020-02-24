@@ -142,6 +142,9 @@ public class RecipeRegistry {
                 'T', new ItemStack(Blocks.LEVER),
                 'I', new ItemStack(Registry.AXLE_WOOD),
                 'G', "gearWood"}).setRegistryName(getRL("mech_torch_toggle")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("plate_wood_early"),new ItemStack(Registry.PLATE_WOOD,1),true,new Object[]{
+                "WWW", "WWW", "WWW",
+                'W', "slabWood"}).setRegistryName(getRL("plate_wood_early")));
         event.getRegistry().register(new ShapedOreRecipe(getRL("plate_wood"),new ItemStack(Registry.PLATE_WOOD,1),true,new Object[]{
                 "WW", "WW",
                 'W', "dustWood"}).setRegistryName(getRL("plate_wood")));
@@ -176,15 +179,20 @@ public class RecipeRegistry {
                 'N', "nuggetIron",
                 'I', "ingotIron",
                 'G', new ItemStack(RegistryHandler.IRON_AXLE)}).setRegistryName(getRL("windvane")));
+        event.getRegistry().register(new ShapedOreRecipe(getRL("hopper_wood"),new ItemStack(Registry.HOPPER_WOOD,1),true,new Object[]{
+                "W W", "WGW", " W ",
+                'W', "slabWood",
+                'G', "gearWood"}).setRegistryName(getRL("hopper_wood")));
         event.getRegistry().register(new ShapelessOreRecipe(getRL("cotton_candy_stick"),new ItemStack(Registry.COTTON_CANDY_STICK,1),new Object[]{
                 "stickWood",new ItemStack(Registry.COTTON_CANDY),new ItemStack(Registry.COTTON_CANDY)}).setRegistryName(getRL("cotton_candy_stick")));
 
         quernRecipes.add(new QuernRecipe(getRL("reeds_to_sugar"),Lists.newArrayList(Ingredient.fromItem(Items.REEDS)),Lists.newArrayList(new ItemStack(Items.SUGAR,2)),0, Double.POSITIVE_INFINITY,300));
         quernRecipes.add(new QuernRecipe(getRL("wheat_to_chaff"),Lists.newArrayList(Ingredient.fromItem(Items.WHEAT)),Lists.newArrayList(new ItemStack(Items.WHEAT_SEEDS),new ItemStack(Blocks.TALLGRASS,1, BlockTallGrass.EnumType.GRASS.getMeta())),0, Double.POSITIVE_INFINITY,300)); //TODO: make this produce chaff; possible candidate for Gin (threshing)
         quernRecipes.add(new QuernRecipe(getRL("wheat_to_flour"),Lists.newArrayList(Ingredient.fromItem(Items.WHEAT_SEEDS)),Lists.newArrayList(new ItemStack(Registry.DUST_FLOUR)),0, Double.POSITIVE_INFINITY,300));
-        quernRecipes.add(new QuernRecipe(getRL("bonemeal"),Lists.newArrayList(Ingredient.fromItem(Items.BONE)),Lists.newArrayList(new ItemStack(Items.DYE,6, 15)),3, Double.POSITIVE_INFINITY,900));
-        quernRecipes.add(new QuernRecipe(getRL("plank_to_dust"),Lists.newArrayList(new OreIngredient("plankWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,2)),3, Double.POSITIVE_INFINITY,900));
-        quernRecipes.add(new QuernRecipe(getRL("log_to_dust"),Lists.newArrayList(new OreIngredient("logWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,10)),5, Double.POSITIVE_INFINITY,1800));
+        quernRecipes.add(new QuernRecipe(getRL("bonemeal"),Lists.newArrayList(Ingredient.fromItem(Items.BONE)),Lists.newArrayList(new ItemStack(Items.DYE,6, 15)),1, Double.POSITIVE_INFINITY,450));
+        quernRecipes.add(new QuernRecipe(getRL("slab_to_dust"),Lists.newArrayList(new OreIngredient("slabWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,1)),1, Double.POSITIVE_INFINITY, 900));
+        quernRecipes.add(new QuernRecipe(getRL("plank_to_dust"),Lists.newArrayList(new OreIngredient("plankWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,2)),1, Double.POSITIVE_INFINITY, 1800));
+        quernRecipes.add(new QuernRecipe(getRL("log_to_dust"),Lists.newArrayList(new OreIngredient("logWood")),Lists.newArrayList(new ItemStack(Registry.DUST_WOOD,10)),3, Double.POSITIVE_INFINITY, 3000));
         quernRecipes.add(new QuernRecipe(getRL("cobblestone_to_gravel"),Lists.newArrayList(new OreIngredient("cobblestone")),Lists.newArrayList(new ItemStack(Blocks.GRAVEL,1)),5, Double.POSITIVE_INFINITY,3000));
         quernRecipes.add(new QuernRecipe(getRL("gravel_to_sand"),Lists.newArrayList(new OreIngredient("gravel")),Lists.newArrayList(new ItemStack(Blocks.SAND,1), new ItemStack(Items.FLINT, 1)),10, Double.POSITIVE_INFINITY,3000));
         quernRecipes.add(new QuernRecipe(getRL("blaze_powder"),Lists.newArrayList(Ingredient.fromItem(Items.BLAZE_ROD)),Lists.newArrayList(new ItemStack(Items.BLAZE_POWDER,5)),10, Double.POSITIVE_INFINITY,1500));
@@ -200,8 +208,8 @@ public class RecipeRegistry {
         ginFills.put(Registry.COTTON_CANDY, new ResourceLocation(Rustichromia.MODID,"blocks/cotton_candy"));
         ginFills.put(Registry.COTTON_WOOL, new ResourceLocation(Rustichromia.MODID,"blocks/cotton"));
 
-        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"stick_wood"),1,Lists.newArrayList(new IngredientSized(new OreIngredient("plankWood"),1)),Lists.newArrayList(new ItemStack(Items.STICK,2)),3, Double.POSITIVE_INFINITY,500));
-        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"torch"),1,Lists.newArrayList(new OreIngredient("stickWood"),new OreIngredient("gemCoal")),Lists.newArrayList(new ItemStack(Blocks.TORCH,5)),5, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"stick_wood"),1,Lists.newArrayList(new IngredientSized(new OreIngredient("plankWood"),1)),Lists.newArrayList(new ItemStack(Items.STICK,2)),1, Double.POSITIVE_INFINITY,500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"torch"),1,Lists.newArrayList(new OreIngredient("stickWood"),new OreIngredient("gemCoal")),Lists.newArrayList(new ItemStack(Blocks.TORCH,5)),1, Double.POSITIVE_INFINITY,500));
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"plate_wood"),1,Lists.newArrayList(new OreIngredient("dustWood")),Lists.newArrayList(new ItemStack(Registry.PLATE_WOOD,1)),1, Double.POSITIVE_INFINITY,500));
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"gear_wood"),1,Lists.newArrayList(new IngredientSized(new OreIngredient("plateWood"),4)),Lists.newArrayList(new ItemStack(Registry.GEAR_WOOD,1)),1, Double.POSITIVE_INFINITY,500));
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"axle_wood"),1,Lists.newArrayList(new IngredientSized(new OreIngredient("plankWood"),2)),Lists.newArrayList(new ItemStack(Registry.AXLE_WOOD,8)),3, Double.POSITIVE_INFINITY,500));

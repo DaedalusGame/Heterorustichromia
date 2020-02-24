@@ -31,14 +31,14 @@ public class ConfigManager {
     }
 
     public static void load() {
-        quernOreAmount = config.get("quernOreAmount","machine", 2, "Multiplier for how much should be produced when processing ores. 0 to disable.", 0, Integer.MAX_VALUE).getInt();
-        quernFlowerAmount = config.get("quernFlowerAmount","machine", 4, "Multiplier for how much should be produced when processing flowers. 0 to disable.", 0, Integer.MAX_VALUE).getInt();
+        quernOreAmount = config.get("machine", "quernOreAmount",2, "Multiplier for how much should be produced when processing ores. 0 to disable.", 0, Integer.MAX_VALUE).getInt();
+        quernFlowerAmount = config.get("machine","quernFlowerAmount", 4, "Multiplier for how much should be produced when processing flowers. 0 to disable.", 0, Integer.MAX_VALUE).getInt();
 
-        windmillBlades = config.get("windmillBlades","machine", 12, "How many blades can be attached to the small windmill.").getInt();
-        windmillWeight = config.get("windmillWeight","machine", 1.0, "How heavy is each blade of the small windmill.").getDouble();
+        windmillBlades = config.get("machine","windmillBlades", 12, "How many blades can be attached to the small windmill.").getInt();
+        windmillWeight = config.get("machine","windmillWeight", 1.0, "How heavy is each blade of the small windmill.").getDouble();
 
-        windmillBigBlades = config.get("windmillBigBlades","machine", 8, "How many blades can be attached to the big windmill.").getInt();
-        windmillBigWeight = config.get("windmillBigWeight","machine", 8.0, "How heave is each blade of the big windmill.").getDouble();
+        windmillBigBlades = config.get("machine","windmillBigBlades", 8, "How many blades can be attached to the big windmill.").getInt();
+        windmillBigWeight = config.get("machine","windmillBigWeight", 8.0, "How heave is each blade of the big windmill.").getDouble();
 
         if (config.hasChanged())
         {

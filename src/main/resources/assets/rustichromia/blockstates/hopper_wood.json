@@ -1,0 +1,51 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:hopper_wood_down",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "cog": [{
+      "model": "rustichromia:cog"
+    }],
+    "facing=down,straight=true": [{
+
+    }],
+    "facing=north,straight=true": [{
+      "x": -90,
+      "y": 0
+    }],
+    "facing=east,straight=true": [{
+      "x": -90,
+      "y": 90
+    }],
+    "facing=south,straight=true": [{
+      "x": -90,
+      "y": 180
+    }],
+    "facing=west,straight=true": [{
+      "x": -90,
+      "y": 270
+    }],
+    "facing=down,straight=false": [{
+
+    }],
+    "facing=north,straight=false": [{
+      "model": "rustichromia:hopper_wood_side"
+    }],
+    "facing=east,straight=false": [{
+      "model": "rustichromia:hopper_wood_side",
+      "y": 90
+    }],
+    "facing=south,straight=false": [{
+      "model": "rustichromia:hopper_wood_side",
+      "y": 180
+    }],
+    "facing=west,straight=false": [{
+      "model": "rustichromia:hopper_wood_side",
+      "y": 270
+    }]
+  }
+}

@@ -13,6 +13,7 @@ tile.assembler3.name=Advanced Assembler
 tile.cotton_seed.name=Cotton Seeds
 tile.crank.name=Hand Crank
 tile.windvane.name=Wind Vane
+tile.hopper_wood.name=Wooden Mechanical Hopper
 
 tile.molten_steel.name=Molten Steel [WIP]
 tile.block_steel.name=Solid Steel [WIP]
