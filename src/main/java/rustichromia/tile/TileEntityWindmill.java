@@ -180,6 +180,7 @@ public class TileEntityWindmill extends TileEntity implements ITickable {
 
     public void breakBlock(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         capability.setPower(0f, null);
+        if(!world.isRemote)
         for (int i = 4; i < blades; i++)
             InventoryHelper.spawnItemStack(world,pos.getX(),pos.getY(),pos.getZ(),new ItemStack(Registry.WINDMILL_BLADE));
         updateNeighbors();
