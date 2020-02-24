@@ -10,12 +10,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import rustichromia.tile.TileEntityBasicMachine;
+import rustichromia.tile.TileEntityHopperWood;
 import rustichromia.tile.TileEntityQuern;
+import rustichromia.util.Misc;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockQuern extends Block {
     public static final PropertyDirection facing = PropertyDirection.create("facing",(facing) -> facing.getAxis().isHorizontal());
@@ -81,5 +89,15 @@ public class BlockQuern extends Block {
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileEntityQuern();
+    }
+
+    @Override
+    public RayTraceResult collisionRayTrace(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d start, @Nonnull Vec3d end) {
+        List<AxisAlignedBB> subBoxes = new ArrayList<>();
+
+        subBoxes.add(new AxisAlignedBB(0,0,0,1, 0.5625,1));
+        subBoxes.add(new AxisAlignedBB(0.1875,0.5, 0.1875,0.8125,1, 0.8125));
+
+        return Misc.raytraceMultiAABB(subBoxes, pos, start, end);
     }
 }

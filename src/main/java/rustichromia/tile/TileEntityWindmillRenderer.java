@@ -32,27 +32,37 @@ public class TileEntityWindmillRenderer extends TileEntitySpecialRenderer<TileEn
         double lastAngle = tile.lastAngle;
         float rotationAngle = (float) (partialTicks * angle) + (1 - partialTicks) * (float) lastAngle;
 
+
         int blades = tile.getBlades();
         for(int i = 0; i < blades; i++) {
+            float rotationInvert = 1;
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.5, 0.5, 0.5);
             GlStateManager.scale(scale,scale,scale);
             switch (facing) {
                 case DOWN:
-                    GlStateManager.rotate(-90, 1, 0, 0);break;
+                    GlStateManager.rotate(-90, 1, 0, 0);
+                    rotationInvert *= -1;
+                    break;
                 case UP:
-                    GlStateManager.rotate(90, 1, 0, 0);break;
+                    GlStateManager.rotate(90, 1, 0, 0);
+                    break;
                 case NORTH:
                     break;
                 case WEST:
-                    GlStateManager.rotate(90, 0, 1, 0);break;
+                    GlStateManager.rotate(90, 0, 1, 0);
+                    break;
                 case SOUTH:
-                    GlStateManager.rotate(180, 0, 1, 0);break;
+                    GlStateManager.rotate(180, 0, 1, 0);
+                    rotationInvert *= -1;
+                    break;
                 case EAST:
-                    GlStateManager.rotate(270, 0, 1, 0);break;
+                    rotationInvert *= -1;
+                    GlStateManager.rotate(270, 0, 1, 0);
+                    break;
             }
             //GlStateManager.rotate( rotationAngle + (360.0f * i) / blades, facing.getFrontOffsetX(), facing.getFrontOffsetY(), facing.getFrontOffsetZ());
-            GlStateManager.rotate( rotationAngle + (360.0f * i) / blades, 0, 0, 1);
+            GlStateManager.rotate( rotationInvert * rotationAngle + (360.0f * i) / blades, 0, 0, 1);
             GlStateManager.translate(-0.5, -0.5, -0.5);
 
             blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(ibakedmodel, 1.0F, 1.0F, 1.0F, 1.0F);

@@ -1,13 +1,18 @@
 package rustichromia.util;
 
+import com.google.common.collect.Lists;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
@@ -102,5 +107,53 @@ public class Misc {
 
     public static void syncTE(TileEntity tile, boolean broken) {
         mysticalmechanics.util.Misc.syncTE(tile,broken);
+    }
+
+    public static AxisAlignedBB rotateAABB(AxisAlignedBB aabb, EnumFacing facing) {
+        switch (facing) {
+            case DOWN:
+                return new AxisAlignedBB(aabb.minX, 1 - aabb.maxY, aabb.minZ, aabb.maxX, 1 - aabb.minY, aabb.maxZ);
+            case UP:
+                return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
+            case NORTH:
+                return new AxisAlignedBB(aabb.minX, aabb.minZ, aabb.maxY, aabb.maxX, aabb.maxZ, aabb.minY);
+            case SOUTH:
+                return new AxisAlignedBB(aabb.minX, aabb.maxZ, aabb.minY, aabb.maxX, aabb.minZ, aabb.maxY);
+            case WEST:
+                return new AxisAlignedBB(aabb.maxY, aabb.minX, aabb.minZ, aabb.minY, aabb.maxX, aabb.maxZ);
+            case EAST:
+                return new AxisAlignedBB(aabb.minY, aabb.maxX, aabb.minZ, aabb.maxY, aabb.minX, aabb.maxZ);
+            default:
+                return null;
+        }
+    }
+
+    public static RayTraceResult raytraceMultiAABB(List<AxisAlignedBB> aabbs, BlockPos pos, Vec3d start, Vec3d end) {
+        List<RayTraceResult> list = Lists.newArrayList();
+
+        list.addAll(aabbs.stream().map(axisalignedbb -> rayTrace2(pos, start, end, axisalignedbb)).collect(Collectors.toList()));
+
+        RayTraceResult raytraceresult1 = null;
+        double d1 = 0.0D;
+
+        for(RayTraceResult raytraceresult : list) {
+            if(raytraceresult != null) {
+                double d0 = raytraceresult.hitVec.squareDistanceTo(end);
+
+                if(d0 > d1) {
+                    raytraceresult1 = raytraceresult;
+                    d1 = d0;
+                }
+            }
+        }
+
+        return raytraceresult1;
+    }
+
+    private static RayTraceResult rayTrace2(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
+        Vec3d vec3d = start.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+        Vec3d vec3d1 = end.subtract((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+        RayTraceResult raytraceresult = boundingBox.calculateIntercept(vec3d, vec3d1);
+        return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), raytraceresult.sideHit, pos);
     }
 }

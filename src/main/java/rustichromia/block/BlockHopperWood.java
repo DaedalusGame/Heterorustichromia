@@ -12,17 +12,27 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import rustichromia.tile.TileEntityBasicMachine;
 import rustichromia.tile.TileEntityHopperWood;
-import rustichromia.tile.TileEntityMechTorch;
+import rustichromia.util.Misc;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockHopperWood extends Block {
     public static final PropertyDirection facing = PropertyDirection.create("facing", facing -> facing != null && facing != EnumFacing.UP);
     public static final PropertyBool straight = PropertyBool.create("straight");
+
+    public static final AxisAlignedBB AABB_BASE = new AxisAlignedBB(0.25,0.25,0.25,0.75,0.75,0.75);
+    public static final AxisAlignedBB AABB_INTAKE = new AxisAlignedBB(0,0.75,0,1,1,1);
+    public static final AxisAlignedBB AABB_OUTLET = new AxisAlignedBB(0.3125,0.75,0.3125, 0.6875,1,0.6875);
 
     public BlockHopperWood(Material materialIn) {
         super(materialIn);
@@ -91,5 +101,21 @@ public class BlockHopperWood extends Block {
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileEntityHopperWood();
+    }
+
+    @Override
+    public RayTraceResult collisionRayTrace(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Vec3d start, @Nonnull Vec3d end) {
+        List<AxisAlignedBB> subBoxes = new ArrayList<>();
+
+        subBoxes.add(AABB_BASE);
+
+        if (world.getTileEntity(pos) instanceof TileEntityHopperWood) {
+            TileEntityHopperWood hopper = ((TileEntityHopperWood) world.getTileEntity(pos));
+
+            subBoxes.add(Misc.rotateAABB(AABB_INTAKE, hopper.getInputFacing()));
+            subBoxes.add(Misc.rotateAABB(AABB_OUTLET, hopper.getOutputFacing()));
+        }
+
+        return Misc.raytraceMultiAABB(subBoxes, pos, start, end);
     }
 }

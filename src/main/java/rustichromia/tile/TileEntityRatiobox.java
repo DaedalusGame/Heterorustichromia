@@ -338,6 +338,10 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
         return Math.round(num * n) / n;
     }
 
+    public boolean hasAxle(EnumFacing facing) {
+        return facing == getInput() || facing == getSideA() || facing == getSideB();
+    }
+
     private class RatioboxMechCapability extends DefaultMechCapability {
         @Override
         public void onPowerChange() {
