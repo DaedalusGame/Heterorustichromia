@@ -112,6 +112,8 @@ public class Registry {
     public static Item PLATE_WOOD;
     @ObjectHolder("rustichromia:dust_flour")
     public static Item DUST_FLOUR;
+    @ObjectHolder("rustichromia:wheat_chaff")
+    public static Item WHEAT_CHAFF;
 
     public static void init() {
         //This doesn't work right.
@@ -335,6 +337,7 @@ public class Registry {
         event.getRegistry().register(DUST_WOOD = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"dust_wood")).setUnlocalizedName("dust_wood").setCreativeTab(CreativeTabs.MATERIALS));
         event.getRegistry().register(PLATE_WOOD = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"plate_wood")).setUnlocalizedName("plate_wood").setCreativeTab(CreativeTabs.MATERIALS));
         event.getRegistry().register(DUST_FLOUR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"dust_flour")).setUnlocalizedName("dust_flour").setCreativeTab(CreativeTabs.MATERIALS));
+        event.getRegistry().register(WHEAT_CHAFF = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"wheat_chaff")).setUnlocalizedName("wheat_chaff").setCreativeTab(CreativeTabs.MATERIALS));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -347,6 +350,7 @@ public class Registry {
         OreDictionary.registerOre("gemCoal", new ItemStack(Items.COAL,1,1));
         OreDictionary.registerOre("dustFlour", DUST_FLOUR);
         OreDictionary.registerOre("foodFlour", DUST_FLOUR);
+        OreDictionary.registerOre("chaffWheat", WHEAT_CHAFF);
     }
 
     @SideOnly(Side.CLIENT)
@@ -402,6 +406,7 @@ public class Registry {
         registerItemModel(DUST_WOOD, 0, "inventory");
         registerItemModel(PLATE_WOOD, 0, "inventory");
         registerItemModel(DUST_FLOUR, 0, "inventory");
+        registerItemModel(WHEAT_CHAFF, 0, "inventory");
     }
 
     @SideOnly(Side.CLIENT)

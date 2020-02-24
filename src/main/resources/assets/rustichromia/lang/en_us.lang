@@ -33,6 +33,7 @@ item.cotton_candy_stick.name=Cotton Candy on a Stick
 item.dust_wood.name=Sawdust
 item.plate_wood.name=Plywood
 item.dust_flour.name=Flour
+item.wheat_chaff.name=Wheat Chaff
 
 rustichromia.jei.recipe.quern=Quern
 rustichromia.jei.recipe.gin=Gin
