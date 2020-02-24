@@ -102,15 +102,15 @@ public class RecipeRegistry {
                 " C ", "CSC", " C ",
                 'C', "stoneDiorite",
                 'S', "nuggetIron"}).setRegistryName(getRL("gear_speckled")));
-        event.getRegistry().register(new ShapedOreRecipe(getRL("disk_stone"),new ItemStack(Registry.DISK_STONE,8),true,new Object[]{
+        event.getRegistry().register(new ShapedOreRecipe(getRL("disk_stone"),new ItemStack(Registry.DISK_STONE,1),true,new Object[]{
                 "CCC", "CSC", "CCC",
                 'C', "stone",
                 'S', "nuggetIron"}).setRegistryName(getRL("disk_stone")));
-        event.getRegistry().register(new ShapedOreRecipe(getRL("disk_sandstone"),new ItemStack(Registry.DISK_SANDSTONE,8),true,new Object[]{
+        event.getRegistry().register(new ShapedOreRecipe(getRL("disk_sandstone"),new ItemStack(Registry.DISK_SANDSTONE,1),true,new Object[]{
                 "CCC", "CSC", "CCC",
                 'C', new ItemStack(Blocks.SANDSTONE, 1, WILDCARD_VALUE),
                 'S', "nuggetIron"}).setRegistryName(getRL("disk_sandstone")));
-        event.getRegistry().register(new ShapedOreRecipe(getRL("disk_red_sandstone"),new ItemStack(Registry.DISK_RED_SANDSTONE,8),true,new Object[]{
+        event.getRegistry().register(new ShapedOreRecipe(getRL("disk_red_sandstone"),new ItemStack(Registry.DISK_RED_SANDSTONE,1),true,new Object[]{
                 "CCC", "CSC", "CCC",
                 'C', new ItemStack(Blocks.RED_SANDSTONE, 1, WILDCARD_VALUE),
                 'S', "nuggetIron"}).setRegistryName(getRL("disk_red_sandstone")));
@@ -218,6 +218,9 @@ public class RecipeRegistry {
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"name_tag"),1,new IngredientSet().ore("paper",2).ore("string",1), new ResultSet().stack(new ItemStack(Items.NAME_TAG,1)),5, Double.POSITIVE_INFINITY,500));
 
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"gear_iron"),2,Lists.newArrayList(new IngredientSized(new OreIngredient("ingotIron"),2)),Lists.newArrayList(new ItemStack(RegistryHandler.IRON_GEAR,1)),10, Double.POSITIVE_INFINITY,1500));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"disk_stone"),2,Lists.newArrayList(new OreIngredient("nuggetIron"),new OreIngredient("stone")),Lists.newArrayList(new ItemStack(Registry.DISK_STONE,1)),5, Double.POSITIVE_INFINITY,1000));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"disk_sandstone"),2,Lists.newArrayList(new OreIngredient("nuggetIron"),Ingredient.fromStacks(new ItemStack(Blocks.SANDSTONE, 1, WILDCARD_VALUE))),Lists.newArrayList(new ItemStack(Registry.DISK_SANDSTONE,1)),5, Double.POSITIVE_INFINITY,1000));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"disk_red_sandstone"),2,Lists.newArrayList(new OreIngredient("nuggetIron"),Ingredient.fromStacks(new ItemStack(Blocks.RED_SANDSTONE, 1, WILDCARD_VALUE))),Lists.newArrayList(new ItemStack(Registry.DISK_RED_SANDSTONE,1)),5, Double.POSITIVE_INFINITY,1000));
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"axle_iron"),2,Lists.newArrayList(new IngredientSized(new OreIngredient("ingotIron"),2)),Lists.newArrayList(new ItemStack(RegistryHandler.IRON_AXLE,8)),15, Double.POSITIVE_INFINITY,1500));
 
         FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(Registry.DUST_FLOUR),new ItemStack(Items.BREAD),0.1f);
