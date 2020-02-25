@@ -33,8 +33,10 @@ public class QuernRecipe extends BasicMachineRecipe {
         while(toCheckIterator.hasNext()) {
             Ingredient check = toCheckIterator.next();
             for (ItemStack input : inputs) {
-                if(check.apply(input))
+                if (check.apply(input)) {
                     toCheckIterator.remove();
+                    break;
+                }
             }
         }
         return toCheck.isEmpty();
