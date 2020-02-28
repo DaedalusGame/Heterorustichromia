@@ -248,9 +248,9 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
                 return true;
             }
         } else if(heldStack.isEmpty()) {
-            if(facing == sideA) {
-                if(player.isSneaking())
-                    sideA = null;
+                if(facing == sideA) {
+                    if(player.isSneaking())
+                        sideA = null;
                 else {
                     swapSides();
                 }
@@ -340,6 +340,16 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
 
     public boolean hasAxle(EnumFacing facing) {
         return facing == getInput() || facing == getSideA() || facing == getSideB();
+    }
+
+    public void rotateTile(World world, BlockPos pos, EnumFacing side) {
+        IBlockState state = world.getBlockState(pos);
+        EnumFacing currentFacing = state.getValue(BlockRatiobox.input);
+        this.capability.setPower(0.0D, null);
+        this.sideA = this.sideA.rotateAround(side.getAxis());
+        this.sideB = this.sideB.rotateAround(side.getAxis());
+        world.setBlockState(pos, state.withProperty(BlockRatiobox.input, currentFacing.rotateAround(side.getAxis())));
+        this.capability.onPowerChange();
     }
 
     private class RatioboxMechCapability extends DefaultMechCapability {

@@ -16,6 +16,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -265,9 +266,10 @@ public class RecipeRegistry {
         for (Map.Entry<ResourceLocation, IRecipe> entry : recipes.getEntries()) {
             IRecipe recipe = entry.getValue();
             ItemStack output = recipe.getRecipeOutput();
-            if(Misc.oreStartsWith(output,"dye")){
+            NonNullList<Ingredient> ingredients = recipe.getIngredients();
+            if(Misc.oreStartsWith(output,"dye") && ingredients.size() == 1){
                 //We got a dye, now for the less fun bit: find a flower ingredient
-                for (Ingredient ingredient : recipe.getIngredients()) {
+                for (Ingredient ingredient : ingredients) {
                     for (ItemStack flowerCandidate : ingredient.getMatchingStacks()) {
                         if(IsFlower(flowerCandidate)) {
                             output = output.copy();

@@ -1,6 +1,5 @@
 package rustichromia.block;
 
-import mysticalmechanics.tileentity.TileEntityGearbox;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -102,7 +101,7 @@ public class BlockRatiobox extends Block {
 
     @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing side) {
-        TileEntityGearbox tile = (TileEntityGearbox)world.getTileEntity(pos);
+        TileEntityRatiobox tile = (TileEntityRatiobox)world.getTileEntity(pos);
         tile.rotateTile(world, pos, side);
         return true;
     }
