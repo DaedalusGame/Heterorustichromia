@@ -21,6 +21,8 @@ import rustichromia.network.PacketHandler;
 import rustichromia.recipe.AssemblerRecipe;
 import rustichromia.recipe.RecipeRegistry;
 import rustichromia.tile.TileEntityAssembler;
+import rustichromia.util.Result;
+import rustichromia.util.ResultItem;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -195,8 +197,17 @@ public class ContainerAssembler extends Container {
                 return true;
             }
         }
-        for (ItemStack result : recipe.outputs) {
-            if (result.isItemEqual(searchStack)) {
+        for (Result result : recipe.outputs) {
+            if (resultMatches(result,searchStack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean resultMatches(Result result, ItemStack searchStack) {
+        if(result instanceof ResultItem) {
+            if (((ResultItem) result).getStack().isItemEqual(searchStack)) {
                 return true;
             }
         }

@@ -9,9 +9,11 @@ import net.minecraft.util.ResourceLocation;
 import rustichromia.Rustichromia;
 import rustichromia.compat.jei.JEI;
 import rustichromia.recipe.GinRecipe;
+import rustichromia.util.Result;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GinWrapper extends BasicMachineRecipeWrapper<GinRecipe> {
     public static final int GEAR_X = 38;
@@ -27,19 +29,19 @@ public class GinWrapper extends BasicMachineRecipeWrapper<GinRecipe> {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        List<ItemStack> outputStacksExterior = recipe.outputsExterior;
-        List<ItemStack> outputStacksInterior = recipe.outputsInterior;
+        List<ItemStack> outputStacksExterior = recipe.outputsExterior.stream().map(Result::getJEIStack).collect(Collectors.toList());
+        List<ItemStack> outputStacksInterior = recipe.outputsInterior.stream().map(Result::getJEIStack).collect(Collectors.toList());
         List<List<ItemStack>> inputStacks = JEI.expandIngredients(recipe.inputs);
         ingredients.setInputLists(ItemStack.class, inputStacks);
         ingredients.setOutputLists(ItemStack.class, Lists.<List<ItemStack>>newArrayList(outputStacksInterior,outputStacksExterior));
     }
 
-    public List<ItemStack> getOutputsExterior() {
-        return new ArrayList<>(recipe.outputsExterior);
+    public List<Result> getOutputsExterior() {
+        return recipe.outputsExterior;
     }
 
-    public List<ItemStack> getOutputsInterior() {
-        return new ArrayList<>(recipe.outputsInterior);
+    public List<Result> getOutputsInterior() {
+        return recipe.outputsInterior;
     }
 
     public List<Ingredient> getInputs() {

@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import rustichromia.util.Result;
+import rustichromia.util.ResultItem;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -16,14 +18,14 @@ import java.util.stream.Collectors;
 public class AssemblerRecipe extends BasicMachineRecipe {
     public int tier;
     public List<Ingredient> inputs = new ArrayList<>();
-    public List<ItemStack> outputs = new ArrayList<>();
+    public List<Result> outputs = new ArrayList<>();
 
     public AssemblerRecipe(@Nonnull ResourceLocation id, int tier, double minPower, double maxPower, double time) {
         super(id, minPower, maxPower, time);
         this.tier = tier;
     }
 
-    public AssemblerRecipe(@Nonnull ResourceLocation id, int tier, @Nonnull Collection<Ingredient> inputs, @Nonnull Collection<ItemStack> outputs, double minPower, double maxPower, double time) {
+    public AssemblerRecipe(@Nonnull ResourceLocation id, int tier, @Nonnull Collection<Ingredient> inputs, @Nonnull Collection<Result> outputs, double minPower, double maxPower, double time) {
         super(id, minPower, maxPower, time);
         this.tier = tier;
         this.inputs.addAll(inputs);
@@ -47,20 +49,22 @@ public class AssemblerRecipe extends BasicMachineRecipe {
         return toCheck.isEmpty();
     }
 
-    public List<ItemStack> getResults(TileEntity tile, double power, List<ItemStack> inputs) {
-        return outputs.stream().map(ItemStack::copy).collect(Collectors.toList());
+    public List<Result> getResults(TileEntity tile, double power, List<ItemStack> inputs) {
+        return transformResults(outputs);
     }
 
     public String getName() {
-        for (ItemStack output : outputs) {
-            return output.getDisplayName();
+        for (Result output : outputs) {
+            if(output instanceof ResultItem)
+                return ((ResultItem) output).getStack().getDisplayName();
         }
         return "Recipe #" + (hashCode() & 0xFF); //Fallback!
     }
 
     public ItemStack getIcon() {
-        for (ItemStack stack : outputs) {
-            return stack;
+        for (Result output : outputs) {
+            if(output instanceof ResultItem)
+                return ((ResultItem) output).getStack();
         }
         return new ItemStack(Items.STICK);
     }

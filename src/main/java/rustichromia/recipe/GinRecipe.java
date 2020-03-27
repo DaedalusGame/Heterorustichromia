@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import rustichromia.util.Result;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,14 +14,14 @@ import java.util.stream.Collectors;
 
 public class GinRecipe extends BasicMachineRecipe {
     public List<Ingredient> inputs = new ArrayList<>();
-    public List<ItemStack> outputsInterior = new ArrayList<>();
-    public List<ItemStack> outputsExterior = new ArrayList<>();
+    public List<Result> outputsInterior = new ArrayList<>();
+    public List<Result> outputsExterior = new ArrayList<>();
 
     public GinRecipe(ResourceLocation id, double minPower, double maxPower, double time) {
         super(id,minPower,maxPower,time);
     }
 
-    public GinRecipe(ResourceLocation id, Collection<Ingredient> inputs, Collection<ItemStack> outputsInterior, Collection<ItemStack> outputsExterior, double minPower, double maxPower, double time) {
+    public GinRecipe(ResourceLocation id, Collection<Ingredient> inputs, Collection<Result> outputsInterior, Collection<Result> outputsExterior, double minPower, double maxPower, double time) {
         super(id,minPower,maxPower,time);
         this.inputs.addAll(inputs);
         this.outputsInterior.addAll(outputsInterior);
@@ -44,11 +45,11 @@ public class GinRecipe extends BasicMachineRecipe {
         return toCheck.isEmpty();
     }
 
-    public List<ItemStack> getResultsInterior(TileEntity tile, double power, List<ItemStack> inputs) {
-        return outputsInterior.stream().map(ItemStack::copy).collect(Collectors.toList());
+    public List<Result> getResultsInterior(TileEntity tile, double power, List<ItemStack> inputs) {
+        return transformResults(outputsInterior);
     }
 
-    public List<ItemStack> getResultsExterior(TileEntity tile, double power, List<ItemStack> inputs) {
-        return outputsExterior.stream().map(ItemStack::copy).collect(Collectors.toList());
+    public List<Result> getResultsExterior(TileEntity tile, double power, List<ItemStack> inputs) {
+        return transformResults(outputsExterior);
     }
 }

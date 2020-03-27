@@ -19,8 +19,8 @@ public class Assembler {
     public static final String CLASS = "mods.rustichromia.Assembler";
 
     @ZenMethod
-    public static void add(String id, int tier, IIngredient[] inputs, IItemStack[] outputs, double minPower, double maxPower, double time) {
-        AssemblerRecipe recipe = new AssemblerRecipe(new ResourceLocation(CraftTweaker.MODID,id), tier, CTUtil.toIngredients(inputs), CTUtil.toItemStacks(outputs), minPower, maxPower, time);
+    public static void add(String id, int tier, IIngredient[] inputs, Object[] outputs, double minPower, double maxPower, double time) {
+        AssemblerRecipe recipe = new AssemblerRecipe(new ResourceLocation(CraftTweaker.MODID,id), tier, CTUtil.toIngredients(inputs), CTUtil.toResults(outputs), minPower, maxPower, time);
         CraftTweaker.LATE_ACTIONS.add(new Add(recipe));
     }
 

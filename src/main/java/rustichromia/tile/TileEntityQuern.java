@@ -18,10 +18,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import rustichromia.block.BlockQuern;
 import rustichromia.recipe.QuernRecipe;
 import rustichromia.recipe.RecipeRegistry;
-import rustichromia.util.ConsumerMechCapability;
-import rustichromia.util.IHasSize;
-import rustichromia.util.ItemBuffer;
-import rustichromia.util.ItemStackHandlerUnique;
+import rustichromia.util.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -36,7 +33,17 @@ public class TileEntityQuern extends TileEntityBasicMachine<QuernRecipe> {
         }
     });
 
-    ItemBuffer outputs = new ItemBuffer(this);
+    ItemBuffer outputs = new ItemBuffer(this) {
+        @Override
+        public ItemStack ejectItem(ItemStack stack) {
+            return TileEntityQuern.this.ejectItem(stack);
+        }
+
+        @Override
+        public boolean ejectBlock(IBlockState state) {
+            return TileEntityQuern.this.ejectBlock(state);
+        }
+    };
 
     public TileEntityQuern() {
         mechPower = new ConsumerMechCapability() {
@@ -71,17 +78,36 @@ public class TileEntityQuern extends TileEntityBasicMachine<QuernRecipe> {
         return super.getCapability(capability, facing);
     }
 
-    private void ejectItems() {
-        if(outputs.isEmpty())
+    private void ejectResults() {
+        if (outputs.isEmpty())
             return;
-        ItemStack stack = outputs.removeFirst();
-        if(!stack.isEmpty()) {
-            EnumFacing facing = getFacing();
+        Result result = outputs.removeFirst();
+        if (!result.isEmpty()) {
+            result.output(outputs);
+            outputs.addFirst(result);
+        }
+    }
 
-            if(hasInventory(facing))
-                outputs.addFirst(pushToInventory(stack, facing, false));
-            else
-                dropItem(stack, facing);
+    private boolean ejectBlock(IBlockState state) {
+        EnumFacing facing = getFacing();
+        BlockPos checkPos = pos.offset(facing);
+        IBlockState checkState = world.getBlockState(checkPos);
+        if(checkState.getBlock().isReplaceable(world, checkPos)) {
+            world.setBlockState(checkPos, state);
+            return true;
+        }
+        return false;
+    }
+
+
+    private ItemStack ejectItem(ItemStack stack) {
+        EnumFacing facing = getFacing();
+        if(hasInventory(facing)) {
+            ItemStack remainder = pushToInventory(stack, facing, false);
+            return remainder;
+        } else {
+            dropItem(stack, facing);
+            return ItemStack.EMPTY;
         }
     }
 
@@ -97,7 +123,7 @@ public class TileEntityQuern extends TileEntityBasicMachine<QuernRecipe> {
     public void update() {
         super.update();
         if(!world.isRemote) {
-            ejectItems();
+            ejectResults();
         }
     }
 
@@ -130,7 +156,7 @@ public class TileEntityQuern extends TileEntityBasicMachine<QuernRecipe> {
 
     @Override
     public void produceOutputs(QuernRecipe recipe, double speed) {
-        List<ItemStack> results = recipe.getResults(this, speed, getCraftingItems());
+        List<Result> results = recipe.getResults(this, speed, getCraftingItems());
         outputs.addAll(results);
     }
 

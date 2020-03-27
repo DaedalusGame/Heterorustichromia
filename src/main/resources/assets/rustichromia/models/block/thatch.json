@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "rustichromia:blocks/thatch_still",
+    "side": "rustichromia:blocks/thatch_flowing"
+  }
+}

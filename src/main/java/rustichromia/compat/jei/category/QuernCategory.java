@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import rustichromia.Rustichromia;
 import rustichromia.compat.jei.JEI;
+import rustichromia.compat.jei.ResultHelper;
 import rustichromia.compat.jei.wrapper.QuernWrapper;
 import rustichromia.util.Misc;
 
@@ -47,8 +48,12 @@ public class QuernCategory implements IRecipeCategory<QuernWrapper> {
     public void setRecipe(IRecipeLayout recipeLayout, QuernWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup stacks = recipeLayout.getItemStacks();
 
+        ResultHelper helper = new ResultHelper();
+        helper.setup(recipeWrapper.getOutputs());
+        stacks.addTooltipCallback(helper.getTooltipCallback());
+
         List<List<ItemStack>> itemInputs = JEI.expandIngredients(recipeWrapper.getInputs());
-        List<List<ItemStack>> itemOutputs = Misc.splitIntoBoxes(recipeWrapper.getOutputs(),3);
+        List<List<ItemStack>> itemOutputs = helper.splitIntoBoxes(recipeWrapper.getOutputs(),3);
 
         for(int i = 0; i < 2; i++)
             for(int j = 0; j < 2; j++) {

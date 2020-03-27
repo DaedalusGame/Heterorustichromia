@@ -14,6 +14,12 @@ tile.cotton_seed.name=Cotton Seeds
 tile.crank.name=Hand Crank
 tile.windvane.name=Wind Vane
 tile.hopper_wood.name=Wooden Mechanical Hopper
+tile.hay_compactor.name=Hay Compactor
+tile.feeder.name=Feeding Trough
+tile.thatch.name=Thatch
+tile.thatch_block.name=Block of Thatch
+tile.thatch_bed.name=Hay Bed
+tile.molten_hay.name=Hay Feed
 
 tile.molten_steel.name=Molten Steel [WIP]
 tile.block_steel.name=Solid Steel [WIP]
@@ -40,8 +46,13 @@ rustichromia.jei.recipe.gin=Gin
 rustichromia.jei.recipe.assembler1=Single Assembler
 rustichromia.jei.recipe.assembler2=Double Assembler
 rustichromia.jei.recipe.assembler3=Advanced Assembler
+rustichromia.jei.recipe.haycompactor=Hay Compactor
 
+rustichromia.tooltip.item.multiblock=§7Multiblock
 rustichromia.tooltip.item.disk_stone=Limits power to more than %s
 rustichromia.tooltip.item.disk_sandstone=Limits power to less than %s
 rustichromia.tooltip.item.disk_red_sandstone=Limits power to exactly %s
 rustichromia.tooltip.item.combine=Can be combined in a crafting grid
+
+rustichromia.tooltip.result.chance=§d%s%% Chance
+rustichromia.tooltip.result.placeblock=§dWill be placed at the output.

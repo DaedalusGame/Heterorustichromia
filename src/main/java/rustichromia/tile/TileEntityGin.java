@@ -39,8 +39,28 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
     });
 
     //TODO: instead of having an interior item buffer, could just have a superstack. if a recipe would output a different item it just won't work.
-    ItemBuffer outputsInterior = new ItemBuffer(this);
-    ItemBuffer outputsExterior = new ItemBuffer(this);
+    ItemBuffer outputsInterior = new ItemBuffer(this) {
+        @Override
+        public ItemStack ejectItem(ItemStack stack) {
+            return TileEntityGin.this.ejectItem(stack);
+        }
+
+        @Override
+        public boolean ejectBlock(IBlockState state) {
+            return TileEntityGin.this.ejectBlock(state);
+        }
+    };
+    ItemBuffer outputsExterior = new ItemBuffer(this) {
+        @Override
+        public ItemStack ejectItem(ItemStack stack) {
+            return TileEntityGin.this.ejectItem(stack);
+        }
+
+        @Override
+        public boolean ejectBlock(IBlockState state) {
+            return TileEntityGin.this.ejectBlock(state);
+        }
+    };
 
     public TileEntityGin() {
         mechPower = new ConsumerMechCapability() {
@@ -95,51 +115,74 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
     //TODO: generify
     private boolean hasCottonCandy(int amount) {
         int count = 0;
-        for (ItemStack stack : outputsInterior) {
-            if(stack.getItem() == Registry.COTTON_CANDY)
-                count += stack.getCount();
+        for (Result result : outputsInterior) {
+            if(result instanceof ResultItem) {
+                ItemStack stack = ((ResultItem) result).getStack();
+                if (stack.getItem() == Registry.COTTON_CANDY)
+                    count += stack.getCount();
+            }
         }
         return count >= amount;
     }
 
     //TODO: generify
     private void removeCottonCandy(int amount) {
-        Iterator<ItemStack> iterator = outputsInterior.iterator();
+        Iterator<Result> iterator = outputsInterior.iterator();
         while(iterator.hasNext() && amount > 0){
-            ItemStack stack = iterator.next();
-            if(stack.getItem() == Registry.COTTON_CANDY) {
-                int take = Math.min(stack.getCount(),amount);
-                stack.shrink(take);
-                if(stack.isEmpty())
-                    iterator.remove();
-                amount -= take;
+            Result result = iterator.next();
+            if(result instanceof ResultItem) {
+                ItemStack stack = ((ResultItem) result).getStack();
+                if (stack.getItem() == Registry.COTTON_CANDY) {
+                    int take = Math.min(stack.getCount(), amount);
+                    stack.shrink(take);
+                    if (stack.isEmpty())
+                        iterator.remove();
+                    amount -= take;
+                }
             }
         }
     }
 
-    private void ejectItemsInterior() {
-        if(outputsInterior.isEmpty())
+    private void ejectResultsInterior() {
+        if (outputsInterior.isEmpty())
             return;
-        ItemStack stack = outputsInterior.removeFirst();
-        if(!stack.isEmpty()) {
-            EnumFacing facing = getFacing();
-            if(hasInventory(facing))
-                outputsInterior.addFirst(pushToInventory(stack, facing, false));
-            else
-                dropItem(stack, facing);
+        Result result = outputsInterior.removeFirst();
+        if (!result.isEmpty()) {
+            result.output(outputsInterior);
+            outputsInterior.addFirst(result);
         }
     }
 
-    private void ejectItemsExterior() {
-        if(outputsExterior.isEmpty())
+    private void ejectResultsExterior() {
+        if (outputsExterior.isEmpty())
             return;
-        ItemStack stack = outputsExterior.removeFirst();
-        if(!stack.isEmpty()) {
-            EnumFacing facing = getFacing();
-            if(hasInventory(facing))
-                outputsExterior.addFirst(pushToInventory(stack, facing, false));
-            else
-                dropItem(stack, facing);
+        Result result = outputsExterior.removeFirst();
+        if (!result.isEmpty()) {
+            result.output(outputsExterior);
+            outputsExterior.addFirst(result);
+        }
+    }
+
+    private boolean ejectBlock(IBlockState state) {
+        EnumFacing facing = getFacing();
+        BlockPos checkPos = pos.offset(facing);
+        IBlockState checkState = world.getBlockState(checkPos);
+        if(checkState.getBlock().isReplaceable(world, checkPos)) {
+            world.setBlockState(checkPos, state);
+            return true;
+        }
+        return false;
+    }
+
+
+    private ItemStack ejectItem(ItemStack stack) {
+        EnumFacing facing = getFacing();
+        if(hasInventory(facing)) {
+            ItemStack remainder = pushToInventory(stack, facing, false);
+            return remainder;
+        } else {
+            dropItem(stack, facing);
+            return ItemStack.EMPTY;
         }
     }
 
@@ -157,9 +200,9 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
         if(!world.isRemote) {
             double speed = mechPower.getPower(null);
             if(speed > 0)
-                ejectItemsExterior();
+                ejectResultsExterior();
             else
-                ejectItemsInterior();
+                ejectResultsInterior();
         }
     }
 
@@ -192,8 +235,8 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
 
     @Override
     public void produceOutputs(GinRecipe recipe, double speed) {
-        List<ItemStack> resultsInterior = recipe.getResultsInterior(this, speed, getCraftingItems());
-        List<ItemStack> resultsExterior = recipe.getResultsExterior(this, speed, getCraftingItems());
+        List<Result> resultsInterior = recipe.getResultsInterior(this, speed, getCraftingItems());
+        List<Result> resultsExterior = recipe.getResultsExterior(this, speed, getCraftingItems());
         outputsInterior.addAll(resultsInterior);
         outputsExterior.addAll(resultsExterior);
     }
@@ -266,9 +309,12 @@ public class TileEntityGin extends TileEntityBasicMachine<GinRecipe> {
     }
 
     public ResourceLocation getFillTexture() {
-        ResourceLocation fill = RecipeRegistry.getGinFill(outputsInterior.getTop());
-        if(fill != null)
-            return fill;
+        Result top = outputsInterior.getTop();
+        if(top instanceof ResultItem) {
+            ResourceLocation fill = RecipeRegistry.getGinFill(((ResultItem) top).getStack());
+            if(fill != null)
+                return fill;
+        }
         return new ResourceLocation("minecraft", "blocks/gravel");
     }
 }

@@ -346,8 +346,10 @@ public class TileEntityRatiobox extends TileEntity implements ITickable, IHasRot
         IBlockState state = world.getBlockState(pos);
         EnumFacing currentFacing = state.getValue(BlockRatiobox.input);
         this.capability.setPower(0.0D, null);
-        this.sideA = this.sideA.rotateAround(side.getAxis());
-        this.sideB = this.sideB.rotateAround(side.getAxis());
+        if(this.sideA != null)
+            this.sideA = this.sideA.rotateAround(side.getAxis());
+        if(this.sideB != null)
+            this.sideB = this.sideB.rotateAround(side.getAxis());
         world.setBlockState(pos, state.withProperty(BlockRatiobox.input, currentFacing.rotateAround(side.getAxis())));
         this.capability.onPowerChange();
     }

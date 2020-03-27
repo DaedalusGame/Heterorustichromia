@@ -9,9 +9,11 @@ import net.minecraft.util.ResourceLocation;
 import rustichromia.Rustichromia;
 import rustichromia.compat.jei.JEI;
 import rustichromia.recipe.AssemblerRecipe;
+import rustichromia.util.Result;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AssemblerWrapper extends BasicMachineRecipeWrapper<AssemblerRecipe> {
     public static final int GEAR_X = 60;
@@ -27,14 +29,14 @@ public class AssemblerWrapper extends BasicMachineRecipeWrapper<AssemblerRecipe>
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        List<ItemStack> outputStacks = recipe.outputs;
+        List<ItemStack> outputStacks = recipe.outputs.stream().map(Result::getJEIStack).collect(Collectors.toList());
         List<List<ItemStack>> inputStacks = JEI.expandIngredients(recipe.inputs);
         ingredients.setInputLists(ItemStack.class, inputStacks);
         ingredients.setOutputLists(ItemStack.class, Lists.<List<ItemStack>>newArrayList(outputStacks));
     }
 
-    public List<ItemStack> getOutputs() {
-        return new ArrayList<>(recipe.outputs);
+    public List<Result> getOutputs() {
+        return recipe.outputs;
     }
 
     public List<Ingredient> getInputs() {

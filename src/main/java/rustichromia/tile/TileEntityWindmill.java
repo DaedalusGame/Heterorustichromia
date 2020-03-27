@@ -70,10 +70,35 @@ public class TileEntityWindmill extends TileEntity implements ITickable {
         return block.getMaxBlades(world,pos,state);
     }
 
+    @Deprecated
     private double getBladeWeight() {
         IBlockState state = world.getBlockState(pos);
         BlockWindmill block = (BlockWindmill) state.getBlock();
         return block.getBladeWeight(world,pos,state);
+    }
+
+    private double getPowerModifier() {
+        IBlockState state = world.getBlockState(pos);
+        BlockWindmill block = (BlockWindmill) state.getBlock();
+        return block.getPowerModifier(world,pos,state);
+    }
+
+    private int getMinHeight() {
+        IBlockState state = world.getBlockState(pos);
+        BlockWindmill block = (BlockWindmill) state.getBlock();
+        return block.getMinHeight(world,pos,state);
+    }
+
+    private double getBladePower() {
+        IBlockState state = world.getBlockState(pos);
+        BlockWindmill block = (BlockWindmill) state.getBlock();
+        return block.getBladePower(world,pos,state);
+    }
+
+    private double getBladePowerPenalty() {
+        IBlockState state = world.getBlockState(pos);
+        BlockWindmill block = (BlockWindmill) state.getBlock();
+        return block.getBladePowerPenalty(world,pos,state);
     }
 
     public int getBlades() {
@@ -128,52 +153,39 @@ public class TileEntityWindmill extends TileEntity implements ITickable {
         return a*(1-slide)+b*slide;
     }
 
-    private double getBiomeWindPower(double wind) {
-        Biome biome = world.getBiome(pos);
-        int heightSlide = (pos.getY() - world.getSeaLevel()) / (world.getHeight() - world.getSeaLevel());
-        float flatness = MathHelper.clamp(1 - biome.getHeightVariation(),0,1);
-        double lower = MathHelper.clampedLerp(flatness*0.5,0.5, heightSlide);
-        double upper = MathHelper.clampedLerp(Math.max(0.1,flatness),1, heightSlide);
-
-        if(world.isThundering()) {
-            lower *= 2.0;
-            upper *= 3.0;
-        } else if(world.isRaining()) {
-            lower *= 1.5;
-            upper *= 2.0;
-        }
-
-        return MathHelper.clampedLerp(MathHelper.clamp(lower,0,1),MathHelper.clamp(upper,0,1),wind);
-    }
-
     private void updateBlades() {
         Vec3d windDirection = WindHandler.getWindDirection(world,pos);
-        double windPower = 0;
+        double windDirectional = 0;
         switch (getFacing().getAxis())
         {
             case X:
-                windPower = MathHelper.clamp(Math.abs(windDirection.x),0,1);
+                windDirectional = MathHelper.clamp(Math.abs(windDirection.x),0,1);
                 break;
             case Y:
-                windPower = MathHelper.clamp(windDirection.lengthVector()/2.0,0,1);
+                windDirectional = MathHelper.clamp(windDirection.lengthVector()/2.0,0,1);
                 break;
             case Z:
-                windPower = MathHelper.clamp(Math.abs(windDirection.z),0,1);
+                windDirectional = MathHelper.clamp(Math.abs(windDirection.z),0,1);
                 break;
         }
 
-        windPower = getBiomeWindPower(windPower);
-        double powerEfficiency = 0.8;
+        Biome biome = world.getBiome(pos);
+        int y = pos.getY();
+        int blades = getBlades();
 
-        double bladeMod = (Math.pow(powerEfficiency,getBlades()-4)-1)/(powerEfficiency-1);
-        double bladeNormal = (Math.pow(powerEfficiency,4)-1)/(powerEfficiency-1);
-        bladeMod = 1 + bladeMod / bladeNormal;
+        double weatherMod = 1.0;
+        if(world.isRaining())
+            weatherMod = 2.0;
+        else if(world.isThundering())
+            weatherMod = 3.0;
 
-        double massSlide = (getBladeWeight() - 1.0) / (8.0 - 1.0);
-        double lowPowerMod = lerp(0.0,-2.0, massSlide);
-        double highPowerMod = lerp(1.0,2.0, massSlide);
+        double heightSlide = MathHelper.clamp((double)(y - world.getSeaLevel() - getMinHeight()) / (world.getHeight() - world.getSeaLevel()),0, 1);
+        double flatness = MathHelper.clampedLerp(0,1, 1 - biome.getHeightVariation());
+        double windBase = windDirectional * weatherMod * heightSlide * MathHelper.clampedLerp(flatness,1, heightSlide);
 
-        double truePower = Math.max(0,5.0 * lerp(lowPowerMod,highPowerMod,windPower) * bladeMod);
+        double power = windBase * blades * getBladePower() - (blades - 4) * getBladePowerPenalty();
+
+        double truePower = Math.log10(1 + Math.max(0,power)) * getPowerModifier();
 
         capability.setPower(truePower,null);
     }

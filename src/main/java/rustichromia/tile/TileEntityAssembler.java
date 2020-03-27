@@ -35,7 +35,17 @@ import java.util.List;
 public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe> {
     ItemStackHandlerUnique inventory;
 
-    ItemBuffer outputs = new ItemBuffer(this);
+    ItemBuffer outputs = new ItemBuffer(this) {
+        @Override
+        public ItemStack ejectItem(ItemStack stack) {
+            return TileEntityAssembler.this.ejectItem(stack);
+        }
+
+        @Override
+        public boolean ejectBlock(IBlockState state) {
+            return TileEntityAssembler.this.ejectBlock(state);
+        }
+    };
     ResourceLocation filter = null;
     float itemAngle, lastItemAngle;
 
@@ -107,16 +117,35 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
         return super.getCapability(capability, facing);
     }
 
-    private void ejectItems() {
+    private void ejectResults() {
         if (outputs.isEmpty())
             return;
-        ItemStack stack = outputs.removeFirst();
-        if (!stack.isEmpty()) {
-            EnumFacing facing = getFacing();
-            if(hasInventory(facing))
-                outputs.addFirst(pushToInventory(stack, facing, false));
-            else
-                dropItem(stack, facing);
+        Result result = outputs.removeFirst();
+        if (!result.isEmpty()) {
+            result.output(outputs);
+            outputs.addFirst(result);
+        }
+    }
+
+    private boolean ejectBlock(IBlockState state) {
+        EnumFacing facing = getFacing();
+        BlockPos checkPos = pos.offset(facing);
+        IBlockState checkState = world.getBlockState(checkPos);
+        if(checkState.getBlock().isReplaceable(world, checkPos)) {
+            world.setBlockState(checkPos, state);
+            return true;
+        }
+        return false;
+    }
+
+    private ItemStack ejectItem(ItemStack stack) {
+        EnumFacing facing = getFacing();
+        if(hasInventory(facing)) {
+            ItemStack remainder = pushToInventory(stack, facing, false);
+            return remainder;
+        } else {
+            dropItem(stack, facing);
+            return ItemStack.EMPTY;
         }
     }
 
@@ -138,7 +167,7 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
     public void update() {
         super.update();
         if (!world.isRemote) {
-            ejectItems();
+            ejectResults();
         } else {
             lastItemAngle = itemAngle;
             itemAngle += 1.5f;
@@ -176,7 +205,7 @@ public class TileEntityAssembler extends TileEntityBasicMachine<AssemblerRecipe>
 
     @Override
     public void produceOutputs(AssemblerRecipe recipe, double speed) {
-        List<ItemStack> results = recipe.getResults(this, speed, getCraftingItems());
+        List<Result> results = recipe.getResults(this, speed, getCraftingItems());
         outputs.addAll(results);
     }
 

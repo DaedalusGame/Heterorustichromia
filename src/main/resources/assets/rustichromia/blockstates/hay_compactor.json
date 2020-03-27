@@ -1,0 +1,102 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "particle": "rustichromia:blocks/block_steel"
+    }
+  },
+  "variants":{
+    "normal": [{}],
+    "inventory": [{
+      "model": "rustichromia:hay_compactor_item",
+      "transform": "forge:default-block"
+    }],
+    "x": {
+      "0": {},
+      "1": {},
+      "2": {}
+    },
+    "y": {
+      "0": {},
+      "1": {},
+      "2": {}
+    },
+    "z": {
+      "0": {},
+      "1": {},
+      "2": {}
+    },
+    "x=1,y=0,z=1": [{
+      "model": "rustichromia:hay_compactor_base"
+    }],
+    "x=1,y=1,z=1": [{
+      "model": "rustichromia:hay_compactor_core"
+    }],
+    "x=1,y=2,z=1": [{
+      "model": "rustichromia:hay_compactor_inlet"
+    }],
+    "x=0,y=1,z=0": [{
+      "model": "rustichromia:hay_compactor_corner_bottom"
+    }],
+    "x=2,y=1,z=0": [{
+      "model": "rustichromia:hay_compactor_corner_bottom",
+      "y": 90
+    }],
+    "x=2,y=1,z=2": [{
+      "model": "rustichromia:hay_compactor_corner_bottom",
+      "y": 180
+    }],
+    "x=0,y=1,z=2": [{
+      "model": "rustichromia:hay_compactor_corner_bottom",
+      "y": 270
+    }],
+    "x=1,y=1,z=0": [{
+      "model": "rustichromia:hay_compactor_edge_bottom",
+      "y": 0
+    }],
+    "x=2,y=1,z=1": [{
+      "model": "rustichromia:hay_compactor_edge_bottom",
+      "y": 90
+    }],
+    "x=1,y=1,z=2": [{
+      "model": "rustichromia:hay_compactor_edge_bottom",
+      "y": 180
+    }],
+    "x=0,y=1,z=1": [{
+      "model": "rustichromia:hay_compactor_edge_bottom",
+      "y": 270
+    }],
+    "x=0,y=2,z=0": [{
+      "model": "rustichromia:hay_compactor_corner_top"
+    }],
+    "x=2,y=2,z=0": [{
+      "model": "rustichromia:hay_compactor_corner_top",
+      "y": 90
+    }],
+    "x=2,y=2,z=2": [{
+      "model": "rustichromia:hay_compactor_corner_top",
+      "y": 180
+    }],
+    "x=0,y=2,z=2": [{
+      "model": "rustichromia:hay_compactor_corner_top",
+      "y": 270
+    }],
+    "x=1,y=2,z=0": [{
+      "model": "rustichromia:hay_compactor_edge_top",
+      "y": 0
+    }],
+    "x=2,y=2,z=1": [{
+      "model": "rustichromia:hay_compactor_edge_top",
+      "y": 90
+    }],
+    "x=1,y=2,z=2": [{
+      "model": "rustichromia:hay_compactor_edge_top",
+      "y": 180
+    }],
+    "x=0,y=2,z=1": [{
+      "model": "rustichromia:hay_compactor_edge_top",
+      "y": 270
+    }]
+
+  }
+}

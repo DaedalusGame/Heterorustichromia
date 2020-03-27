@@ -29,7 +29,16 @@ public abstract class BlockWindmill extends Block {
 
     public abstract int getMaxBlades(World world, BlockPos pos, IBlockState state);
 
+    @Deprecated
     public abstract double getBladeWeight(World world, BlockPos pos, IBlockState state);
+
+    public abstract double getPowerModifier(World world, BlockPos pos, IBlockState state);
+
+    public abstract int getMinHeight(World world, BlockPos pos, IBlockState state);
+
+    public abstract double getBladePower(World world, BlockPos pos, IBlockState state);
+
+    public abstract double getBladePowerPenalty(World world, BlockPos pos, IBlockState state);
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {

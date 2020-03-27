@@ -6,10 +6,7 @@
     "transform": "forge:default-block"
   },
   "variants":{
-    "inventory":[{}],
-    "trail":{
-      "true":  { },
-      "false":  { }
-    }
+    "normal":[{}],
+    "inventory":[{}]
   }
 }

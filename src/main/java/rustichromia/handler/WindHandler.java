@@ -72,7 +72,12 @@ public class WindHandler {
                 2*noiseMap.eval(centerx,centery+unit,centerz) +
                 -2*noiseMap.eval(centerx,centery-unit,centerz);
 
-        return new Vec3d(x,0,y);
+        double power = (noiseMap.eval(centerx,centery,centerz) + 1) / 2;
+
+        if(x == 0 && y == 0)
+            return new Vec3d(0,0,0);
+        else
+            return new Vec3d(x,0,y).normalize().scale(power);
     }
 
     @SubscribeEvent

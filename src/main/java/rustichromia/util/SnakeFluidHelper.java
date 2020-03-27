@@ -5,14 +5,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-import rustichromia.Registry;
 import rustichromia.block.BlockSnakeFluid;
 
 import java.util.*;
 
 public class SnakeFluidHelper {
     private static Random random = new Random();
-    private static final int MAX_DISTANCE = 128;
     private DimensionPos fluidPos;
     private Set<BlockPos> visited = new HashSet<>(); //blocks won't cross dimensions so this is fine
     private LinkedList<VisitPos> toVisit = new LinkedList<>();
@@ -62,7 +60,7 @@ public class SnakeFluidHelper {
             IBlockState downState = world.getBlockState(downPos);
             if(block.couldFlowInto(world, downPos,downState, EnumFacing.DOWN)) {
                 pits.add(direction);
-            } else if(distance < MAX_DISTANCE) {
+            } else if(distance < block.getMaxDistance()) {
                 for(EnumFacing facing : EnumFacing.HORIZONTALS)
                     this.toVisit.add(new VisitPos(pos.offset(facing),direction,distance+1));
             }
@@ -80,7 +78,7 @@ public class SnakeFluidHelper {
         if(checkValid(world)) {
             BlockPos pos = fluidPos.getPos();
             if(pits.isEmpty()) {
-                world.setBlockState(pos, Registry.BLOCK_STEEL.getDefaultState());
+                block.settle(world, pos);
             } else {
                 int randIndex = random.nextInt(pits.size());
                 for (int i = 0; i < pits.size(); i++) {

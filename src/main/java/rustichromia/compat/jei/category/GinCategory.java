@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import rustichromia.Rustichromia;
 import rustichromia.compat.jei.JEI;
+import rustichromia.compat.jei.ResultHelper;
 import rustichromia.compat.jei.wrapper.GinWrapper;
 import rustichromia.util.Misc;
 
@@ -47,9 +48,14 @@ public class GinCategory implements IRecipeCategory<GinWrapper> {
     public void setRecipe(IRecipeLayout recipeLayout, GinWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup stacks = recipeLayout.getItemStacks();
 
+        ResultHelper helper = new ResultHelper();
+        helper.setup(recipeWrapper.getOutputsInterior());
+        helper.setup(recipeWrapper.getOutputsExterior());
+        stacks.addTooltipCallback(helper.getTooltipCallback());
+
         List<List<ItemStack>> itemInputs = JEI.expandIngredients(recipeWrapper.getInputs());
-        List<List<ItemStack>> itemOutputsInterior = Misc.splitIntoBoxes(recipeWrapper.getOutputsInterior(),4);
-        List<List<ItemStack>> itemOutputsExterior = Misc.splitIntoBoxes(recipeWrapper.getOutputsExterior(),4);
+        List<List<ItemStack>> itemOutputsInterior = helper.splitIntoBoxes(recipeWrapper.getOutputsInterior(),4);
+        List<List<ItemStack>> itemOutputsExterior = helper.splitIntoBoxes(recipeWrapper.getOutputsExterior(),4);
 
         for(int i = 0; i < 2; i++)
             for(int j = 0; j < 2; j++) {

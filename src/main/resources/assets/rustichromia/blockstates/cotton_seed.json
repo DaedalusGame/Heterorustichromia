@@ -1,0 +1,37 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cross",
+    "textures": {
+      "particle": "rustichromia:blocks/cotton_crown5"
+    }
+  },
+  "variants":{
+    "normal": [{}],
+    "inventory": [{
+      "model": "rustichromia:cotton_seed",
+      "transform": "forge:default-item"
+    }],
+    "age": {
+      "0": { "textures": { "cross": "rustichromia:blocks/cotton_stem0" }},
+      "1": { "textures": { "cross": "rustichromia:blocks/cotton_stem1" }},
+      "2": { "textures": { "cross": "rustichromia:blocks/cotton_stem2" }},
+      "3": { "textures": { "cross": "rustichromia:blocks/cotton_stem3" }},
+      "4": { "textures": { "cross": "rustichromia:blocks/cotton_stem4" }},
+      "5": { "textures": { "cross": "rustichromia:blocks/cotton_crown5" }, "model": "rustichromia:cotton_leaves" },
+      "6": { "textures": { "cross": "rustichromia:blocks/cotton_crown5" }, "model": "rustichromia:cotton_bloom" },
+      "7": { "textures": { "cross": "rustichromia:blocks/cotton_crown6" }, "model": "rustichromia:cotton_bolls" }
+    },
+    "harvested": {
+      "true": {},
+      "false": {}
+    },
+    "age=5,harvested=false": [{"y": 0}, {"y": 90}, {"y": 180}, {"y": 270}],
+    "age=6,harvested=false": [{"y": 0}, {"y": 90}, {"y": 180}, {"y": 270}],
+    "age=7,harvested=false": [{"y": 0}, {"y": 90}, {"y": 180}, {"y": 270}],
+    "age=7,harvested=true": [{
+      "textures": { "cross": "rustichromia:blocks/cotton_crown6" },
+      "model": "cross"
+    }]
+  }
+}

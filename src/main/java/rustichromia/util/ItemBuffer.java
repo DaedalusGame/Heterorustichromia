@@ -1,6 +1,6 @@
 package rustichromia.util;
 
-import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,17 +14,17 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class ItemBuffer implements INBTSerializable<NBTTagList>, Iterable<ItemStack> {
+public class ItemBuffer implements INBTSerializable<NBTTagList>, Iterable<Result> {
     private static final int OVERFLOW_THRESHOLD = 100;
 
     TileEntity tile;
-    LinkedList<ItemStack> stacks = new LinkedList<>();
+    LinkedList<Result> stacks = new LinkedList<>();
 
     public ItemBuffer(TileEntity tile) {
         this.tile = tile;
     }
 
-    public void add(ItemStack stack) {
+    public void add(Result stack) {
         if(stack.isEmpty())
             return;
         stacks.add(stack);
@@ -32,21 +32,21 @@ public class ItemBuffer implements INBTSerializable<NBTTagList>, Iterable<ItemSt
         checkOverflow();
     }
 
-    public void addAll(Collection<ItemStack> stack) {
+    public void addAll(Collection<Result> stack) {
         stacks.addAll(stack);
         tile.markDirty();
         checkOverflow();
     }
 
-    public void addFirst(ItemStack stack) {
+    public void addFirst(Result stack) {
         if(stack.isEmpty())
             return;
         stacks.addFirst(stack);
     }
 
-    public ItemStack removeFirst() {
+    public Result removeFirst() {
         if(stacks.isEmpty())
-            return ItemStack.EMPTY;
+            return Result.EMPTY;
         tile.markDirty();
         return stacks.removeFirst();
     }
@@ -55,14 +55,14 @@ public class ItemBuffer implements INBTSerializable<NBTTagList>, Iterable<ItemSt
         return stacks.isEmpty();
     }
 
-    public ItemStack getTop() {
+    public Result getTop() {
         if(stacks.isEmpty())
-            return ItemStack.EMPTY;
+            return Result.EMPTY;
         return stacks.getLast();
     }
 
     public int totalItems() {
-        return stacks.stream().mapToInt(ItemStack::getCount).sum();
+        return stacks.stream().mapToInt(Result::getItemCount).sum();
     }
 
     public int size() {
@@ -70,9 +70,17 @@ public class ItemBuffer implements INBTSerializable<NBTTagList>, Iterable<ItemSt
     }
 
     public void dropAll(World world, BlockPos pos) {
-        for (ItemStack stack : stacks) {
-            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+        for (Result stack : stacks) {
+            stack.drop(world, pos);
         }
+    }
+
+    public ItemStack ejectItem(ItemStack stack) {
+        return stack;
+    }
+
+    public boolean ejectBlock(IBlockState state) {
+        return false;
     }
 
     private void checkOverflow() {
@@ -83,8 +91,11 @@ public class ItemBuffer implements INBTSerializable<NBTTagList>, Iterable<ItemSt
     @Override
     public NBTTagList serializeNBT() {
         NBTTagList tag = new NBTTagList();
-        for (ItemStack stack : stacks) {
-            tag.appendTag(stack.serializeNBT());
+        for (Result stack : stacks) {
+            NBTTagCompound compound = new NBTTagCompound();
+            compound.setString("type", stack.getResourceLocation().toString());
+            stack.writeToNBT(compound);
+            tag.appendTag(compound);
         }
         return tag;
     }
@@ -95,12 +106,18 @@ public class ItemBuffer implements INBTSerializable<NBTTagList>, Iterable<ItemSt
             return;
         stacks.clear();
         for (NBTBase stack : tag) {
-            stacks.add(new ItemStack((NBTTagCompound) stack));
+            NBTTagCompound compound = (NBTTagCompound) stack;
+            Result result;
+            if(compound.hasKey("type"))
+                result = Result.deserialize(compound);
+            else //Backwards compat
+                result = new ResultItem(new ItemStack(compound));
+            stacks.add(result);
         }
     }
 
     @Override
-    public Iterator<ItemStack> iterator() {
+    public Iterator<Result> iterator() {
         return stacks.iterator();
     }
 }

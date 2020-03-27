@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import rustichromia.Rustichromia;
 import rustichromia.compat.jei.JEI;
+import rustichromia.compat.jei.ResultHelper;
 import rustichromia.compat.jei.wrapper.AssemblerWrapper;
 import rustichromia.util.Misc;
 
@@ -47,8 +48,12 @@ public class AssemblerCategory implements IRecipeCategory<AssemblerWrapper> {
     public void setRecipe(IRecipeLayout recipeLayout, AssemblerWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup stacks = recipeLayout.getItemStacks();
 
+        ResultHelper helper = new ResultHelper();
+        helper.setup(recipeWrapper.getOutputs());
+        stacks.addTooltipCallback(helper.getTooltipCallback());
+
         List<List<ItemStack>> itemInputs = JEI.expandIngredients(recipeWrapper.getInputs());
-        List<List<ItemStack>> itemOutputs = Misc.splitIntoBoxes(recipeWrapper.getOutputs(),9);
+        List<List<ItemStack>> itemOutputs = helper.splitIntoBoxes(recipeWrapper.getOutputs(),9);
 
         for(int i = 0; i < 3; i++)
             for(int j = 0; j < 3; j++) {

@@ -9,9 +9,11 @@ import net.minecraft.item.crafting.Ingredient;
 import rustichromia.Registry;
 import rustichromia.compat.jei.category.AssemblerCategory;
 import rustichromia.compat.jei.category.GinCategory;
+import rustichromia.compat.jei.category.HayCompactorCategory;
 import rustichromia.compat.jei.category.QuernCategory;
 import rustichromia.compat.jei.wrapper.AssemblerWrapper;
 import rustichromia.compat.jei.wrapper.GinWrapper;
+import rustichromia.compat.jei.wrapper.HayCompactorWrapper;
 import rustichromia.compat.jei.wrapper.QuernWrapper;
 import rustichromia.recipe.*;
 
@@ -35,6 +37,7 @@ public class JEI implements IModPlugin {
         registry.addRecipeCategories(ASSEMBLER_1 = new AssemblerCategory(guiHelper,1));
         registry.addRecipeCategories(ASSEMBLER_2 = new AssemblerCategory(guiHelper,2));
         registry.addRecipeCategories(ASSEMBLER_3 = new AssemblerCategory(guiHelper,3));
+        registry.addRecipeCategories(new HayCompactorCategory(guiHelper));
     }
 
     @Override
@@ -47,12 +50,14 @@ public class JEI implements IModPlugin {
         reg.handleRecipes(AssemblerRecipe.class, AssemblerWrapper::new,ASSEMBLER_1.getUid());
         reg.handleRecipes(AssemblerRecipe.class, AssemblerWrapper::new,ASSEMBLER_2.getUid());
         reg.handleRecipes(AssemblerRecipe.class, AssemblerWrapper::new,ASSEMBLER_3.getUid());
+        reg.handleRecipes(HayCompactorRecipe.class, HayCompactorWrapper::new, HayCompactorCategory.UID);
 
         reg.addRecipes(expandRecipes(RecipeRegistry.quernRecipes),QuernCategory.UID);
         reg.addRecipes(expandRecipes(RecipeRegistry.ginRecipes),GinCategory.UID);
         reg.addRecipes(expandRecipes(RecipeRegistry.getAssemblerRecipes(1)),ASSEMBLER_1.getUid());
         reg.addRecipes(expandRecipes(RecipeRegistry.getAssemblerRecipes(2)),ASSEMBLER_2.getUid());
         reg.addRecipes(expandRecipes(RecipeRegistry.getAssemblerRecipes(3)),ASSEMBLER_3.getUid());
+        reg.addRecipes(expandRecipes(RecipeRegistry.hayCompactorRecipes),HayCompactorCategory.UID);
 
         reg.addRecipeCatalyst(new ItemStack(Registry.QUERN),QuernCategory.UID);
         reg.addRecipeCatalyst(new ItemStack(Registry.GIN),GinCategory.UID);
@@ -62,6 +67,7 @@ public class JEI implements IModPlugin {
         reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_2),ASSEMBLER_2.getUid());
         reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_3),ASSEMBLER_2.getUid());
         reg.addRecipeCatalyst(new ItemStack(Registry.ASSEMBLER_3),ASSEMBLER_3.getUid());
+        reg.addRecipeCatalyst(new ItemStack(Registry.HAY_COMPACTOR),HayCompactorCategory.UID);
     }
 
     public static List<List<ItemStack>> expandIngredients(Ingredient ingredient) {

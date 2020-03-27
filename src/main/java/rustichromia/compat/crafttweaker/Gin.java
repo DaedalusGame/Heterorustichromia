@@ -18,8 +18,8 @@ public class Gin {
     public static final String CLASS = "mods.rustichromia.Gin";
 
     @ZenMethod
-    public static void add(String id, IIngredient[] inputs, IItemStack[] internal, IItemStack[] external, double minPower, double maxPower, double time) {
-        GinRecipe recipe = new GinRecipe(new ResourceLocation(CraftTweaker.MODID,id), CTUtil.toIngredients(inputs), CTUtil.toItemStacks(internal), CTUtil.toItemStacks(external), minPower, maxPower, time);
+    public static void add(String id, IIngredient[] inputs, Object[] internal, Object[] external, double minPower, double maxPower, double time) {
+        GinRecipe recipe = new GinRecipe(new ResourceLocation(CraftTweaker.MODID,id), CTUtil.toIngredients(inputs),  CTUtil.toResults(internal), CTUtil.toResults(external), minPower, maxPower, time);
         CraftTweaker.LATE_ACTIONS.add(new Add(recipe));
     }
 

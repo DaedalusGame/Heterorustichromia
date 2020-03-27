@@ -1,0 +1,23 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:thatch_bed",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "inventory": [{
+      "model": "rustichromia:thatch_bed_item",
+      "transform": {}
+    }],
+    "facing": {
+      "north": {},
+      "south": {},
+      "east": {},
+      "west": {}
+    },
+    "part": {
+      "head": {},
+      "foot": {}
+    }
+  }
+}

@@ -4,10 +4,13 @@ import mysticalmechanics.api.IGearBehavior;
 import mysticalmechanics.api.MysticalMechanicsAPI;
 import mysticalmechanics.handler.RegistryHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -25,15 +28,15 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import rustichromia.block.*;
-import rustichromia.item.ItemBlastSpear;
-import rustichromia.item.ItemCottonCandy;
-import rustichromia.item.ItemDisk;
+import rustichromia.item.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -79,6 +82,19 @@ public class Registry {
     public static Block WINDVANE;
     @ObjectHolder("rustichromia:hopper_wood")
     public static Block HOPPER_WOOD;
+    @ObjectHolder("rustichromia:thatch")
+    public static Block THATCH;
+    @ObjectHolder("rustichromia:thatch_block")
+    public static Block THATCH_BLOCK;
+    @ObjectHolder("rustichromia:molten_hay")
+    public static BlockSnakeFluid MOLTEN_HAY;
+    @ObjectHolder("rustichromia:feeder")
+    public static Block FEEDER;
+    @ObjectHolder("rustichromia:thatch_bed")
+    public static Block THATCH_BED;
+
+    @ObjectHolder("rustichromia:hay_compactor")
+    public static Block HAY_COMPACTOR;
 
     @ObjectHolder("rustichromia:windmill_blade")
     public static Item WINDMILL_BLADE;
@@ -114,6 +130,8 @@ public class Registry {
     public static Item DUST_FLOUR;
     @ObjectHolder("rustichromia:wheat_chaff")
     public static Item WHEAT_CHAFF;
+
+    public static Fluid FLUID_THATCH = new Fluid("thatch", new ResourceLocation(Rustichromia.MODID,"blocks/thatch_still"), new ResourceLocation(Rustichromia.MODID,"blocks/thatch_flowing")).setDensity(2000);
 
     public static void init() {
         //This doesn't work right.
@@ -196,7 +214,9 @@ public class Registry {
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         CreativeTabs mystmechTab = MysticalMechanicsAPI.IMPL.getCreativeTab();
 
-        MOLTEN_STEEL = (BlockSnakeFluid) new BlockSnakeFluid(MapColor.WHITE_STAINED_HARDENED_CLAY).setRegistryName(Rustichromia.MODID, "molten_steel").setUnlocalizedName("molten_steel").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
+        FluidRegistry.registerFluid(FLUID_THATCH);
+
+        MOLTEN_STEEL = (BlockSnakeFluid) new BlockSnakeMetal(MapColor.WHITE_STAINED_HARDENED_CLAY).setRegistryName(Rustichromia.MODID, "molten_steel").setUnlocalizedName("molten_steel").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
         BLOCK_STEEL = new Block(Material.IRON,MapColor.WHITE_STAINED_HARDENED_CLAY).setRegistryName(Rustichromia.MODID, "block_steel").setUnlocalizedName("block_steel").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
         RECEPTACLE = new BlockMetalReceptacle(Material.IRON).setRegistryName(Rustichromia.MODID, "receptacle").setUnlocalizedName("receptacle").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
         EXTRUDER = new BlockExtrusionForm(Material.IRON).setRegistryName(Rustichromia.MODID, "extruder").setUnlocalizedName("extruder").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
@@ -215,6 +235,26 @@ public class Registry {
             public double getBladeWeight(World world, BlockPos pos, IBlockState state) {
                 return ConfigManager.windmillWeight;
             }
+
+            @Override
+            public double getPowerModifier(World world, BlockPos pos, IBlockState state) {
+                return ConfigManager.windmillPowerMod;
+            }
+
+            @Override
+            public int getMinHeight(World world, BlockPos pos, IBlockState state) {
+                return ConfigManager.windmillMinHeight;
+            }
+
+            @Override
+            public double getBladePower(World world, BlockPos pos, IBlockState state) {
+                return ConfigManager.windmillBladePower;
+            }
+
+            @Override
+            public double getBladePowerPenalty(World world, BlockPos pos, IBlockState state) {
+                return ConfigManager.windmillBladePenalty;
+            }
         }.setRegistryName(Rustichromia.MODID, "windmill").setUnlocalizedName("windmill").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         WINDMILL_BIG = new BlockWindmill(Material.WOOD) {
             @Override
@@ -230,6 +270,26 @@ public class Registry {
             @Override
             public double getBladeWeight(World world, BlockPos pos, IBlockState state) {
                 return ConfigManager.windmillBigWeight;
+            }
+
+            @Override
+            public double getPowerModifier(World world, BlockPos pos, IBlockState state) {
+                return ConfigManager.windmillBigPowerMod;
+            }
+
+            @Override
+            public int getMinHeight(World world, BlockPos pos, IBlockState state) {
+                return ConfigManager.windmillBigMinHeight;
+            }
+
+            @Override
+            public double getBladePower(World world, BlockPos pos, IBlockState state) {
+                return ConfigManager.windmillBigBladePower;
+            }
+
+            @Override
+            public double getBladePowerPenalty(World world, BlockPos pos, IBlockState state) {
+                return ConfigManager.windmillBigBladePenalty;
             }
         }.setRegistryName(Rustichromia.MODID, "windmill_big").setUnlocalizedName("windmill_big").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
         MECH_TORCH = new BlockMechTorch(Material.WOOD).setRegistryName(Rustichromia.MODID, "mech_torch").setUnlocalizedName("mech_torch").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
@@ -272,9 +332,16 @@ public class Registry {
                 return 3;
             }
         }.setRegistryName(Rustichromia.MODID, "assembler3").setUnlocalizedName("assembler3").setCreativeTab(mystmechTab).setHardness(5.0F).setResistance(10.0F);
-        COTTON_SEED = new Block(Material.PLANTS).setRegistryName(Rustichromia.MODID, "cotton_seed").setUnlocalizedName("cotton_seed").setCreativeTab(CreativeTabs.MATERIALS).setHardness(5.0F).setResistance(10.0F);
+        COTTON_SEED = new BlockCotton().setRegistryName(Rustichromia.MODID, "cotton_seed").setUnlocalizedName("cotton_seed").setCreativeTab(CreativeTabs.MATERIALS);
         WINDVANE = new BlockWindVane(Material.IRON).setRegistryName(Rustichromia.MODID, "windvane").setUnlocalizedName("windvane").setCreativeTab(CreativeTabs.DECORATIONS).setHardness(5.0F).setResistance(10.0F);
         HOPPER_WOOD = new BlockHopperWood(Material.WOOD).setRegistryName(Rustichromia.MODID, "hopper_wood").setUnlocalizedName("hopper_wood").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
+        THATCH = new BlockThatch(Material.GRASS).setRegistryName(Rustichromia.MODID, "thatch").setUnlocalizedName("thatch").setCreativeTab(CreativeTabs.DECORATIONS).setHardness(5.0F).setResistance(10.0F);
+        THATCH_BLOCK = new BlockThatchBarrel(Material.GRASS).setRegistryName(Rustichromia.MODID, "thatch_block").setUnlocalizedName("thatch_block").setCreativeTab(CreativeTabs.DECORATIONS).setHardness(5.0F).setResistance(10.0F);
+        MOLTEN_HAY = (BlockSnakeFluid) new BlockSnakeHay().setRegistryName(Rustichromia.MODID, "molten_hay").setUnlocalizedName("molten_hay").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
+        FEEDER = new BlockFeeder(Material.WOOD).setRegistryName(Rustichromia.MODID, "feeder").setUnlocalizedName("feeder").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
+        THATCH_BED = new BlockThatchBed(Material.GRASS).setRegistryName(Rustichromia.MODID, "thatch_bed").setUnlocalizedName("thatch_bed").setCreativeTab(CreativeTabs.DECORATIONS).setHardness(5.0F).setResistance(10.0F);
+
+        HAY_COMPACTOR = new BlockHayCompactor(Material.IRON).setRegistryName(Rustichromia.MODID, "hay_compactor").setUnlocalizedName("hay_compactor").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
 
         event.getRegistry().register(MOLTEN_STEEL);
         event.getRegistry().register(BLOCK_STEEL);
@@ -295,6 +362,13 @@ public class Registry {
         event.getRegistry().register(COTTON_SEED);
         event.getRegistry().register(WINDVANE);
         event.getRegistry().register(HOPPER_WOOD);
+        event.getRegistry().register(THATCH);
+        event.getRegistry().register(THATCH_BLOCK);
+        event.getRegistry().register(MOLTEN_HAY);
+        event.getRegistry().register(FEEDER);
+        event.getRegistry().register(THATCH_BED);
+
+        event.getRegistry().register(HAY_COMPACTOR);
     }
 
     @SubscribeEvent
@@ -317,9 +391,16 @@ public class Registry {
         event.getRegistry().register(new ItemBlock(ASSEMBLER_1).setRegistryName(ASSEMBLER_1.getRegistryName()));
         event.getRegistry().register(new ItemBlock(ASSEMBLER_2).setRegistryName(ASSEMBLER_2.getRegistryName()));
         event.getRegistry().register(new ItemBlock(ASSEMBLER_3).setRegistryName(ASSEMBLER_3.getRegistryName()));
-        event.getRegistry().register(new ItemBlock(COTTON_SEED).setRegistryName(COTTON_SEED.getRegistryName()));
+        event.getRegistry().register(new ItemSeed(COTTON_SEED).setRegistryName(COTTON_SEED.getRegistryName()));
         event.getRegistry().register(new ItemBlock(WINDVANE).setRegistryName(WINDVANE.getRegistryName()));
         event.getRegistry().register(new ItemBlock(HOPPER_WOOD).setRegistryName(HOPPER_WOOD.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(THATCH).setRegistryName(THATCH.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(THATCH_BLOCK).setRegistryName(THATCH_BLOCK.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(MOLTEN_HAY).setRegistryName(MOLTEN_HAY.getRegistryName()));
+        event.getRegistry().register(new ItemBlock(FEEDER).setRegistryName(FEEDER.getRegistryName()));
+        event.getRegistry().register(new ItemBlockBed(THATCH_BED).setRegistryName(THATCH_BED.getRegistryName()));
+
+        event.getRegistry().register(new ItemBlock(HAY_COMPACTOR).setRegistryName(HAY_COMPACTOR.getRegistryName()));
 
         event.getRegistry().register(SHAMSHIR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"shamshir")).setUnlocalizedName("shamshir").setCreativeTab(CreativeTabs.COMBAT));
         event.getRegistry().register(SPEAR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"spear")).setUnlocalizedName("spear").setCreativeTab(CreativeTabs.COMBAT));
@@ -388,6 +469,13 @@ public class Registry {
         registerItemModel(Item.getItemFromBlock(WINDVANE), 1, "normal");
         registerItemModel(Item.getItemFromBlock(HOPPER_WOOD), 0, "inventory");
         registerItemModel(Item.getItemFromBlock(HOPPER_WOOD), 1, "cog");
+        registerItemModel(Item.getItemFromBlock(THATCH), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(THATCH_BLOCK), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(MOLTEN_HAY), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(FEEDER), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(THATCH_BED), 0, "inventory");
+
+        registerItemModel(Item.getItemFromBlock(HAY_COMPACTOR), 0, "inventory");
 
         registerItemModel(WINDMILL_BLADE, 0, "inventory");
         registerItemModel(GEAR_SPECKLED, 0, "inventory");
@@ -407,6 +495,20 @@ public class Registry {
         registerItemModel(PLATE_WOOD, 0, "inventory");
         registerItemModel(DUST_FLOUR, 0, "inventory");
         registerItemModel(WHEAT_CHAFF, 0, "inventory");
+
+        ModelLoader.setCustomStateMapper(THATCH_BED, new StateMap.Builder().ignore(BlockBed.OCCUPIED).build());
+        ModelLoader.setCustomStateMapper(HAY_COMPACTOR, new StateMap.Builder().ignore(BlockHayCompactor.TYPE).build());
+        ModelLoader.setCustomStateMapper(MOLTEN_STEEL, new StateMap.Builder().ignore(BlockSnakeFluid.TRAIL).build());
+        ModelLoader.setCustomStateMapper(MOLTEN_HAY, new StateMap.Builder().ignore(BlockSnakeFluid.TRAIL).build());
+
+        final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(THATCH.getRegistryName(), "normal");
+
+        ModelLoader.setCustomStateMapper(THATCH, new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                return modelResourceLocation;
+            }
+        });
     }
 
     @SideOnly(Side.CLIENT)
@@ -419,5 +521,8 @@ public class Registry {
     public void onTextureStitch(TextureStitchEvent event) {
         event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cotton"));
         event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cotton_candy"));
+
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/thatch_still"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/thatch_flowing"));
     }
 }

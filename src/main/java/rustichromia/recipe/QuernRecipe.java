@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import rustichromia.util.Result;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,13 +14,13 @@ import java.util.stream.Collectors;
 
 public class QuernRecipe extends BasicMachineRecipe {
     public List<Ingredient> inputs = new ArrayList<>();
-    public List<ItemStack> outputs = new ArrayList<>();
+    public List<Result> outputs = new ArrayList<>();
 
     public QuernRecipe(ResourceLocation id, double minPower, double maxPower, double time) {
         super(id,minPower,maxPower,time);
     }
 
-    public QuernRecipe(ResourceLocation id, Collection<Ingredient> inputs, Collection<ItemStack> outputs, double minPower, double maxPower, double time) {
+    public QuernRecipe(ResourceLocation id, Collection<Ingredient> inputs, Collection<Result> outputs, double minPower, double maxPower, double time) {
         super(id,minPower,maxPower,time);
         this.inputs.addAll(inputs);
         this.outputs.addAll(outputs);
@@ -42,7 +43,7 @@ public class QuernRecipe extends BasicMachineRecipe {
         return toCheck.isEmpty();
     }
 
-    public List<ItemStack> getResults(TileEntity tile, double power, List<ItemStack> inputs) {
-        return outputs.stream().map(ItemStack::copy).collect(Collectors.toList());
+    public List<Result> getResults(TileEntity tile, double power, List<ItemStack> inputs) {
+        return transformResults(outputs);
     }
 }

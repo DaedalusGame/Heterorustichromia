@@ -5,9 +5,13 @@ import mysticalmechanics.api.IMechUnit;
 import mysticalmechanics.api.MysticalMechanicsAPI;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import rustichromia.util.Result;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class BasicMachineRecipe {
     public ResourceLocation id;
@@ -53,6 +57,10 @@ public class BasicMachineRecipe {
 
     public List<String> getExtraData() {
         return null;
+    }
+
+    protected List<Result> transformResults(Collection<Result> results) {
+        return results.stream().map(Result::transform).filter(x -> !x.isEmpty()).collect(Collectors.toList());
     }
 
     @Override
