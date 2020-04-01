@@ -95,6 +95,17 @@ public class BlockHayCompactor extends Block implements IMultiBlock<TileEntityHa
     }
 
     @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        switch (state.getValue(TYPE)) {
+            case Controller:
+                TileEntityHayCompactor tile = (TileEntityHayCompactor) world.getTileEntity(pos);
+                tile.clearInventory();
+                break;
+        }
+        super.breakBlock(world, pos, state);
+    }
+
+    @Override
     public boolean canPlaceBlockAt(World world, BlockPos pos) {
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
