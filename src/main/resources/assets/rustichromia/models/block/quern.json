@@ -3,7 +3,8 @@
 	"textures": {
 		"3": "rustichromia:blocks/quern_basin",
 		"4": "rustichromia:blocks/quern_basin_front",
-		"5": "rustichromia:blocks/quern_basin_top"
+		"5": "rustichromia:blocks/quern_basin_top",
+		"particle": "rustichromia:blocks/quern_basin"
 	},
 	"elements": [
 		{
