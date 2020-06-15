@@ -196,8 +196,9 @@ public class RecipeRegistry {
                 'W', "slabWood",
                 'G', "gearWood"}).setRegistryName(getRL("hopper_wood")));
         event.getRegistry().register(new ShapedOreRecipe(getRL("feeder"),new ItemStack(Registry.FEEDER,1),true,new Object[]{
-                "W W", "WGW", "WWW",
+                "W W", "WGW", "WIW",
                 'W', "plankWood",
+                'I', "ingotIron",
                 'G', new ItemStack(Items.BOWL)}).setRegistryName(getRL("feeder")));
         event.getRegistry().register(new ShapelessOreRecipe(getRL("cotton_candy_stick"),new ItemStack(Registry.COTTON_CANDY_STICK,1),new Object[]{
                 "stickWood",new ItemStack(Registry.COTTON_CANDY),new ItemStack(Registry.COTTON_CANDY)}).setRegistryName(getRL("cotton_candy_stick")));
@@ -255,6 +256,7 @@ public class RecipeRegistry {
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"gear_iron"),2,Lists.newArrayList(new IngredientSized(new OreIngredient("ingotIron"),2)),new ResultSet().stack(new ItemStack(RegistryHandler.IRON_GEAR,1)),10, Double.POSITIVE_INFINITY,1500));
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"axle_iron"),2,Lists.newArrayList(new IngredientSized(new OreIngredient("ingotIron"),2)),new ResultSet().stack(new ItemStack(RegistryHandler.IRON_AXLE,8)),15, Double.POSITIVE_INFINITY,1500));
         assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"hay_compactor"),2,new IngredientSet().ore("ingotIron",16).ore("gearIron",4).stack(new ItemStack(Blocks.HOPPER)).stack(new ItemStack(Blocks.PISTON,4)), new ResultSet().stack(new ItemStack(Registry.HAY_COMPACTOR,1)),10, Double.POSITIVE_INFINITY,2000));
+        assemblerRecipes.add(new AssemblerRecipe(new ResourceLocation(Rustichromia.MODID,"feed_trough"),2,new IngredientSet().ore("plankWood",1).stack(new ItemStack(Items.BOWL)), new ResultSet().stack(new ItemStack(Registry.FEEDER,1)),5, Double.POSITIVE_INFINITY,1500));
 
         hayCompactorRecipes.add(new HayCompactorRecipe(new ResourceLocation(Rustichromia.MODID, "wheat"), Lists.newArrayList(new IngredientSized(Ingredient.fromItem(Items.WHEAT),9)),new ResultSet().stack(new ItemStack(Blocks.HAY_BLOCK)), 10, 60, 1000));
         hayCompactorRecipes.add(new HayCompactorRecipe(new ResourceLocation(Rustichromia.MODID, "haybale"), Lists.newArrayList(new IngredientSized(Ingredient.fromItem(Registry.WHEAT_CHAFF),9)),new ResultSet().stack(new ItemStack(Registry.THATCH_BLOCK)), 10, 60, 1000));
