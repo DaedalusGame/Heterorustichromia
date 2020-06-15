@@ -8,7 +8,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.util.vector.Quaternion;
-import sun.plugin.dom.exception.InvalidStateException;
 
 public abstract class TurnMachine<T> {
     public static class Orientation {
@@ -72,7 +71,7 @@ public abstract class TurnMachine<T> {
 
         private void checkGimbal() {
             if (forward.getAxis() == up.getAxis())
-                throw new InvalidStateException("Turn machine is gimbally locked!");
+                throw new IllegalStateException("Turn machine is gimbally locked!");
         }
     }
 
