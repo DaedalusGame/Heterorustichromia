@@ -61,7 +61,7 @@ public class Assembler {
 
         @Override
         public void apply() {
-            RecipeRegistry.assemblerRecipes.removeIf(recipe -> recipe.id == id);
+            RecipeRegistry.assemblerRecipes.removeIf(recipe -> recipe.id.equals(id));
         }
 
         @Override

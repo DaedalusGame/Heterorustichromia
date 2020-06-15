@@ -60,7 +60,7 @@ public class Gin {
 
         @Override
         public void apply() {
-            RecipeRegistry.ginRecipes.removeIf(recipe -> recipe.id == id);
+            RecipeRegistry.ginRecipes.removeIf(recipe -> recipe.id.equals(id));
         }
 
         @Override

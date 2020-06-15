@@ -60,7 +60,7 @@ public class HayCompactor {
 
         @Override
         public void apply() {
-            RecipeRegistry.hayCompactorRecipes.removeIf(recipe -> recipe.id == id);
+            RecipeRegistry.hayCompactorRecipes.removeIf(recipe -> recipe.id.equals(id));
         }
 
         @Override

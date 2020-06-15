@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rustichromia:cart",
+    "textures": {
+      "particle": "rustichromia:blocks/cart"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants":{
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

@@ -1,21 +1,18 @@
 package rustichromia;
 
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import rustichromia.cart.*;
+import rustichromia.entity.EntityCart;
 import rustichromia.entity.EntitySpear;
 import rustichromia.gui.GuiHandler;
 import rustichromia.handler.RestHandler;
@@ -77,10 +74,13 @@ public class Rustichromia {
         GameRegistry.registerTileEntity(TileEntityHayCompactor.class, new ResourceLocation(MODID, "hay_compactor"));
         GameRegistry.registerTileEntity(TileEntityHayCompactorInlet.class, new ResourceLocation(MODID, "hay_compactor_inlet"));
         GameRegistry.registerTileEntity(TileEntityFeeder.class, new ResourceLocation(MODID, "feeder"));
+        GameRegistry.registerTileEntity(TileEntityCart.class, new ResourceLocation(MODID, "cart"));
+        GameRegistry.registerTileEntity(TileEntityCartControl.class, new ResourceLocation(MODID, "cart_control"));
 
         int id = 0;
 
         EntityRegistry.registerModEntity(new ResourceLocation(Rustichromia.MODID,"spear"), EntitySpear.class, "spear", id++, this, 64, 1, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Rustichromia.MODID,"cart"), EntityCart.class, "cart", id++, this, 64, 1, true);
 
         Registry.init();
         if(Loader.isModLoaded(Rustic.MODID))
@@ -89,5 +89,11 @@ public class Rustichromia {
             MistyWorld.init();
 
         PROXY.init();
+    }
+
+    @Mod.EventHandler
+    public void onServerStopping(FMLServerStoppingEvent event) {
+        CartData.cleanup();
+        CartDataClient.cleanup();
     }
 }

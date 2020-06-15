@@ -62,7 +62,7 @@ public class Quern {
 
         @Override
         public void apply() {
-            RecipeRegistry.quernRecipes.removeIf(recipe -> recipe.id == id);
+            RecipeRegistry.quernRecipes.removeIf(recipe -> recipe.id.equals(id));
         }
 
         @Override

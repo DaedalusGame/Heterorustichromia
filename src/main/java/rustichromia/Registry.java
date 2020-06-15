@@ -36,6 +36,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import rustichromia.block.*;
+import rustichromia.cart.*;
+import rustichromia.cart.content.ContentItems;
+import rustichromia.cart.control.*;
 import rustichromia.item.*;
 
 import javax.annotation.Nonnull;
@@ -92,6 +95,10 @@ public class Registry {
     public static Block FEEDER;
     @ObjectHolder("rustichromia:thatch_bed")
     public static Block THATCH_BED;
+    @ObjectHolder("rustichromia:cart")
+    public static Block CART;
+    @ObjectHolder("rustichromia:cart_control")
+    public static Block CART_CONTROL;
 
     @ObjectHolder("rustichromia:hay_compactor")
     public static Block HAY_COMPACTOR;
@@ -340,6 +347,8 @@ public class Registry {
         MOLTEN_HAY = (BlockSnakeFluid) new BlockSnakeHay().setRegistryName(Rustichromia.MODID, "molten_hay").setUnlocalizedName("molten_hay").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
         FEEDER = new BlockFeeder(Material.WOOD).setRegistryName(Rustichromia.MODID, "feeder").setUnlocalizedName("feeder").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
         THATCH_BED = new BlockThatchBed(Material.GRASS).setRegistryName(Rustichromia.MODID, "thatch_bed").setUnlocalizedName("thatch_bed").setCreativeTab(CreativeTabs.DECORATIONS).setHardness(5.0F).setResistance(10.0F);
+        CART = new BlockCart(Material.IRON).setRegistryName(Rustichromia.MODID, "cart").setUnlocalizedName("cart").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
+        CART_CONTROL = new BlockCartControl(Material.CIRCUITS).setRegistryName(Rustichromia.MODID, "cart_control").setUnlocalizedName("cart_control").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
 
         HAY_COMPACTOR = new BlockHayCompactor(Material.IRON).setRegistryName(Rustichromia.MODID, "hay_compactor").setUnlocalizedName("hay_compactor").setCreativeTab(CreativeTabs.REDSTONE).setHardness(5.0F).setResistance(10.0F);
 
@@ -367,6 +376,8 @@ public class Registry {
         event.getRegistry().register(MOLTEN_HAY);
         event.getRegistry().register(FEEDER);
         event.getRegistry().register(THATCH_BED);
+        event.getRegistry().register(CART);
+        event.getRegistry().register(CART_CONTROL);
 
         event.getRegistry().register(HAY_COMPACTOR);
     }
@@ -399,8 +410,25 @@ public class Registry {
         event.getRegistry().register(new ItemBlock(MOLTEN_HAY).setRegistryName(MOLTEN_HAY.getRegistryName()));
         event.getRegistry().register(new ItemBlock(FEEDER).setRegistryName(FEEDER.getRegistryName()));
         event.getRegistry().register(new ItemBlockBed(THATCH_BED).setRegistryName(THATCH_BED.getRegistryName()));
+        event.getRegistry().register(new ItemBlockCart(CART).setRegistryName(CART.getRegistryName()));
+        event.getRegistry().register(new ItemBlockCartControl(CART_CONTROL).setRegistryName(CART_CONTROL.getRegistryName()));
 
         event.getRegistry().register(new ItemBlock(HAY_COMPACTOR).setRegistryName(HAY_COMPACTOR.getRegistryName()));
+
+        Control.register(Arrow.SUPPLIER);
+        Control.register(ArrowRedstone.SUPPLIER);
+        Control.register(Rail.SUPPLIER);
+        Control.register(ArrowRail.SUPPLIER);
+        Control.register(RailCurve.SUPPLIER);
+        Control.register(Path.SUPPLIER);
+        Control.register(PathCurve.SUPPLIER);
+        Control.register(Trigger.SUPPLIER);
+        Control.register(Stop.SUPPLIER);
+        Control.register(StopRedstone.SUPPLIER);
+        Control.register(StopFill.SUPPLIER);
+        Control.register(StopEmpty.SUPPLIER);
+
+        CartContent.register(ContentItems.SUPPLIER);
 
         event.getRegistry().register(SHAMSHIR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"shamshir")).setUnlocalizedName("shamshir").setCreativeTab(CreativeTabs.COMBAT));
         event.getRegistry().register(SPEAR = new Item().setRegistryName(new ResourceLocation(Rustichromia.MODID,"spear")).setUnlocalizedName("spear").setCreativeTab(CreativeTabs.COMBAT));
@@ -474,6 +502,8 @@ public class Registry {
         registerItemModel(Item.getItemFromBlock(MOLTEN_HAY), 0, "inventory");
         registerItemModel(Item.getItemFromBlock(FEEDER), 0, "inventory");
         registerItemModel(Item.getItemFromBlock(THATCH_BED), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(CART), 0, "inventory");
+        registerItemModel(Item.getItemFromBlock(CART), 0, "normal");
 
         registerItemModel(Item.getItemFromBlock(HAY_COMPACTOR), 0, "inventory");
 
@@ -509,6 +539,10 @@ public class Registry {
                 return modelResourceLocation;
             }
         });
+
+        ItemBlockCartControl cartControl = (ItemBlockCartControl) Item.getItemFromBlock(CART_CONTROL);
+        ModelLoader.setCustomMeshDefinition(cartControl, cartControl::getModel);
+        ModelLoader.registerItemVariants(cartControl, Control.getSuppliers().stream().map(ControlSupplier::getModel).toArray(ResourceLocation[]::new));
     }
 
     @SideOnly(Side.CLIENT)
@@ -524,5 +558,24 @@ public class Registry {
 
         event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/thatch_still"));
         event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/thatch_flowing"));
+
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/arrow"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/arrow_redstone_on"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/arrow_redstone_off"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/alternate"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/optional"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/rail"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/rail_straight"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/rail_curve"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/rail_curve_mirror"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/path_straight"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/path_curve"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/path_curve_mirror"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/trigger"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/trigger0"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/trigger1"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/stop"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/stop_redstone_on"));
+        event.getMap().registerSprite(new ResourceLocation(Rustichromia.MODID,"blocks/cart_control/stop_redstone_off"));
     }
 }
