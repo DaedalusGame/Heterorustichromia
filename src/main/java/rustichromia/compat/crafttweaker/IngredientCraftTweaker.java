@@ -22,7 +22,7 @@ public class IngredientCraftTweaker extends Ingredient implements IHasSize {
     @Override
     public ItemStack[] getMatchingStacks() {
         List<IItemStack> stacks = predicate != null ? predicate.getItems() : new ArrayList<>();
-        return stacks.stream().map(CraftTweakerMC::getItemStack).toArray(ItemStack[]::new);
+        return stacks.stream().map(CraftTweakerMC::getItemStack).map(stack -> withSize(stack,predicate.getAmount())).toArray(ItemStack[]::new);
     }
 
     @Override
@@ -35,5 +35,10 @@ public class IngredientCraftTweaker extends Ingredient implements IHasSize {
     @Override
     public int getSize() {
         return predicate.getAmount();
+    }
+
+    private ItemStack withSize(ItemStack stack, int size) {
+        stack.setCount(size);
+        return stack;
     }
 }
