@@ -1,0 +1,58 @@
+tile.windmill.name=Windmühle
+tile.windmill_big.name=Große Windmühle
+tile.mech_torch.name=Mechanischer Timer
+tile.mech_torch_toggle.name=Mechanischer Toggler
+tile.axle_wood.name=Holzachse
+tile.ratiobox.name=Ratiobox
+tile.press.name=Mechanische Presse
+tile.quern.name=Mahlstein
+tile.gin.name=Egreniermaschine
+tile.assembler1.name=Einzel-Assembler
+tile.assembler2.name=Doppel-Assembler
+tile.assembler3.name=Erweiterter Assembler
+tile.cotton_seed.name=Baumwollsamen
+tile.crank.name=Handkurbel
+tile.windvane.name=Wetterfahne
+tile.hopper_wood.name=Mechanischer Holztrichter
+tile.hay_compactor.name=Heupresse
+tile.feeder.name=Futtertrog
+tile.thatch.name=Dachstroh
+tile.thatch_block.name=Dachstroh-Block
+tile.thatch_bed.name=Heubett
+tile.molten_hay.name=Heufutter
+
+tile.molten_steel.name=Flüssiger Stahl [i.A.]
+tile.block_steel.name=Fester Stahl [i.A.]
+tile.extruder.name=Extrusionsform [i.A.]
+tile.receptacle.name=Extrusionsbehälter [i.A.]
+
+item.windmill_blade.name=Windmühlenflügel
+item.gear_speckled.name=Gesprenkeltes Zahnrad
+item.gear_wood.name=Sperrholz-Zahnrad
+item.disk_stone.name=Steinscheibe
+item.disk_sandstone.name=Sandsteinscheibe
+item.disk_red_sandstone.name=Rote Sandsteinscheibe
+item.cotton.name=Baumwolle
+item.cotton_wool.name=Baumwollwatte
+item.cotton_candy.name=Zuckerwatte
+item.cotton_candy_stick.name=Zuckerwatte am Stiel
+item.dust_wood.name=Sägemehl
+item.plate_wood.name=Sperrholz
+item.dust_flour.name=Mehl
+item.wheat_chaff.name=Weizenspreu
+
+rustichromia.jei.recipe.quern=Mahlstein
+rustichromia.jei.recipe.gin=Egreniermaschine
+rustichromia.jei.recipe.assembler1=Einzel-Assembler
+rustichromia.jei.recipe.assembler2=Doppel-Assembler
+rustichromia.jei.recipe.assembler3=Erweiterter Assembler
+rustichromia.jei.recipe.haycompactor=Heupresse
+
+rustichromia.tooltip.item.multiblock=§7Multiblock
+rustichromia.tooltip.item.disk_stone=Begrenzt die Leistung auf mehr als %s
+rustichromia.tooltip.item.disk_sandstone=Begrenzt die Leistung auf weniger als %s
+rustichromia.tooltip.item.disk_red_sandstone=Begrenzt die Leistung auf genau %s
+rustichromia.tooltip.item.combine=Kann in einer Werkbank kombiniert werden
+
+rustichromia.tooltip.result.chance=§d%s%% Wahrscheinlichkeit
+rustichromia.tooltip.result.placeblock=§dWird an der Ausgabe platziert.
